@@ -81,6 +81,65 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2017/03/29/直播原理/" title="直播 浅析" itemprop="url">直播 浅析</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Dean Ambrose" target="_blank" itemprop="author">Dean Ambrose</a>
+		
+  <p class="article-time">
+    <time datetime="2017-03-29T11:11:07.000Z" itemprop="datePublished"> 发表于 2017-03-29</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>##直播原理<br><img src="http://ooyerqo96.bkt.clouddn.com/1478828600861735.png" alt="princeple -w400"></p>
+<p>主要步骤：</p>
+<p>###音视频采集<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">音视频采集, 网上也有很多大神些的技术博客, demo 等, 我这里边只针对iOS 原声的来介绍以下</div><div class="line">利用AVFoundation框架, 进行音视频采集</div><div class="line">AVCaptureSession // 音视频录制期间管理者 </div><div class="line">AVCaptureDevice // 设备管理者, (用来操作所闪光灯, 聚焦, 摄像头切换等)</div><div class="line">AVCaptureDeviceInput // 音视频输入数据的管理对象</div><div class="line">AVCaptureVideoDataOutput // 视频输出数据的管理者</div><div class="line">AVCaptureAudioDataOutput // 音频输出数据的管理者</div><div class="line">AVCaptureVideoPreviewLayer // 用来展示视频的图像</div><div class="line">注意, 必须要设置音视频输出对象的代理方法, 然后在代理方法中获取sampleBuffer, 然后判断captureOutput是音频还是视频, 来进行音视频数据相应的编码</div><div class="line">- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection &#123;</div><div class="line">&#125;</div><div class="line">也可以利用GPUImageVideoCamera 来进行视频数据的采集获取, 可以利用GPUImage 进行美颜, 添加水印, 人脸识别等</div></pre></td></tr></table></figure></p>
+<h3 id="流媒体"><a href="#流媒体" class="headerlink" title="流媒体"></a>流媒体</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">流媒体是指采用流式传输的方式在网上播放的媒体格式, 是边传边播的媒体，是多媒体的一种!</div><div class="line">然后就是大家需要了解的几个关键词</div><div class="line">帧:视频是由很多连续图像组成, 每一帧就代表一幅静止的图像</div><div class="line">GOP:（Group of Pictures）画面组，一个GOP就是一组连续的画面，每个画面都是一帧，GOP就是很多帧的集合!</div><div class="line">帧的分类:I帧、P帧、B帧</div><div class="line">为了提高压缩比例，降低视频文件的大小，在针对连续动态图像编码时，一般会将连续若干幅图像编码为P、B、I三种帧类型</div><div class="line">I帧:一组连续画面(GOP)的第一个帧, I帧采用帧内压缩法(也成关键帧压缩法), I帧的压缩不依靠与其他帧, 靠尽可能去除图像空间冗余信息来压缩的, 可以单独作为图像!</div><div class="line"></div><div class="line">P帧:预测帧(也叫前向参考帧), P帧的压缩依赖于前一帧, 通过充分降低与图像序列中前面已编码帧的时间冗余信息来压缩传输数据量的编码图像!</div><div class="line"></div><div class="line">B帧:也叫双向预测帧, 当把一帧压缩成B帧时，它根据邻近的前几帧、本帧以及后几帧数据的不同点来压缩本帧，也即仅记录本帧与前后帧的差值。</div><div class="line"></div><div class="line">帧率:就是在1秒钟时间里传输的图片的帧数，也可以理解为图形处理器每秒钟能够刷新几次，通常用FPS表示, 每秒钟帧数 (fps) 愈多，所显示的动作就会愈流畅!</div><div class="line"></div><div class="line">码率: 也成为比特率, 是指每秒传送的比特(bit)数, 比特率越高，传送数据速度越快, 单位为 bps(Bit Per Second)。</div></pre></td></tr></table></figure>
+<p>###音视频编解码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">音视频编解码, 说白了就是对音视频数据进行压缩, 减少数据对空间的占用, 便于网络传输, 存储和使用!</div><div class="line">目前直播常用的音视频编解码方式是h.264/AVC, AAC/MP3</div><div class="line">硬软编解码的区别:</div><div class="line">硬解码：由显卡核心GPU来对高清视频进行解码工作，CPU占用率很低，画质效果比软解码略差一点，需要对播放器进行设置。</div><div class="line">　　优点：播放流畅、低功耗</div><div class="line">　　缺点：受视频格式限制、功耗大、画质没有软解码好</div><div class="line"></div><div class="line">软解码：由CPU负责解码进行播放</div><div class="line">　　优点：不受视频格式限制、画质略好于硬解</div><div class="line">　　缺点：会占用过高的资源、对于高清视频可能没有硬解码流畅(主要看CPU的能力)</div><div class="line"></div><div class="line">苹果API有提供音视频硬编解码接口, 但只针对iOS8.0以上版本!</div><div class="line">利用VideoToolbox 和AudioToolbox 这连个框架进行音视频的硬编码! </div><div class="line">这里附上前辈们的关于VideoToolbox使用的简书, http://www.jianshu.com/p/6dfe49b5dab8</div><div class="line">和AudioToolbox的技术简书http://www.jianshu.com/p/a671f5b17fc1</div></pre></td></tr></table></figure></p>
+<h3 id="流媒体数据封装"><a href="#流媒体数据封装" class="headerlink" title="流媒体数据封装"></a>流媒体数据封装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">TS: 是流媒体封装格式的一种，流媒体封装的好处就是不需要加载索引再播放，大大降低了首次载入的延迟,两个TS片段可以无缝拼接，播放器能连续播放!</div><div class="line">FLV: 也是一种流媒体的封装格式,但他形成的文件极小、加载速度极快，使得网络观看视频文件成为可能,因此FLV格式成为了当今主流视频格式</div></pre></td></tr></table></figure>
+<h3 id="RTMP推流"><a href="#RTMP推流" class="headerlink" title="RTMP推流"></a>RTMP推流</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">RTMP协议是基于TCP/IP 的协议簇;RTMP(Real Time Messaging Protocol)实时消息传送协议是Adobe Systems公司为Flash播放器和服务器之间音频、视频和数据传输 开发的开放协议</div><div class="line">它有多种变种：</div><div class="line">a, RTMP工作在TCP之上，默认使用端口1935；</div><div class="line">b, RTMPE在RTMP的基础上增加了加密功能；</div><div class="line">c, RTMPT封装在HTTP请求之上，可穿透防火墙；</div><div class="line">d, RTMPS类似RTMPT，增加了TLS/SSL的安全功能；</div><div class="line">它是一个互联网TCP/IP体系结构中应用层的协议。RTMP协议中基本的数据单元称为消息（Message）。当RTMP协议在互联网中传输数据的时候，消息会被拆分成更小的单元，称为消息块（Chunk）。RTMP传输媒体数据的过程中，发送端首先把媒体数据封装成消息，然后把消息分割成消息块，最后将分割后的消息块通过TCP协议发送出去。接收端在通过TCP协议收到数据后，首先把消息块重新组合成消息，然后通过对消息进行解封装处理就可以恢复出媒体数据。</div><div class="line">播放一个RTMP协议的流媒体需要经过以下几个步骤：握手，建立连接，建立流，播放。</div><div class="line">demo中RTMP协议推流, 用的是librtmp-iOS框架! 参考https://my.oschina.net/jerikc/blog/501948</div></pre></td></tr></table></figure>
+<p>###集成播放器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">IJKPlayer 是一个基于 ffplay 的轻量级 Android/iOS 视频播放器。API 易于集成；编译配置可裁剪，方便控制安装包大小；支持 硬件加速解码，更加省电。而DanmakuFlameMaster(开源弹幕框架) 架构清晰，简单易用，支持多种高效率绘制方式选择，支持多种自定义功能设置!</div></pre></td></tr></table></figure></p>
+<p>本文参照 <a href="http://www.cnblogs.com/Unclefeng/p/6363152.html" target="_blank" rel="external">Unclefeng的博客</a></p>
+<p>#####直播请参照简书 <a href="http://www.jianshu.com/p/bd42bacbe4cc" target="_blank" rel="external">袁峥iOS直播</a></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2017/03/26/runloop/" title="runloop 研究" itemprop="url">runloop 研究</a>
   </h1>
   <p class="article-author">By
