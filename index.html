@@ -81,6 +81,68 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2017/04/20/APNs推送/" title="APNs推送详解" itemprop="url">APNs推送详解</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Dean Ambrose" target="_blank" itemprop="author">Dean Ambrose</a>
+		
+  <p class="article-time">
+    <time datetime="2017-04-20T12:42:03.000Z" itemprop="datePublished"> 发表于 2017-04-20</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h3 id="什么是APNs消息推送"><a href="#什么是APNs消息推送" class="headerlink" title="什么是APNs消息推送"></a>什么是APNs消息推送</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">APNs: Apple Push Notification Service的缩写,是苹果的服务器</div><div class="line">平时用的最多的第三方推送：极光推送原理与iOS原生推送差不多。</div></pre></td></tr></table></figure>
+<h3 id="推送流程"><a href="#推送流程" class="headerlink" title="推送流程"></a>推送流程</h3><blockquote>
+<p>阶段一<br>    1.app向APNs注册该device。 </p>
+<pre><code>2. APNs返回device token给app。 
+3. app将device token 传给app服务端，由服务端保存。
+</code></pre><p>阶段2<br>    1.device和APNs建立长连接。<br>    2.app服务端将device token + 消息打包发给APNs。<br>    3.APNs将消息发送给divice。</p>
+</blockquote>
+<h3 id="客户端操作"><a href="#客户端操作" class="headerlink" title="客户端操作"></a>客户端操作</h3><p>1.注册“通知设置” 允许你的应用在设备上开启通知<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions &#123;</div><div class="line">    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge categories:nil];</div><div class="line">    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];</div><div class="line">    return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>2.收到“通知设置”的回调，给你的设备注册远程通知<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings &#123;</div><div class="line">    if (notificationSettings.types != UIUserNotificationTypeNone) &#123;</div><div class="line">        [application registerForRemoteNotifications];</div><div class="line">    &#125; else &#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>3.收到注册远程通知的回调，成功将deviceToken发送给app服务器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken &#123;</div><div class="line">    [self sendToProviderWithDiviceToken:deviceToken];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error &#123;</div><div class="line">    NSLog(@&quot;#error in registration:%@&quot;, error);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>4.服务器发送通知点开以后启用一下回调<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">- (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo &#123;</div><div class="line">    NSDictionary *apsInfo = [userInfo objectForKey:@&quot;aps&quot;];</div><div class="line"></div><div class="line">    NSString *alert = [apsInfo objectForKey:@&quot;alert&quot;];</div><div class="line">    NSLog(@&quot;Received Push Alert: %@&quot;, alert);</div><div class="line"></div><div class="line">    NSString *sound = [apsInfo objectForKey:@&quot;sound&quot;];</div><div class="line">    NSLog(@&quot;Received Push Sound: %@&quot;, sound);</div><div class="line"></div><div class="line">    NSString *badge = [apsInfo objectForKey:@&quot;badge&quot;];</div><div class="line">    NSLog(@&quot;Received Push Badge: %@&quot;, badge);</div><div class="line">    application.applicationIconBadgeNumber = [[apsInfo objectForKey:@&quot;badge&quot;] integerValue];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>消息json格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">　　&quot;aps&quot; :</div><div class="line">           &#123; &quot;alert&quot; :</div><div class="line">                      &#123;</div><div class="line">                        &quot;action-loc-key&quot; : &quot;显示&quot; ,</div><div class="line">                        &quot;body&quot; : &quot;This is the alert text&quot;</div><div class="line">                       &#125;,</div><div class="line">             &quot;badge&quot; : 1,</div><div class="line">             &quot;sound&quot; : &quot;default&quot; &#125;,</div><div class="line">　　&quot;server&quot; : &#123; &quot;serverId&quot; : 1, &quot;name&quot; : &quot;Server name&quot;&#125;</div><div class="line">　　&#125;</div></pre></td></tr></table></figure></p>
+<p>之前项目都用到了一直懒得整理，现在借鉴DevYuan的博客重新梳理一下，慢慢再往上添加修改内容，每天进步一点点！</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2017/04/05/urlschema/" title="urlschema" itemprop="url">urlschema</a>
   </h1>
   <p class="article-author">By
@@ -469,7 +531,7 @@ GSEventReceiveRunLoopMode：接受系统事件的内部mode，通常用不到。
 <p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
 <h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">$ hexo deploy</div><div class="line"></div><div class="line">$ hexo d -g 发布 （本人使用Mweb直接创建。md文件所以创建好后只需要发布一下就可以了）</div></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
 
         
