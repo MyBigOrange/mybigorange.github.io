@@ -81,6 +81,87 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2017/04/25/面试题整理2/" title="面试题整理2" itemprop="url">面试题整理2</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Dean Ambrose" target="_blank" itemprop="author">Dean Ambrose</a>
+		
+  <p class="article-time">
+    <time datetime="2017-04-25T12:42:03.000Z" itemprop="datePublished"> 发表于 2017-04-25</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <ol>
+<li><p>volatile 有什么含义，病给出三个例子<br> 一个定义为volatile的变量是说这个变量可能被意想不到的改变，这样编译器就不会去假设这个变量的值了。精确地说编译器在用到这个变量是必须每次都小心的重新读取这个变量的值，而不是使用保存在寄存器里的备份。（多线程应用中被几个任务共享的变量）</p>
+</li>
+<li><p>static管家字的作用<br> 1.函数体内static变量的作用范围为该函数体，不同于auto变量，该变量的内存纸杯分配一次，因此其值在下次调用时仍然维持上次的值。<br> 2.在模块内static全局变量可以被模块内所有的函数访问，但不能被模块外其他函数访问。<br> 3.在模块内static函数只可能被这一模块内的其他函数调用，这个函数的使用范文被限制在声明他的模块内。<br> 4.在类中的static成员变量主语整个类所拥有，该类的所有对象只有一份拷贝。<br> 5.在类中static成员函数属于整个类所拥有，这个函数不接受this指针，因而只能范文类 的static成员变量</p>
+</li>
+<li><p>线程和进程的区别和联系<br> 进程和线程都是有操作系统所体会的程序运行的基本单元，系统利用该基本单元实现系统对用用的并发性<br> 进程和线程的主要差别再有他呢是不同的操作系统资源管理方式<br> 进程有独立的地址空间，一个进程崩溃后，在保护模式下不会对其他进程产生影响，而线程只是一个进程中不同执行路径<br> 线程有自己的堆栈和局部变量，但是线程之间没有独立的地址空间，一个线程死掉就等于整个进程死掉，所以多进程要比多线程的程序健壮，但在进程切换时，耗费资源较大，小效率要差一些。</p>
+</li>
+<li><p>http和scoket通信的区别<br> http是客户端用http协议进行请求，发送请求时候需要封装http请求头，并绑定请求的数据，服务器一般有web服务器配合（当然也非绝对）。 http请求方式为客户端主动发起请求，服务器才能给响应，一次请求完毕后则断开连接，以节省资源。服务器不能主动给客户端响应（除非采取http长连接 技术）。iphone主要使用类是NSUrlConnection。<br> scoket是客户端跟服务器直接使用socket“套接字”进行连接，并没有规定连接后断开，所以客户端和服务器可以保持连接通道，双方 都可以主动发送数据。一般在游戏开发或股票开发这种要求即时性很强并且保持发送数据量比较大的场合使用。主要使用类是CFSocketRef。</p>
+</li>
+<li><p>TCP和UDP的区别<br> TCP全称是Transmission Control Protocol，中文名为传输控制协议，它可以提供可靠的、面向连接的网络数据传递服务。传输控制协议主要包含下列任务和功能：</p>
+</li>
+</ol>
+<ul>
+<li>确保IP数据报的成功传递。</li>
+<li>对程序发送的大块数据进行分段和重组。</li>
+<li>确保正确排序及按顺序传递分段的数据。</li>
+<li>通过计算校验和，进行传输数据的完整性检查。<br>TCP提供的是面向连接的、可靠的数据流传输，而UDP提供的是非面向连接的、不可靠的数据流传输。<br>简单的说，TCP注重数据安全，而UDP数据传输快点，但安全性一般</li>
+</ul>
+<ol>
+<li>简述内存分区情况<br>代码区：存放二进制代码<br>数据区：系统运行时申请内存并初始化，系统退出时由系统释放，存放全局变量，静态变量，常量<br>堆区：通过mallOC等函数或new等操作动态申请得到，徐程序员手动申请释放<br>栈区：函数模块内申请，函数结束时有系统自动释放，存放局部变量函数参数</li>
+</ol>
+<p>7.队列和栈有什么区别<br>都是线性结构<br>队列是一种先进先出的数据结构，它在两端进行操作，一端入队一端出队<br>栈是一种先进后厨的数据结构，它只能在栈顶进行操作，入栈和出栈都在栈顶操作</p>
+<p>8.http协议中 post get区别<br>get 提交数据不安全，数据至于请求行，客户端地址栏可见<br>    提交数据大小有限<br>    方法不可以设置书签<br>post 方法提交数据安全，数据置于消息主体内，客户端不可见<br>提交数据大小没有像限制<br>可以设置书签</p>
+<p>9.iOS系统的结构<br>核心操作系统层，核心服务层，媒体层，界面服务层</p>
+<p>10.简书视图控制器的声明周期<br>Viewdidload    viewwillappear   viewdidapear  viewwilldisappear viewdiddisappear dealloc</p>
+<p>11.tableView 的重用机制<br>UITableView 通过重用单元格来达到节省内存的目的: 通过为每个单元格指定一个重用标识符(reuseIdentifier),即指定了单元格的种类,以及当单元格滚出屏幕时,允许恢复单元格以便重用.对于不同种类的单元格使用不同的ID,对于简单的表格,一个标识符就够了.</p>
+<p>12.解析XML文件有哪几种方式<br>以 DOM 方式解析 XML 文件；以 SAX 方式解析 XML 文件；</p>
+<p>13.Core Foundation中提供了哪几种操作Socket的方法<br> CFNetwork 、 CFSocket 和 BSD Socket </p>
+<p> 14.CFSocket使用有哪几个步骤<br> 创建 Socket 的上下文；创建 Socket ；配置要访问的服务器信息；封装服务器信息；连接服务器；</p>
+<p> 15.有哪几种手势通知方法、写清楚方法名？<br>-(void)touchesBegan:(NSSet<em> )touchedwithEvent:(UIEvent</em> )event;<br>-(void)touchesMoved:(NSSet<em> )touched withEvent:(UIEvent</em> )event;<br>-(void)touchesEnded:(NSSet<em> )touchedwithEvent:(UIEvent</em> )event;<br>-(void)touchesCanceled:(NSSet<em> )touchedwithEvent:(UIEvent</em>)event;</p>
+<p>16.Quatrz 2D的绘图功能的三个核心概念是什么并简述其作用。<br>上下文：主要用于描述图形写入哪里；<br>路径：是在图层上绘制的内容；<br>状态：用于保存配置变换的值、填充和轮廓， alpha 值等。</p>
+<p>17.uiview calayer 关系<br>每个 UIView 内部都有一个 CALayer 在背后提供内容的绘制和显示，并且 UIView 的尺寸样式都由内部的 Layer 所提供。两者都有树状层级结构，layer 内部有 SubLayers，View 内部有 SubViews.但是 Layer 比 View 多了个AnchorPoint<br>在 View显示的时候，UIView 做为 Layer 的 CALayerDelegate,View 的显示内容由内部的 CALayer 的 display<br>CALayer 是默认修改属性支持隐式动画的，在给 UIView 的 Layer 做动画的时候，View 作为 Layer 的代理，Layer 通过 actionForLayer:forKey:向 View请求相应的 action(动画行为)<br>layer 内部维护着三分 layer tree,分别是 presentLayer Tree(动画树),modeLayer Tree(模型树), Render Tree (渲染树),在做 iOS动画的时候，我们修改动画的属性，在动画的其实是 Layer 的 presentLayer的属性值,而最终展示在界面上的其实是提供 View的modelLayer<br>两者最明显的区别是 View可以接受并处理事件，而 Layer 不可以</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2017/04/20/APNs推送/" title="APNs推送详解" itemprop="url">APNs推送详解</a>
   </h1>
   <p class="article-author">By
@@ -107,6 +188,95 @@
 <p>4.服务器发送通知点开以后启用一下回调<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">- (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo &#123;</div><div class="line">    NSDictionary *apsInfo = [userInfo objectForKey:@&quot;aps&quot;];</div><div class="line"></div><div class="line">    NSString *alert = [apsInfo objectForKey:@&quot;alert&quot;];</div><div class="line">    NSLog(@&quot;Received Push Alert: %@&quot;, alert);</div><div class="line"></div><div class="line">    NSString *sound = [apsInfo objectForKey:@&quot;sound&quot;];</div><div class="line">    NSLog(@&quot;Received Push Sound: %@&quot;, sound);</div><div class="line"></div><div class="line">    NSString *badge = [apsInfo objectForKey:@&quot;badge&quot;];</div><div class="line">    NSLog(@&quot;Received Push Badge: %@&quot;, badge);</div><div class="line">    application.applicationIconBadgeNumber = [[apsInfo objectForKey:@&quot;badge&quot;] integerValue];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>消息json格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">　　&quot;aps&quot; :</div><div class="line">           &#123; &quot;alert&quot; :</div><div class="line">                      &#123;</div><div class="line">                        &quot;action-loc-key&quot; : &quot;显示&quot; ,</div><div class="line">                        &quot;body&quot; : &quot;This is the alert text&quot;</div><div class="line">                       &#125;,</div><div class="line">             &quot;badge&quot; : 1,</div><div class="line">             &quot;sound&quot; : &quot;default&quot; &#125;,</div><div class="line">　　&quot;server&quot; : &#123; &quot;serverId&quot; : 1, &quot;name&quot; : &quot;Server name&quot;&#125;</div><div class="line">　　&#125;</div></pre></td></tr></table></figure></p>
 <p>之前项目都用到了一直懒得整理，现在借鉴DevYuan的博客重新梳理一下，慢慢再往上添加修改内容，每天进步一点点！</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/04/20/面试题整理/" title="面试题整理1" itemprop="url">面试题整理1</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Dean Ambrose" target="_blank" itemprop="author">Dean Ambrose</a>
+		
+  <p class="article-time">
+    <time datetime="2017-04-20T12:42:03.000Z" itemprop="datePublished"> 发表于 2017-04-20</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>1.Object-c的类可以多重继承么?可以实现多个接口么?Category是什么?重写一个类的方式用继承好还是分类好?为什么?<br>OC类不可以多重继承，可以实现多个接口，通过实现多个接口可以完成C++的多重继承，Category是类别，一般情况下用分类好，用Category去重写类的方法，仅对本类有效，不会影响到其他类与原有类的关系<br>2.#import 跟#include 又什么区别，@class呢, #import&lt;&gt; 跟 #import””又什么区别?   </p>
+<p> #import是OC导入头文件的关键字，#include是C/C++导入头文件的关键字，使用#import头文件会自动自导入一次，不会重复导入。<br> @class告诉编译器某个类的声明，当执行时才去查看类的实现文件，可以解决头文件的相互包含</p>
+<p> #import&lt;&gt; 用来包含系统的头文件，#import”” 用来包含用户的头文件。<br>3.属性readWrite、readonly、assign、retain、copy、nonatomic各是什么作用，在那种情况下使用<br>readwrite 是可读可写特性，需要生成getter.setter方法时使用<br>readonly 是只读属性，置灰生成getter方法，不会生成setter方法，不希望属性在类外改变时使用<br>assign是赋值特性，setter方法将传入参数赋值给实例变量，仅设置变量时使用<br>copy 赋值特性，setter方法将传入对象赋值一份，需要完全一份新的变量时使用<br>retain 表示特有属性，setter方法传入参数先保留再赋值，传入参数的retaincount会+1<br>nonatomic 非院子操作，决定编译器生成的setter getter是否是院子操作，atomic表示多线程安全，一般使用nonatomic<br>4.写一个setter方法 用于完成 @property （nonatomic,retain） Nssstring <em>name ,写一个setter方法用于完成 @property （nonatomic,copy） NSString </em>name   </p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- (void) setName:(NSString*) str   </div><div class="line">&#123;   </div><div class="line">    name = str;   </div><div class="line">&#125;   </div><div class="line">- (void) setName:(NSString*) str   </div><div class="line">&#123;   </div><div class="line">    id t = [str copy];   </div><div class="line">    name = t;   </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</code></pre><p>5.对于语句 NSString *obj = [[NSData alloc] init] obj 在编译和运行时分别是什么类型的对象？<br>编译时时NSString 类型的，运行时是NSData类型的<br>6.常见Obj-C的数据类型有哪些，和C的基本类型有什么区别?<br>常见Objective-C数据类型有：NSString、NSNumber、NSArray、NSMutabkeArray、NSData、NSDictionary等，这些都是class，创建后便是对象，而C语言的基本类型int 只是一定字节的内存空间，用于存放数值，NSInteger是基本数据类型，并不是NSNumber的子类，当然也不是NSObjective-C的子类。NSIneger是基本数据类型int或long的别名，区别在于NSIntger会根据系统是32位还是64位来决定本身是int还是long.  </p>
+<p>7.id 声明的对象有什么特性<br>id声明的对象具有运行时特性，即可以指向任意类型的object-C 的对象   </p>
+<p>8.原子（atomic）跟非原子nonatomic 属性有什么区别<br>atomic 提供线程安全，是防止在未完成的时候被另外一个线程读取，造成数据错误<br>nonatomic 在自己管理内存环境中，解析的访问器保留并自动释放返回的值，如果指定了nonatmic,那么访问器只是简单的返回这个值。   </p>
+<p>9.类别的作用？继承和类别在实现中有何区别？<br>category 可以在不改变原来代码的情况下往里面添加新的方法，只能添加，不能修改删除，并且如果类别和原来类中的方法产生名冲突，则类别将覆盖原来的方法，因为 类别具有更高的优先级<br>类别的三个主要作用：</p>
+<blockquote>
+<p>将类的实现分散到多个不同文件或者多个不同的框架中<br>创建私有方法的前向引用<br>想对象添加非正式协议<br>继承可以 增加修改或者删除方法，并且可以增加属性   </p>
+</blockquote>
+<p>10.类别和扩展的区别<br>extension 可以添加属性，并且添加的方法必须实现，扩展可以看成一个私有的类</p>
+<p>11.什么事KVO KVC<br>KVC 键-值编码，简介访问对象的属性，使用字符串来标识属性，而不是通过调用存取的方法，直接或通过实例变量访问的机制<br>“当通过KVC调用对象时，比如：[self valueForKey:@”someKey”]时，程序会自动试图通过几种不同的方式解析这个调用。首先查找对象是否带有 someKey 这个方法，如果没找到，会继续查找对象是否带有someKey这个实例变量(iVar)，如果还没有找到，程序会继续试图调用 -(id) valueForUndefinedKey:这个方法。如果这个方法还是没有被实现的话，程序会抛出一个NSUndefinedKeyException异常错误。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[self valueforKey:@&quot;someKey&quot;]</div></pre></td></tr></table></figure></p>
+<p>KVO 键值观察机制，他提供了观察某一属性变化的方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[self addobderver:self forKey:@&quot;highlight&quot; option:0 context:nil]   </div><div class="line">-(void) observerValueForKeyPath:(NSString) keyPath ofObject:(id)object chage:(NSDictionary) chage context:(void *)context</div></pre></td></tr></table></figure></p>
+<p>12.代理的作用?<br>代理的目的是改变或传递控制链，允许一个类在某些特定的时刻通知到其他类，而不需要获取到哪些类的指针，可以减少框架的复杂度，另外一点代理可以理解为java中回调监听机制的一种类似。</p>
+<p>13.可修改不可修改<br>可修改是不可修改的合集，前者在舒适化后的内存空间就是固定不变的，后者是可以添加的，可以动态申请新的内存空间</p>
+<p>14.OC的动态运行时语言是什么意思<br>多态，主要是将数据类型的确定由编译时推迟到运行时。这个问题涉及到两个概念，运行时和多态，简单的来说，运行时机制使我们直到运行时才能去决定一个对象的类别，以及调用该类别对象制定方法‘多态：不同对象以自己的方式相应相同的消息的能力叫做多态。运行时机制是多态的基础。</p>
+<p>15.通知和协议的不同之处<br>协议有控制链的关系，通知没有<br>通知可以一对多，一条消息可以发送给多个消息接受者。<br>代理不能一对多<br>控制链 has-a 单一拥有，和可控制的对应关系 </p>
+<p>16.对于单例的理解<br>在objective-c中要实现一个单例类，至少需要做以下四个步骤：<br>1).为单例对象实现一个静态实例，并初始化，然后设置成nil，<br>2).实现一个实例构造方法检查上面声明的静态实例是否为nil，如果是则新建并返回一个本类的实例，<br>3).重写allocWithZone方法，用来保证其他人直接使用alloc和init试图获得一个新实力的时候不产生一个新实例，<br>4).适当实现allocWitheZone，copyWithZone，release和autorelease。</p>
+<p>17.响应链<br>事件响应链，包括点击事件，画面刷新事件，在视图栈内从上之下或者从下至上传播。   </p>
+<p>18.方法和选择器有何不同<br>selector只是一个方法的名字，method是一个组合体，包含了名字和实现。</p>
+<p>19.延迟加载<br>懒汉模式：只在用到的时候才去初始化，岩石<br>一个延时加载避免内存过高，一个异步加载避免线程阻塞</p>
+<p>20.类NSObject的哪些方法经常被使用<br>NSObject是OC的基类，其由NSObject类及一系列协议构成<br>其中类方法alloc、class、description、 对象方法：init、的allOC、performSelector 等经常被使用。</p>
+<p>21.什么是简便构造方法<br>简便构造方法一般是由CocoaTouch框架提供，如NSNumber的numberWithBOOL： numberWithChar： Foundation下大部分类均有简便狗仔方法，我们可以通过简便构造方法获取息通给我们创建好的对象，并不需要手动释放。</p>
+<p>22.UIView的动画效果有哪些<br>UIViewAnimationOptionCurveEaseInOut UIViewAnimationOptionCurveEaseIn UIViewAnimationOptionCurveEaseOut UIViewAnimationOptionTransitionFlipFromLeft UIViewAnimationOptionTransitionFlipFromRight UIViewAnimationOptionTransitionCurlUpUIViewAnimationOptionTransitionCurlDown</p>
+<p>23.在iPhone应用中如何保存数据</p>
+<ol>
+<li>通过web服务，保存在服务器上。</li>
+<li>通过NSCoder固话机制，将对象保存在文件中</li>
+<li>通过SQLIT额或者coreData保存在文件数据库中</li>
+</ol>
+<p>24.谓词<br>The NSPredicate class is used to define logical conditions used to constrain a search either for a fetch or for in-memory filtering.<br>NSPredicate类是用来定义逻辑条件约束的获取或内存中的过滤搜索</p>
+<p>25.iOS 中的多线程<br>多线程，是Cocoa框架下的多线程，通过Cocoa的封装，可以让我们更为方便的使用线程，做过C++的同学可能会对线程有更多的理解，比如线程的创立，信号量、共享变量有认识，Cocoa框架下会方便很多，它对线程做了封装，有些封装，可以让我们创建的对象，本身便拥有线程，也就是线程的对象化抽象，从而减少我们的工程，提供程序的健壮性。</p>
+<p>GCD是(Grand Central Dispatch)的缩写 ，从系统级别提供的一个易用地多线程类库，具有运行时的特点，能充分利用多核心硬件。GCD的API接口为C语言的函数，函数参数中多数有Block，关于Block的使用参看这里，为我们提供强大的“接口”，对于GCD的使用参见本文</p>
+<p>NSOperation与Queue<br>NSOperation是一个抽象类，它封装了线程的细节实现，我们可以通过子类化该对象，加上NSQueue来同面向对象的思维，管理多线程程序。具体可参看这里：一个基于NSOperation的多线程网络访问的项目。</p>
+<p>NSThread<br>NSThread是一个控制线程执行的对象，它不如NSOperation抽象，通过它我们可以方便的得到一个线程，并控制它。但NSThread的线程之间的并发控制，是需要我们自己来控制的，可以通过NSCondition实现。<br>参看 iOS多线程编程之NSThread的使用<br>其他多线程<br>在Cocoa的框架下，通知、Timer和异步函数等都有使用多线程，(待补充).</p>
+<p>26。项目中什么时候使用GCD什么时候使用NSOpration<br>NSOpetaion的优点是对线程的高度抽象，在项目中使用它回事项目的程序节后更好，自泪花NSOptaion的设计思路，是具有棉线谷底想的优点，是的实现是多线程支持，而节后简单，建议在复杂项目中使用。<br>GCD本身简单易用，对于不复杂的多线程操作，会节省代码量，而Block参数的使用会使代码更为一度，建议在简单项目中使用</p>
+<p>27.什么是Block，BLock的实现原理<br>Block:我们称之为代码块，他类似于一个方法，而每一个方法都是在被调用的时候从硬盘到内存，然后去执行，执行完就消失， 方法的内存不需要我们管理，方法的内存在栈区，Block不想OC的类对象（在堆区），他也是在栈区的，如果我们使用Block作为一个对象的属性，我们会使用copy修饰她，因为他在栈区，我们没办法控制塔的消亡，当我们用copy修饰的时候，息通会把Block的实现拷贝一份到堆区，这样我们对应的属性就拥有该Block的所有权，就可以保证代码块不会提前消亡。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">typedef void(^MyBlock)(void);//block写法比较特殊，一般重命名一下    </div><div class="line">@interface LBS_A_ViewController ()   </div><div class="line">@property (nonatomic,copy)MyBlock block;//定义一个MyBlock属性   </div><div class="line">@end   </div><div class="line">@implementation LBS_A_ViewController    </div><div class="line">-(void)viewDidLoad &#123;   </div><div class="line">     [super viewDidLoad];   </div><div class="line">    //实现一个block 这个block实现代码是在栈区的，也就是说，当viewDidLoad这个方法执行完之后，block就消失了。   </div><div class="line">    void(^block)(void) = ^&#123;   </div><div class="line">        NSLog(@&quot;block的简单使用&quot;);   </div><div class="line">    &#125;;   </div><div class="line">    //赋值给属性_block 此时就完成了copy _block指针指向堆中一块内存(存放的是block的实现代码)，_block就一直拥有了代码块的使用权，直到 LBS_A_ViewCont         roller对象消亡。</div><div class="line">   _block = block;</div></pre></td></tr></table></figure></p>
+<p>28.C 和OC怎么混用<br>OC的编译器处理后缀为.m的文件时，可以识别OC、C的代码，处理.mm的文件时会识别OC、C、C++代码（.cpp文件只能编译C++），OC混编cpp不是问题，只要cpp文件和cpp unclude 的文件中不包含OC的东西就可以使用<br>29.OC中堆栈的区别<br> （1） 管理方式：栈是由编译器自动管理，堆释放工作是由程序员来控制的，容易产生内存泄漏<br> （2） 申请大小：栈是想低地址扩展的数据结构，是一块儿连续的内存区域，也就是说栈顶的地址和栈的最大容量是息通预先设定好的。堆是想高地址扩展的数据结构，是不连续的内存区域。这是由与系统实用链表来存储的空闲内存地址的，自然是不连续的，儿链表的遍历放心啊更是有低地址想高地址。堆的大小受限于计算机系统中的有效虚拟内存。<br>  （3）碎片问题：对于对来讲，频繁的创建释放造成空间的不连续从而造成大量的碎片，使圣墟效率降低。栈不会存在这个问题。<br>  （4）分配方式：栈是机器系统提供的数据结构，计算机会分配专门的寄存器存放栈的地址，压栈出站都有专门的指令执行，这就决定了栈的效率比较高。堆是由C/C++函数库提供的，他的机制很复杂</p>
+<p>30.关键字const有什么含意？修饰类呢?static的作用,用于类呢?还有extern c的作用<br>const 意味着”只读”，下面的声明都是什么意思？<br>const int a;<br>int const a;<br>const int <em> a;<br>int </em> const a;<br>int?const * a const;<br>前两个的作用是一样，a是一个常整型数。<br>第三个意味着a是一个指向常整型数的指针（也就是，整型数是不可修改的，但指针可以）。<br>第四个意思a是一个指向整型数的常指针（也就是说，指针指向的整型数是可以修改的，但指针是不可修改的）。<br>最后一个意味着a是一个指向常整型数的常指针（也就是说，指针指向的整型数是不可修改的，同时指针也是不可修改的）。<br>1).欲阻止一个变量被改变，可以使用 const 关键字。在定义该 const 变量时，通常需要对它进行初<br>始化，因为以后就没有机会再去改变它了；<br>2).对指针来说，可以指定指针本身为 const，也可以指定指针所指的数据为 const，或二者同时指<br>定为 const；<br>3).在一个函数声明中，const 可以修饰形参，表明它是一个输入参数，在函数内部不能改变其值；<br>4).对于类的成员函数，若指定其为 const 类型，则表明其是一个常函数，不能修改类的成员变量；<br>5).对于类的成员函数，有时候必须指定其返回值为 const 类型，以使得其返回值不为“左值”。</p>
 
         
         
