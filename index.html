@@ -162,76 +162,14 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/04/20/APNs推送/" title="APNs推送详解" itemprop="url">APNs推送详解</a>
+      <a href="/2017/04/23/面试题整理/" title="面试题整理1" itemprop="url">面试题整理1</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Dean Ambrose" target="_blank" itemprop="author">Dean Ambrose</a>
 		
   <p class="article-time">
-    <time datetime="2017-04-20T12:42:03.000Z" itemprop="datePublished"> 发表于 2017-04-20</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h3 id="什么是APNs消息推送"><a href="#什么是APNs消息推送" class="headerlink" title="什么是APNs消息推送"></a>什么是APNs消息推送</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">APNs: Apple Push Notification Service的缩写,是苹果的服务器</div><div class="line">平时用的最多的第三方推送：极光推送原理与iOS原生推送差不多。</div></pre></td></tr></table></figure>
-<h3 id="推送流程"><a href="#推送流程" class="headerlink" title="推送流程"></a>推送流程</h3><blockquote>
-<p>阶段一<br>    1.app向APNs注册该device。 </p>
-<pre><code>2. APNs返回device token给app。 
-3. app将device token 传给app服务端，由服务端保存。
-</code></pre><p>阶段2<br>    1.device和APNs建立长连接。<br>    2.app服务端将device token + 消息打包发给APNs。<br>    3.APNs将消息发送给divice。</p>
-</blockquote>
-<h3 id="客户端操作"><a href="#客户端操作" class="headerlink" title="客户端操作"></a>客户端操作</h3><p>1.注册“通知设置” 允许你的应用在设备上开启通知<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions &#123;</div><div class="line">    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge categories:nil];</div><div class="line">    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];</div><div class="line">    return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>2.收到“通知设置”的回调，给你的设备注册远程通知<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings &#123;</div><div class="line">    if (notificationSettings.types != UIUserNotificationTypeNone) &#123;</div><div class="line">        [application registerForRemoteNotifications];</div><div class="line">    &#125; else &#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>3.收到注册远程通知的回调，成功将deviceToken发送给app服务器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken &#123;</div><div class="line">    [self sendToProviderWithDiviceToken:deviceToken];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error &#123;</div><div class="line">    NSLog(@&quot;#error in registration:%@&quot;, error);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>4.服务器发送通知点开以后启用一下回调<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">- (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo &#123;</div><div class="line">    NSDictionary *apsInfo = [userInfo objectForKey:@&quot;aps&quot;];</div><div class="line"></div><div class="line">    NSString *alert = [apsInfo objectForKey:@&quot;alert&quot;];</div><div class="line">    NSLog(@&quot;Received Push Alert: %@&quot;, alert);</div><div class="line"></div><div class="line">    NSString *sound = [apsInfo objectForKey:@&quot;sound&quot;];</div><div class="line">    NSLog(@&quot;Received Push Sound: %@&quot;, sound);</div><div class="line"></div><div class="line">    NSString *badge = [apsInfo objectForKey:@&quot;badge&quot;];</div><div class="line">    NSLog(@&quot;Received Push Badge: %@&quot;, badge);</div><div class="line">    application.applicationIconBadgeNumber = [[apsInfo objectForKey:@&quot;badge&quot;] integerValue];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>消息json格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">　　&quot;aps&quot; :</div><div class="line">           &#123; &quot;alert&quot; :</div><div class="line">                      &#123;</div><div class="line">                        &quot;action-loc-key&quot; : &quot;显示&quot; ,</div><div class="line">                        &quot;body&quot; : &quot;This is the alert text&quot;</div><div class="line">                       &#125;,</div><div class="line">             &quot;badge&quot; : 1,</div><div class="line">             &quot;sound&quot; : &quot;default&quot; &#125;,</div><div class="line">　　&quot;server&quot; : &#123; &quot;serverId&quot; : 1, &quot;name&quot; : &quot;Server name&quot;&#125;</div><div class="line">　　&#125;</div></pre></td></tr></table></figure></p>
-<p>之前项目都用到了一直懒得整理，现在借鉴DevYuan的博客重新梳理一下，慢慢再往上添加修改内容，每天进步一点点！</p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/04/20/面试题整理/" title="面试题整理1" itemprop="url">面试题整理1</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Dean Ambrose" target="_blank" itemprop="author">Dean Ambrose</a>
-		
-  <p class="article-time">
-    <time datetime="2017-04-20T12:42:03.000Z" itemprop="datePublished"> 发表于 2017-04-20</time>
+    <time datetime="2017-04-23T14:42:03.000Z" itemprop="datePublished"> 发表于 2017-04-23</time>
     
   </p>
 </header>
@@ -277,6 +215,68 @@
 <p>27.什么是Block，BLock的实现原理<br>Block:我们称之为代码块，他类似于一个方法，而每一个方法都是在被调用的时候从硬盘到内存，然后去执行，执行完就消失， 方法的内存不需要我们管理，方法的内存在栈区，Block不想OC的类对象（在堆区），他也是在栈区的，如果我们使用Block作为一个对象的属性，我们会使用copy修饰她，因为他在栈区，我们没办法控制塔的消亡，当我们用copy修饰的时候，息通会把Block的实现拷贝一份到堆区，这样我们对应的属性就拥有该Block的所有权，就可以保证代码块不会提前消亡。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">typedef void(^MyBlock)(void);//block写法比较特殊，一般重命名一下    </div><div class="line">@interface LBS_A_ViewController ()   </div><div class="line">@property (nonatomic,copy)MyBlock block;//定义一个MyBlock属性   </div><div class="line">@end   </div><div class="line">@implementation LBS_A_ViewController    </div><div class="line">-(void)viewDidLoad &#123;   </div><div class="line">     [super viewDidLoad];   </div><div class="line">    //实现一个block 这个block实现代码是在栈区的，也就是说，当viewDidLoad这个方法执行完之后，block就消失了。   </div><div class="line">    void(^block)(void) = ^&#123;   </div><div class="line">        NSLog(@&quot;block的简单使用&quot;);   </div><div class="line">    &#125;;   </div><div class="line">    //赋值给属性_block 此时就完成了copy _block指针指向堆中一块内存(存放的是block的实现代码)，_block就一直拥有了代码块的使用权，直到 LBS_A_ViewCont         roller对象消亡。</div><div class="line">   _block = block;</div></pre></td></tr></table></figure></p>
 <p>28.C 和OC怎么混用<br>OC的编译器处理后缀为.m的文件时，可以识别OC、C的代码，处理.mm的文件时会识别OC、C、C++代码（.cpp文件只能编译C++），OC混编cpp不是问题，只要cpp文件和cpp unclude 的文件中不包含OC的东西就可以使用<br>29.OC中堆栈的区别<br> （1） 管理方式：栈是由编译器自动管理，堆释放工作是由程序员来控制的，容易产生内存泄漏<br> （2） 申请大小：栈是想低地址扩展的数据结构，是一块儿连续的内存区域，也就是说栈顶的地址和栈的最大容量是息通预先设定好的。堆是想高地址扩展的数据结构，是不连续的内存区域。这是由与系统实用链表来存储的空闲内存地址的，自然是不连续的，儿链表的遍历放心啊更是有低地址想高地址。堆的大小受限于计算机系统中的有效虚拟内存。<br>  （3）碎片问题：对于对来讲，频繁的创建释放造成空间的不连续从而造成大量的碎片，使圣墟效率降低。栈不会存在这个问题。<br>  （4）分配方式：栈是机器系统提供的数据结构，计算机会分配专门的寄存器存放栈的地址，压栈出站都有专门的指令执行，这就决定了栈的效率比较高。堆是由C/C++函数库提供的，他的机制很复杂</p>
 <p>30.关键字const有什么含意？修饰类呢?static的作用,用于类呢?还有extern c的作用<br>const 意味着”只读”，下面的声明都是什么意思？<br>const int a;<br>int const a;<br>const int <em> a;<br>int </em> const a;<br>int?const * a const;<br>前两个的作用是一样，a是一个常整型数。<br>第三个意味着a是一个指向常整型数的指针（也就是，整型数是不可修改的，但指针可以）。<br>第四个意思a是一个指向整型数的常指针（也就是说，指针指向的整型数是可以修改的，但指针是不可修改的）。<br>最后一个意味着a是一个指向常整型数的常指针（也就是说，指针指向的整型数是不可修改的，同时指针也是不可修改的）。<br>1).欲阻止一个变量被改变，可以使用 const 关键字。在定义该 const 变量时，通常需要对它进行初<br>始化，因为以后就没有机会再去改变它了；<br>2).对指针来说，可以指定指针本身为 const，也可以指定指针所指的数据为 const，或二者同时指<br>定为 const；<br>3).在一个函数声明中，const 可以修饰形参，表明它是一个输入参数，在函数内部不能改变其值；<br>4).对于类的成员函数，若指定其为 const 类型，则表明其是一个常函数，不能修改类的成员变量；<br>5).对于类的成员函数，有时候必须指定其返回值为 const 类型，以使得其返回值不为“左值”。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/04/20/APNs推送/" title="APNs推送详解" itemprop="url">APNs推送详解</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Dean Ambrose" target="_blank" itemprop="author">Dean Ambrose</a>
+		
+  <p class="article-time">
+    <time datetime="2017-04-20T12:42:03.000Z" itemprop="datePublished"> 发表于 2017-04-20</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h3 id="什么是APNs消息推送"><a href="#什么是APNs消息推送" class="headerlink" title="什么是APNs消息推送"></a>什么是APNs消息推送</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">APNs: Apple Push Notification Service的缩写,是苹果的服务器</div><div class="line">平时用的最多的第三方推送：极光推送原理与iOS原生推送差不多。</div></pre></td></tr></table></figure>
+<h3 id="推送流程"><a href="#推送流程" class="headerlink" title="推送流程"></a>推送流程</h3><blockquote>
+<p>阶段一<br>    1.app向APNs注册该device。 </p>
+<pre><code>2. APNs返回device token给app。 
+3. app将device token 传给app服务端，由服务端保存。
+</code></pre><p>阶段2<br>    1.device和APNs建立长连接。<br>    2.app服务端将device token + 消息打包发给APNs。<br>    3.APNs将消息发送给divice。</p>
+</blockquote>
+<h3 id="客户端操作"><a href="#客户端操作" class="headerlink" title="客户端操作"></a>客户端操作</h3><p>1.注册“通知设置” 允许你的应用在设备上开启通知<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions &#123;</div><div class="line">    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge categories:nil];</div><div class="line">    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];</div><div class="line">    return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>2.收到“通知设置”的回调，给你的设备注册远程通知<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings &#123;</div><div class="line">    if (notificationSettings.types != UIUserNotificationTypeNone) &#123;</div><div class="line">        [application registerForRemoteNotifications];</div><div class="line">    &#125; else &#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>3.收到注册远程通知的回调，成功将deviceToken发送给app服务器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken &#123;</div><div class="line">    [self sendToProviderWithDiviceToken:deviceToken];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error &#123;</div><div class="line">    NSLog(@&quot;#error in registration:%@&quot;, error);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>4.服务器发送通知点开以后启用一下回调<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">- (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo &#123;</div><div class="line">    NSDictionary *apsInfo = [userInfo objectForKey:@&quot;aps&quot;];</div><div class="line"></div><div class="line">    NSString *alert = [apsInfo objectForKey:@&quot;alert&quot;];</div><div class="line">    NSLog(@&quot;Received Push Alert: %@&quot;, alert);</div><div class="line"></div><div class="line">    NSString *sound = [apsInfo objectForKey:@&quot;sound&quot;];</div><div class="line">    NSLog(@&quot;Received Push Sound: %@&quot;, sound);</div><div class="line"></div><div class="line">    NSString *badge = [apsInfo objectForKey:@&quot;badge&quot;];</div><div class="line">    NSLog(@&quot;Received Push Badge: %@&quot;, badge);</div><div class="line">    application.applicationIconBadgeNumber = [[apsInfo objectForKey:@&quot;badge&quot;] integerValue];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>消息json格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">　　&quot;aps&quot; :</div><div class="line">           &#123; &quot;alert&quot; :</div><div class="line">                      &#123;</div><div class="line">                        &quot;action-loc-key&quot; : &quot;显示&quot; ,</div><div class="line">                        &quot;body&quot; : &quot;This is the alert text&quot;</div><div class="line">                       &#125;,</div><div class="line">             &quot;badge&quot; : 1,</div><div class="line">             &quot;sound&quot; : &quot;default&quot; &#125;,</div><div class="line">　　&quot;server&quot; : &#123; &quot;serverId&quot; : 1, &quot;name&quot; : &quot;Server name&quot;&#125;</div><div class="line">　　&#125;</div></pre></td></tr></table></figure></p>
+<p>之前项目都用到了一直懒得整理，现在借鉴DevYuan的博客重新梳理一下，慢慢再往上添加修改内容，每天进步一点点！</p>
 
         
         
