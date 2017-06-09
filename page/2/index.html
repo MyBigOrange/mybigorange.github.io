@@ -81,6 +81,147 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2017/03/26/runloop/" title="runloop 研究" itemprop="url">runloop 研究</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Dean Ambrose" target="_blank" itemprop="author">Dean Ambrose</a>
+		
+  <p class="article-time">
+    <time datetime="2017-03-26T11:11:07.000Z" itemprop="datePublished"> 发表于 2017-03-26</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="runloop概念"><a href="#runloop概念" class="headerlink" title="runloop概念"></a>runloop概念</h2><pre><code>RunLoop是系统中和线程相关的基础架构的组成部分( 和线程相关 )，一个RunLoop是一个事件处理环，系统利用这个事件处理环来安排事务，协调输入的各种事件。当一个iOS应用启动后，如果我们不做任何交互操作，那么该应用默认不会做任何响应，一旦我们触摸了屏幕，或者点击了某个按钮，程序就会立即做出相应的响应，给我们的操作一个反馈。就好像这个应用处于一个时刻准备着的状态，有事要做的时候，它就会马上做。没有事要做的时候，它就等待一样。应用的这一点全是靠RunLoop机制来实现的。RunLoop从字面理解可以把它看做一个运行循环，而且它会事件相关联，所有这里我们也暂时把它当做一个事件运行循环。
+
+苹果官方为我们提供了两个这样的运行循环对象：NSRunLoop 和 CFRunLoopRef。CFRunLoopRef 是在 CoreFoundation 框架内的，它提供了纯 C 函数的 API，所有这些 API 都是线程安全的。NSRunLoop 是基于 CFRunLoopRef 的封装，提供了面向对象的 API，但是这些 API 不是线程安全的。下面结合这两个对象来介绍运行循环
+</code></pre><p>RunLoop机制是用来分发和处理事件的，那么我们来看看RunLoop能处理的事件类型：输入源（input source）和定时源（timer source）<br>输入源（input source）：传递异步事件，消息通常来自于其他线程，处理其他线程的消息，如下载操作执行完毕，要回到主线程中更新UI，这些异步事件就是由RunLoop来监听和管理的。<br>定时源（timer source）：传递同步事件，发生在特定时间，或者时间间隔，如定时检查UI界面上有没有刷新事件、点击事件等等，也就是处理本线程上的事件。</p>
+<pre><code> RunLoop只有在一定的模式下才会运行，就是说要想启动RunLoop就要指定其运行的模式。系统已经提供了RunLoop运行的5种模式，如下：
+NSDefaultRunLoopMode：是RunLoop默认的模式，表示程序空闲。如果我们用NSTimer来每秒打印输出的时候，一旦有手势操作（如滑动、滚动等操作），那么NSTimer就会停止执行。
+UITrackingRunLoopMode：跟踪模式（是UIScrollView专用模式）。上面提到的NSTimer例子，一旦有滚动等操作，RunLoop就会自动从NSDefaultRunLoopMode模式切换到UITrackingRunLoopMode模式，目的就是为了保证滚动的流畅性，给用户提供流畅的体验。
+NSRunLoopCommonMode：这种模式会包含以上两种模式。我们执行滑动操作的同时，NSTimer会始终调用方法来执行打印，但是，一旦所调用的方法中有耗时的操作时，效果就会卡顿。所有在实际开发中，不建议使用该模式。但是，有的需求就是又要有耗时操作又要保证流畅。解决办法就是将耗时操作放到子线程中（子线程RunLoop需要手动启动：CFRunLoopRun(),CFRunLoopStop(CFRunLoopCurrent())停止循环）。
+UIInitializationRunLoopMode：在程序刚启动的时进入该模式，启动完就不在使用。
+GSEventReceiveRunLoopMode：接受系统事件的内部mode，通常用不到。
+</code></pre><h2 id="RunLoop总结："><a href="#RunLoop总结：" class="headerlink" title="RunLoop总结："></a>RunLoop总结：</h2><p>RunLoop是iOS事件响应与任务处理最核心的机制，它贯穿iOS整个系统。<br>RunLoop是一种事件运行循环机制，是保持应用程序持续运行的一种机制。正是由于该机制的存在，应用程序才能在没有事件发生的时候处于休眠状态，有事件发生的时候处于工作状态。以此来节约CPU资源。这也是它的一大特点。<br>NSRunLoop是Cocoa框架中的类，与之对应的，在Core Foundation中是CFRunLoopRef类。两者的区别是前者不是线程安全的，后者是线程安全的，且两者可以相互转化。<br>RunLoop和线程的关系：<br>RunLoop是用来管理线程的，每个线程对应一个RunLoop对象。我们不可以去创建当前线程的RunLoop对象，但是我们可以去获取当前线程的RunLoop。RunLoop就是来监听该线程有无事件发生，如果有就工作，如果没有就休眠。<br>主线程的RunLoop对象默认开启，其他线程默认不开启。<br>RunLoop与AutoreleasePool；<br>RunLoop处理的事件类型；<br>RunLoop的运行模式mode；</p>
+<h2 id="主要应用场景"><a href="#主要应用场景" class="headerlink" title="主要应用场景"></a>主要应用场景</h2><ul>
+<li>RunLoop与NSTimer的结合</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">默认情况下NSTimer被创建好之后，实在DefaultModel下的，所以所以当前页面中有Scroll事件时，Timer事件就会被阻塞，起不到任何反应。</div><div class="line">*解决办法*</div><div class="line">更改NSTimer运行的model，UITranckingRunloopModel</div><div class="line">或者：将NSTimer放到新的线程（非UI）中</div><div class="line">NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(newThread) object:nil];</div><div class="line">    [thread start];</div><div class="line">- (void)newThread&#123;</div><div class="line">    @autoreleasepool&#123;</div><div class="line">        //在当前Run Loop中添加timer，模式是默认的NSDefaultRunLoopMode</div><div class="line">        timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(incrementCounter:) userInfo: nil repeats:YES];</div><div class="line">        //开始执行新线程的Run Loop，如果不启动run loop，timer的事件是不会响应的</div><div class="line">        [[NSRunLoop currentRunLoop] run];</div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">总结</div><div class="line"></div><div class="line">1、如果是在主线程中运行timer，想要timer在某界面有视图滚动时，依然能正常运转，那么将timer添加到RunLoop中时，就需要设置mode 为NSRunLoopCommonModes。</div><div class="line">2、如果是在子线程中运行timer,那么将timer添加到RunLoop中后，Mode设置为NSDefaultRunLoopMode或NSRunLoopCommonModes均可，但是需要保证RunLoop在运行，且其中有任务。</div></pre></td></tr></table></figure>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/03/25/runtime 实用讲解/" title="runtime 参考细节" itemprop="url">runtime 参考细节</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Dean Ambrose" target="_blank" itemprop="author">Dean Ambrose</a>
+		
+  <p class="article-time">
+    <time datetime="2017-03-25T11:11:07.000Z" itemprop="datePublished"> 发表于 2017-03-25</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>形势严峻，找工作期间还得给自己充电啊，把以前模棱两可的知识点再梳理一遍，知其然，知其所以然，加油。</p>
+<h2 id="什么是runtime"><a href="#什么是runtime" class="headerlink" title="什么是runtime"></a>什么是runtime</h2><p>运行时，是一套较底层的纯C语言API，平时我们写的OC代码，运行的时候都是以runtime进行的，只不过我们感觉不到而已。</p>
+<h2 id="runtime-有什么作用"><a href="#runtime-有什么作用" class="headerlink" title="runtime 有什么作用"></a>runtime 有什么作用</h2><ol>
+<li>获取一个类全部成员变量名（包括私有） Ivas *ivars = class_copyIvarList([class] ,&amp;count);</li>
+<li>获取一个类全部属性名 objc_propety_t *properties = class_copyPropertyList(class, &amp;count)</li>
+<li>获取一个类全部方法 Method method = class_copyMethodList(class,&amp;count)</li>
+<li>获取一个类遵循的所有协议 __unsafe_unretained Protocol *protocols = class_copyProtocolList([self class], &amp;count)</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">/// 描述类中的一个方法</div><div class="line">typedef struct objc_method *Method;</div><div class="line"></div><div class="line">/// 实例变量</div><div class="line">typedef struct objc_ivar *Ivar;</div><div class="line"></div><div class="line">/// 类别Category</div><div class="line">typedef struct objc_category *Category;</div><div class="line"></div><div class="line">/// 类中声明的属性</div><div class="line">typedef struct objc_property *objc_property_t;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">unsigned int count;</div><div class="line">    //获取属性列表</div><div class="line">    objc_property_t *propertyList = class_copyPropertyList([self class], &amp;count);</div><div class="line">    for (unsigned int i=0; i&lt;count; i++) &#123;</div><div class="line">        const char *propertyName = property_getName(propertyList[i]);</div><div class="line">        NSLog(@&quot;property----&gt;%@&quot;, [NSString stringWithUTF8String:propertyName]);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //获取方法列表</div><div class="line">    Method *methodList = class_copyMethodList([self class], &amp;count);</div><div class="line">    for (unsigned int i; i&lt;count; i++) &#123;</div><div class="line">        Method method = methodList[i];</div><div class="line">        NSLog(@&quot;method----&gt;%@&quot;, NSStringFromSelector(method_getName(method)));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //获取成员变量列表</div><div class="line">    Ivar *ivarList = class_copyIvarList([self class], &amp;count);</div><div class="line">    for (unsigned int i; i&lt;count; i++) &#123;</div><div class="line">        Ivar myIvar = ivarList[i];</div><div class="line">        const char *ivarName = ivar_getName(myIvar);</div><div class="line">        NSLog(@&quot;Ivar----&gt;%@&quot;, [NSString stringWithUTF8String:ivarName]);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //获取协议列表</div><div class="line">    __unsafe_unretained Protocol **protocolList = class_copyProtocolList([self class], &amp;count);</div><div class="line">    for (unsigned int i; i&lt;count; i++) &#123;</div><div class="line">        Protocol *myProtocal = protocolList[i];</div><div class="line">        const char *protocolName = protocol_getName(myProtocal);</div><div class="line">        NSLog(@&quot;protocol----&gt;%@&quot;, [NSString stringWithUTF8String:protocolName]);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h2 id="方法调用在运行时的过程"><a href="#方法调用在运行时的过程" class="headerlink" title="方法调用在运行时的过程"></a>方法调用在运行时的过程</h2><p>如果用示例对象调用示例方法，会到实例的Isa指针指向的对象（类对象）操作。<br>如果盗用的是类方法，就会到类对象的isa指针指向的对象（也就是元类对象）中对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">1. 首先，在相应操作的对象中的缓存方法列表中找调用的方法，如果找到，转向相应实现并执行。</div><div class="line">2. 如果没找到，在相应操作的对象中的方法列表中找调用的方法，如果找到，转向相应实现执行</div><div class="line">3. 如果没找到，去父类指针所指向的对象中执行1，2.</div><div class="line">4. 以此类推，如果一直到根类还没找到，转向拦截调用。</div><div class="line">5. 如果没有重写拦截调用的方法，程序报错。</div></pre></td></tr></table></figure>
+<blockquote>
+<p>重写父类方法后，并没有覆盖父类方法，只是在当前对象中找到了这个方法后就不会去父类中寻找<br>如果想调用已经重写过的方法的父类的实现，只需要使用 super这个编译器标识。他就会在运行时跳过当天类对象寻找方法的过程</p>
+</blockquote>
+<p>###拦截调用<br>如果没有找到这个方法就会转向拦截调用。拦截调用就是在找不到调用的方法程序崩溃之前，你有机会通过重写NSObject的四个方法处理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">+ (BOOL)resolveClassMethod:(SEL)sel; 第一个方法是当你调用一个不存在的类方法的时候，会调用这个方法，默认返回NO，你可以加上自己的处理然后返回YES。</div><div class="line">+ (BOOL)resolveInstanceMethod:(SEL)sel; 第二个方法和第一个方法相似，只不过处理的是实例方法</div><div class="line">//后两个方法需要转发到其他的类处理</div><div class="line">- (id)forwardingTargetForSelector:(SEL)aSelector; 第三个方法是将你调用的不存在的方法重定向到一个其他声明了这个方法的类，只需要你返回一个有这个方法的target。</div><div class="line">- (void)forwardInvocation:(NSInvocation *)anInvocation; 第四个方法是将你调用的不存在的方法打包成NSInvocation传给你。做完你自己的处理后，调用invokeWithTarget:方法让某个target触发这个方法</div></pre></td></tr></table></figure>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><ol>
+<li><p>动态添加方法<br>2.关联对象，分类添加新的新的属性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">//首先定义一个全局变量，用它的地址作为关联对象的key</div><div class="line">static char associatedObjectKey;</div><div class="line">//设置关联对象</div><div class="line">objc_setAssociatedObject(target, &amp;associatedObjectKey, @&quot;添加的字符串属性&quot;, OBJC_ASSOCIATION_RETAIN_NONATOMIC); //获取关联对象</div><div class="line">NSString *string = objc_getAssociatedObject(target, &amp;associatedObjectKey);</div><div class="line">NSLog(@&quot;AssociatedObject = %@&quot;, string);</div></pre></td></tr></table></figure>
+</li>
+<li><p>方法交换 方法交换，顾名思义，就是将两个方法的实现交换。例如，将A方法和B方法交换，调用A方法的时候，就会执行B方法中的代码，反之亦然。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">#import &quot;UIViewController+swizzling.h&quot;</div><div class="line">#import &lt;objc/runtime.h&gt;</div><div class="line"></div><div class="line">@implementation UIViewController (swizzling)</div><div class="line"></div><div class="line">//load方法会在类第一次加载的时候被调用</div><div class="line">//调用的时间比较靠前，适合在这个方法里做方法交换</div><div class="line">+ (void)load&#123;</div><div class="line">    //方法交换应该被保证，在程序中只会执行一次</div><div class="line">    static dispatch_once_t onceToken;</div><div class="line">    dispatch_once(&amp;onceToken, ^&#123;</div><div class="line"></div><div class="line">        //获得viewController的生命周期方法的selector</div><div class="line">        SEL systemSel = @selector(viewWillAppear:);</div><div class="line">        //自己实现的将要被交换的方法的selector</div><div class="line">        SEL swizzSel = @selector(swiz_viewWillAppear:);</div><div class="line">        //两个方法的Method</div><div class="line">        Method systemMethod = class_getInstanceMethod([self class], systemSel);</div><div class="line">        Method swizzMethod = class_getInstanceMethod([self class], swizzSel);</div><div class="line"></div><div class="line">        //首先动态添加方法，实现是被交换的方法，返回值表示添加成功还是失败</div><div class="line">        BOOL isAdd = class_addMethod(self, systemSel, method_getImplementation(swizzMethod), method_getTypeEncoding(swizzMethod));</div><div class="line">        if (isAdd) &#123;</div><div class="line">            //如果成功，说明类中不存在这个方法的实现</div><div class="line">            //将被交换方法的实现替换到这个并不存在的实现</div><div class="line">            class_replaceMethod(self, swizzSel, method_getImplementation(systemMethod), method_getTypeEncoding(systemMethod));</div><div class="line">        &#125;else&#123;</div><div class="line">            //否则，交换两个方法的实现</div><div class="line">            method_exchangeImplementations(systemMethod, swizzMethod);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)swiz_viewWillAppear:(BOOL)animated&#123;</div><div class="line">    //这时候调用自己，看起来像是死循环</div><div class="line">    //但是其实自己的实现已经被替换了</div><div class="line">    [self swiz_viewWillAppear:animated];</div><div class="line">    NSLog(@&quot;swizzle&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>4.给对象添加关联对象<br>比如alertView,一般传值，使用的是alertView的tag属性。我们想把更多的参数传给alertView代理：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">- (void)shopCartCell:(BSShopCartCell *)shopCartCell didDeleteClickedAtRecId:(NSString *)recId</div><div class="line">&#123;</div><div class="line">    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@&quot;&quot; message:@&quot;确认要删除这个宝贝&quot; delegate:self cancelButtonTitle:@&quot;取消&quot; otherButtonTitles:@&quot;确定&quot;, nil];</div><div class="line">    </div><div class="line">    // 传递多参数</div><div class="line">    objc_setAssociatedObject(alert, &quot;suppliers_id&quot;, @&quot;1&quot;, OBJC_ASSOCIATION_RETAIN_NONATOMIC);</div><div class="line">    objc_setAssociatedObject(alert, &quot;warehouse_id&quot;, @&quot;2&quot;, OBJC_ASSOCIATION_RETAIN_NONATOMIC);</div><div class="line">    </div><div class="line">    alert.tag = [recId intValue];</div><div class="line">    [alert show];</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line"> *  确定删除操作</div><div class="line"> */</div><div class="line">- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex &#123;</div><div class="line">    if (buttonIndex == 1) &#123;</div><div class="line">        </div><div class="line">        NSString *warehouse_id = objc_getAssociatedObject(alertView, &quot;warehouse_id&quot;);</div><div class="line">        NSString *suppliers_id = objc_getAssociatedObject(alertView, &quot;suppliers_id&quot;);</div><div class="line">        NSString *recId = [NSString stringWithFormat:@&quot;%ld&quot;,(long)alertView.tag];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">objc_setAssociatedObject方法的参数解释:</div><div class="line"></div><div class="line">第一个参数id object, 当前对象</div><div class="line">第二个参数const void *key, 关联的key，是c字符串 </div><div class="line">第三个参数id value, 被关联的对象的值 </div><div class="line">第四个参数objc_AssociationPolicy policy关联引用的规则</div></pre></td></tr></table></figure></p>
+<p>动态添加方法<br>开发使用场景：如果一个类方法非常多，加载类到内存的时候也比较耗费资源，需要给每个方法生成映射表，可以使用动态给某个类，添加方法解决。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"> Person *p = [[Person alloc] init];</div><div class="line"></div><div class="line">    // 默认person，没有实现eat方法，可以通过performSelector调用，但是会报错。</div><div class="line">    // 动态添加方法就不会报错</div><div class="line">    [p performSelector:@selector(eat)];</div><div class="line">    </div><div class="line">    // 默认方法都有两个隐式参数，</div><div class="line">void eat(id self,SEL sel)</div><div class="line">&#123;</div><div class="line">       NSLog(@&quot;%@ %@&quot;,self,NSStringFromSelector(sel));</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 当一个对象调用未实现的方法，会调用这个方法处理,并且会把对应的方法列表传过来.</div><div class="line">// 刚好可以用来判断，未实现的方法是不是我们想要动态添加的方法</div><div class="line">+ (BOOL)resolveInstanceMethod:(SEL)sel</div><div class="line">&#123;</div><div class="line">    if (sel == @selector(eat)) &#123;</div><div class="line">        // 动态添加eat方法</div><div class="line"></div><div class="line">        // 第一个参数：给哪个类添加方法</div><div class="line">        // 第二个参数：添加方法的方法编号</div><div class="line">        // 第三个参数：添加方法的函数实现（函数地址）</div><div class="line">        // 第四个参数：函数的类型，(返回值+参数类型) v:void @:对象-&gt;self :表示SEL-&gt;_cmd</div><div class="line">        class_addMethod(self, @selector(eat), eat, &quot;v@:&quot;);</div><div class="line">    &#125;</div><div class="line">    return [super resolveInstanceMethod:sel];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2017/03/21/绑定域名/" title="github pages 绑定一级二级域名" itemprop="url">github pages 绑定一级二级域名</a>
   </h1>
   <p class="article-author">By

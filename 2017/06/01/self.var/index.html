@@ -4,24 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>iOS 核心知识点 | Dean Ambrose</title>
+    <title>self.var 和_var区别 | Dean Ambrose</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Dean Ambrose">
     
 
     
-    <meta name="description" content="iOS必须知道并深究的一些知识点，一点一点积累扩展。 ##iOS 核心框架CoreAnimationCoreGraphicsCoreLocationAVFoundationFoundation ##iOS核心机制 UITableView 重用ObjC内存管理；自动释放池，ARC如何实现runloopruntimeBlock的定义、特性、内存区域、如何实现Responder ChainNSOpera">
+    <meta name="description" content="在平时搬砖的过程中经常为了省事直接使用_var来访问，有时候使用self.var，但是两者是有本质区别的，之前是知道什么情况下用什么情况下不用，好记性还不如烂笔头呢，简单记录一下方便以后查阅吧。 注意区分一下属性和实例变量 self.var是对属性的访问；而_var是对实例变量的访问 实例变量具有私有性，一般情况下仅在类内部使用，为了方便给外读写这个实力变量，就有了属性，属性用@property管">
 <meta name="keywords">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS 核心知识点">
-<meta property="og:url" content="http://yoursite.com/2017/05/15/iOS 整体大观/index.html">
+<meta property="og:title" content="self.var 和_var区别">
+<meta property="og:url" content="http://yoursite.com/2017/06/01/self.var/index.html">
 <meta property="og:site_name" content="Dean Ambrose">
-<meta property="og:description" content="iOS必须知道并深究的一些知识点，一点一点积累扩展。 ##iOS 核心框架CoreAnimationCoreGraphicsCoreLocationAVFoundationFoundation ##iOS核心机制 UITableView 重用ObjC内存管理；自动释放池，ARC如何实现runloopruntimeBlock的定义、特性、内存区域、如何实现Responder ChainNSOpera">
-<meta property="og:updated_time" content="2017-06-09T04:31:11.000Z">
+<meta property="og:description" content="在平时搬砖的过程中经常为了省事直接使用_var来访问，有时候使用self.var，但是两者是有本质区别的，之前是知道什么情况下用什么情况下不用，好记性还不如烂笔头呢，简单记录一下方便以后查阅吧。 注意区分一下属性和实例变量 self.var是对属性的访问；而_var是对实例变量的访问 实例变量具有私有性，一般情况下仅在类内部使用，为了方便给外读写这个实力变量，就有了属性，属性用@property管">
+<meta property="og:updated_time" content="2017-06-09T07:44:26.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS 核心知识点">
-<meta name="twitter:description" content="iOS必须知道并深究的一些知识点，一点一点积累扩展。 ##iOS 核心框架CoreAnimationCoreGraphicsCoreLocationAVFoundationFoundation ##iOS核心机制 UITableView 重用ObjC内存管理；自动释放池，ARC如何实现runloopruntimeBlock的定义、特性、内存区域、如何实现Responder ChainNSOpera">
+<meta name="twitter:title" content="self.var 和_var区别">
+<meta name="twitter:description" content="在平时搬砖的过程中经常为了省事直接使用_var来访问，有时候使用self.var，但是两者是有本质区别的，之前是知道什么情况下用什么情况下不用，好记性还不如烂笔头呢，简单记录一下方便以后查阅吧。 注意区分一下属性和实例变量 self.var是对属性的访问；而_var是对实例变量的访问 实例变量具有私有性，一般情况下仅在类内部使用，为了方便给外读写这个实力变量，就有了属性，属性用@property管">
 
     
     <link rel="alternative" href="www.baidu.com" title="Dean Ambrose" type="application/atom+xml">
@@ -81,14 +81,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/05/15/iOS 整体大观/" title="iOS 核心知识点" itemprop="url">iOS 核心知识点</a>
+      <a href="/2017/06/01/self.var/" title="self.var 和_var区别" itemprop="url">self.var 和_var区别</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Dean Ambrose" target="_blank" itemprop="author">Dean Ambrose</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-15T13:55:03.000Z" itemprop="datePublished"> 发表于 2017-05-15</time>
+    <time datetime="2017-06-01T11:23:54.000Z" itemprop="datePublished"> 发表于 2017-06-01</time>
     
   </p>
 </header>
@@ -101,15 +101,14 @@
 		
 		</div>
 		
-		<p>iOS必须知道并深究的一些知识点，一点一点积累扩展。</p>
-<p>##iOS 核心框架<br>CoreAnimation<br>CoreGraphics<br>CoreLocation<br>AVFoundation<br>Foundation</p>
-<p>##iOS核心机制</p>
-<p>UITableView 重用<br>ObjC内存管理；自动释放池，ARC如何实现<br>runloop<br>runtime<br>Block的定义、特性、内存区域、如何实现<br>Responder Chain<br>NSOperation<br>GCD</p>
-<p>##数据结构</p>
-<p>8大排序算法<br>二叉树实现<br>二分查找实现<br>面向对象编程<br>封装、继承、多态<br>设计模式6个原则<br>设计一个类的功能，如何划分粒度（单一职责）<br>接口隔离。<br>如果有一个鸟类，有飞的动作，一个鸵鸟继承它是合适的吗（里氏替换）<br>类之间的依赖如何依赖偶合度最小（依赖倒转）<br>高层依赖低层，低层不能依赖高层。依赖接口，不能依赖具体的类。<br>如果A要调用C函数，但C是B的成员类，应该如何设计？（迪米特）<br>如何设计类，能做到只增加代码，而不修改代码，有哪些经验（开放封闭）<br>通过设计模式解决。</p>
-<p>##计算机技术</p>
-<p>计算机网络： TCP/IP、HTTPCDN、SPDY<br>计算机安全： RSA、AES、DES<br>操作系统：线程、进程、堆栈、死锁、调度算法</p>
-<p>##iOS新特性、新技术<br>iOS7 UIDynamic、SpritKit、新布局、扁平化<br>iOS8 应用程序扩展、HealthKit、SceneKit、CoreLocation、TouchID、PhotoKit<br>iOS9<br>iOS10<br>iOS11<br>Apple Watch<br>第三方库：SDWebImage、AFNetwork、JSONKit、wax<br>swift</p>
+		<p>在平时搬砖的过程中经常为了省事直接使用_var来访问，有时候使用self.var，但是两者是有本质区别的，之前是知道什么情况下用什么情况下不用，好记性还不如烂笔头呢，简单记录一下方便以后查阅吧。</p>
+<p>注意区分一下属性和实例变量</p>
+<p>self.var是对属性的访问；而_var是对实例变量的访问</p>
+<p>实例变量具有私有性，一般情况下仅在类内部使用，为了方便给外读写这个实力变量，就有了属性，属性用@property管家in自声明，属性包含对实力变量读写的get/set方法。在iOS5以后，当我们使用@property来声明属性变量，编译器会自动为我们生成对应的一个以下划线加属性名的实例变量，还有其对应的getter.setter方法。下划线是包括在变量名字里的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">@property (nonatomic, copy) NSString *var;</div><div class="line"></div><div class="line">等价于</div><div class="line"></div><div class="line">NSString *_var;</div><div class="line">- (NSString*)var&#123;</div><div class="line">    return _var;</div><div class="line">&#125;</div><div class="line">- (void)setVar:(NSString*)var&#123;</div><div class="line">    _var = var;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>编译器为我们生成了对私有实例变量操作的get、set方法，当然getter，setter里面还可能有其他额外操作。这样一来我们就可以看出通过self.var和_var访问实例变量的区别，在.m文件中可以通过_var来访问实例变量，但是getter、setter不会被调用，而来自外部的访问，需要通过getter、setter。</p>
+<p>重写get/set方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">//getter：</div><div class="line">- (NSString *)name &#123;</div><div class="line">    NSLog(&quot;%@&quot;, _name);</div><div class="line">    return _name; //必须使用——var访问，否则又会出发属性的getter，进入死循环</div><div class="line">&#125;</div><div class="line">//setter:</div><div class="line">- (void)setName:(NSString *)newValue &#123;</div><div class="line">    _name = newValue;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>如果编译器发现你同时重写了getter、setter，@property机制将不会生效，也就是说，需要我们自己声明_var，当然我们也可以关联到另外一个实例变量上去而并非_var。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -122,7 +121,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2017/05/15/iOS 整体大观/" data-title="iOS 核心知识点 | Dean Ambrose" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yoursite.com/2017/06/01/self.var/" data-title="self.var 和_var区别 | Dean Ambrose" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -136,18 +135,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2017/05/14/基本算法/" title="必须会基本算法">
+ <a href="/2017/05/15/iOS 整体大观/" title="iOS 核心知识点">
   <strong>上一篇：</strong><br/>
   <span>
-  必须会基本算法</span>
+  iOS 核心知识点</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2017/06/01/self.var/"  title="self.var 和_var区别">
+<a href="/2017/06/01/SDWebimage缓存机制/"  title="SDWebImage 缓存机制">
  <strong>下一篇：</strong><br/> 
- <span>self.var 和_var区别
+ <span>SDWebImage 缓存机制
 </span>
 </a>
 </div>
