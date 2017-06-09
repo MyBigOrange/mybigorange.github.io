@@ -11,17 +11,19 @@
     
 
     
-    <meta name="description" content="什么是APNs消息推送12APNs: Apple Push Notification Service的缩写,是苹果的服务器平时用的最多的第三方推送：极光推送原理与iOS原生推送差不多。 推送流程 阶段一    1.app向APNs注册该device。  2. APNs返回device token给app。  3. app将device token 传给app服务端，由服务端保存。 阶段2    1">
+    <meta name="description" content="什么是APNs消息推送12APNs: Apple Push Notification Service的缩写,是苹果的服务器平时用的最多的第三方推送：极光推送原理与iOS原生推送差不多。 推送步骤1、注册：为应用程序申请消息推送服务。此时你的设备会向APNs服务器发送注册请求。2、APNs服务器接受请求，并将deviceToken返给你设备上的应用程序3、客户端应用程序将deviceToken发送给">
 <meta name="keywords">
 <meta property="og:type" content="article">
 <meta property="og:title" content="APNs推送详解">
 <meta property="og:url" content="http://yoursite.com/2017/04/20/APNs推送/index.html">
 <meta property="og:site_name" content="Dean Ambrose">
-<meta property="og:description" content="什么是APNs消息推送12APNs: Apple Push Notification Service的缩写,是苹果的服务器平时用的最多的第三方推送：极光推送原理与iOS原生推送差不多。 推送流程 阶段一    1.app向APNs注册该device。  2. APNs返回device token给app。  3. app将device token 传给app服务端，由服务端保存。 阶段2    1">
-<meta property="og:updated_time" content="2017-05-26T00:41:27.000Z">
+<meta property="og:description" content="什么是APNs消息推送12APNs: Apple Push Notification Service的缩写,是苹果的服务器平时用的最多的第三方推送：极光推送原理与iOS原生推送差不多。 推送步骤1、注册：为应用程序申请消息推送服务。此时你的设备会向APNs服务器发送注册请求。2、APNs服务器接受请求，并将deviceToken返给你设备上的应用程序3、客户端应用程序将deviceToken发送给">
+<meta property="og:image" content="http://ooyerqo96.bkt.clouddn.com/1340708-47499ef73a24d52f.png">
+<meta property="og:updated_time" content="2017-06-09T03:04:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="APNs推送详解">
-<meta name="twitter:description" content="什么是APNs消息推送12APNs: Apple Push Notification Service的缩写,是苹果的服务器平时用的最多的第三方推送：极光推送原理与iOS原生推送差不多。 推送流程 阶段一    1.app向APNs注册该device。  2. APNs返回device token给app。  3. app将device token 传给app服务端，由服务端保存。 阶段2    1">
+<meta name="twitter:description" content="什么是APNs消息推送12APNs: Apple Push Notification Service的缩写,是苹果的服务器平时用的最多的第三方推送：极光推送原理与iOS原生推送差不多。 推送步骤1、注册：为应用程序申请消息推送服务。此时你的设备会向APNs服务器发送注册请求。2、APNs服务器接受请求，并将deviceToken返给你设备上的应用程序3、客户端应用程序将deviceToken发送给">
+<meta name="twitter:image" content="http://ooyerqo96.bkt.clouddn.com/1340708-47499ef73a24d52f.png">
 
     
     <link rel="alternative" href="www.baidu.com" title="Dean Ambrose" type="application/atom+xml">
@@ -97,11 +99,13 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是APNs消息推送"><span class="toc-number">1.</span> <span class="toc-text">什么是APNs消息推送</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#推送流程"><span class="toc-number">2.</span> <span class="toc-text">推送流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#客户端操作"><span class="toc-number">3.</span> <span class="toc-text">客户端操作</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是APNs消息推送"><span class="toc-number">1.</span> <span class="toc-text">什么是APNs消息推送</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#推送步骤"><span class="toc-number">2.</span> <span class="toc-text">推送步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#推送流程"><span class="toc-number">3.</span> <span class="toc-text">推送流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#客户端操作"><span class="toc-number">4.</span> <span class="toc-text">客户端操作</span></a></li></ol>
 		
 		</div>
 		
 		<h3 id="什么是APNs消息推送"><a href="#什么是APNs消息推送" class="headerlink" title="什么是APNs消息推送"></a>什么是APNs消息推送</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">APNs: Apple Push Notification Service的缩写,是苹果的服务器</div><div class="line">平时用的最多的第三方推送：极光推送原理与iOS原生推送差不多。</div></pre></td></tr></table></figure>
+<h3 id="推送步骤"><a href="#推送步骤" class="headerlink" title="推送步骤"></a>推送步骤</h3><p>1、注册：为应用程序申请消息推送服务。此时你的设备会向APNs服务器发送注册请求。<br>2、APNs服务器接受请求，并将deviceToken返给你设备上的应用程序<br>3、客户端应用程序将deviceToken发送给后台服务器程序，后台接收并储存。<br>4、后台服务器向APNs服务器发送推送消息<br>5、APNs服务器将消息发给deviceToken对应设备上的应用程序</p>
+<p><img src="http://ooyerqo96.bkt.clouddn.com/1340708-47499ef73a24d52f.png" alt="priceple -400"></p>
 <h3 id="推送流程"><a href="#推送流程" class="headerlink" title="推送流程"></a>推送流程</h3><blockquote>
 <p>阶段一<br>    1.app向APNs注册该device。 </p>
 <pre><code>2. APNs返回device token给app。 
@@ -166,7 +170,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是APNs消息推送"><span class="toc-number">1.</span> <span class="toc-text">什么是APNs消息推送</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#推送流程"><span class="toc-number">2.</span> <span class="toc-text">推送流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#客户端操作"><span class="toc-number">3.</span> <span class="toc-text">客户端操作</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是APNs消息推送"><span class="toc-number">1.</span> <span class="toc-text">什么是APNs消息推送</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#推送步骤"><span class="toc-number">2.</span> <span class="toc-text">推送步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#推送流程"><span class="toc-number">3.</span> <span class="toc-text">推送流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#客户端操作"><span class="toc-number">4.</span> <span class="toc-text">客户端操作</span></a></li></ol>
  
   </div>
 

@@ -4,24 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>面试题整理2 | Dean Ambrose</title>
+    <title>常用算法 | Dean Ambrose</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Dean Ambrose">
     
 
     
-    <meta name="description" content="volatile 有什么含义，病给出三个例子 一个定义为volatile的变量是说这个变量可能被意想不到的改变，这样编译器就不会去假设这个变量的值了。精确地说编译器在用到这个变量是必须每次都小心的重新读取这个变量的值，而不是使用保存在寄存器里的备份。（多线程应用中被几个任务共享的变量）  static管家字的作用 1.函数体内static变量的作用范围为该函数体，不同于auto变量，该变量的内存">
+    <meta name="description" content="天道酬勤">
 <meta name="keywords">
 <meta property="og:type" content="article">
-<meta property="og:title" content="面试题整理2">
-<meta property="og:url" content="http://yoursite.com/2017/04/25/面试题整理2/index.html">
+<meta property="og:title" content="常用算法">
+<meta property="og:url" content="http://yoursite.com/2017/05/15/面试题3/index.html">
 <meta property="og:site_name" content="Dean Ambrose">
-<meta property="og:description" content="volatile 有什么含义，病给出三个例子 一个定义为volatile的变量是说这个变量可能被意想不到的改变，这样编译器就不会去假设这个变量的值了。精确地说编译器在用到这个变量是必须每次都小心的重新读取这个变量的值，而不是使用保存在寄存器里的备份。（多线程应用中被几个任务共享的变量）  static管家字的作用 1.函数体内static变量的作用范围为该函数体，不同于auto变量，该变量的内存">
-<meta property="og:updated_time" content="2017-06-06T05:13:33.000Z">
+<meta property="og:description" content="天道酬勤">
+<meta property="og:updated_time" content="2017-06-09T03:24:14.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="面试题整理2">
-<meta name="twitter:description" content="volatile 有什么含义，病给出三个例子 一个定义为volatile的变量是说这个变量可能被意想不到的改变，这样编译器就不会去假设这个变量的值了。精确地说编译器在用到这个变量是必须每次都小心的重新读取这个变量的值，而不是使用保存在寄存器里的备份。（多线程应用中被几个任务共享的变量）  static管家字的作用 1.函数体内static变量的作用范围为该函数体，不同于auto变量，该变量的内存">
+<meta name="twitter:title" content="常用算法">
+<meta name="twitter:description" content="天道酬勤">
 
     
     <link rel="alternative" href="www.baidu.com" title="Dean Ambrose" type="application/atom+xml">
@@ -81,14 +81,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/04/25/面试题整理2/" title="面试题整理2" itemprop="url">面试题整理2</a>
+      <a href="/2017/05/15/面试题3/" title="常用算法" itemprop="url">常用算法</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Dean Ambrose" target="_blank" itemprop="author">Dean Ambrose</a>
 		
   <p class="article-time">
-    <time datetime="2017-04-25T12:42:03.000Z" itemprop="datePublished"> 发表于 2017-04-25</time>
+    <time datetime="2017-05-15T14:55:03.000Z" itemprop="datePublished"> 发表于 2017-05-15</time>
     
   </p>
 </header>
@@ -101,39 +101,7 @@
 		
 		</div>
 		
-		<ol>
-<li><p>volatile 有什么含义，病给出三个例子<br> 一个定义为volatile的变量是说这个变量可能被意想不到的改变，这样编译器就不会去假设这个变量的值了。精确地说编译器在用到这个变量是必须每次都小心的重新读取这个变量的值，而不是使用保存在寄存器里的备份。（多线程应用中被几个任务共享的变量）</p>
-</li>
-<li><p>static管家字的作用<br> 1.函数体内static变量的作用范围为该函数体，不同于auto变量，该变量的内存纸杯分配一次，因此其值在下次调用时仍然维持上次的值。<br> 2.在模块内static全局变量可以被模块内所有的函数访问，但不能被模块外其他函数访问。<br> 3.在模块内static函数只可能被这一模块内的其他函数调用，这个函数的使用范文被限制在声明他的模块内。<br> 4.在类中的static成员变量主语整个类所拥有，该类的所有对象只有一份拷贝。<br> 5.在类中static成员函数属于整个类所拥有，这个函数不接受this指针，因而只能范文类 的static成员变量</p>
-</li>
-<li><p>线程和进程的区别和联系<br> 进程和线程都是有操作系统所体会的程序运行的基本单元，系统利用该基本单元实现系统对用用的并发性<br> 进程和线程的主要差别再有他呢是不同的操作系统资源管理方式<br> 进程有独立的地址空间，一个进程崩溃后，在保护模式下不会对其他进程产生影响，而线程只是一个进程中不同执行路径<br> 线程有自己的堆栈和局部变量，但是线程之间没有独立的地址空间，一个线程死掉就等于整个进程死掉，所以多进程要比多线程的程序健壮，但在进程切换时，耗费资源较大，小效率要差一些。</p>
-</li>
-<li><p>http和scoket通信的区别<br> http是客户端用http协议进行请求，发送请求时候需要封装http请求头，并绑定请求的数据，服务器一般有web服务器配合（当然也非绝对）。 http请求方式为客户端主动发起请求，服务器才能给响应，一次请求完毕后则断开连接，以节省资源。服务器不能主动给客户端响应（除非采取http长连接 技术）。iphone主要使用类是NSUrlConnection。<br> scoket是客户端跟服务器直接使用socket“套接字”进行连接，并没有规定连接后断开，所以客户端和服务器可以保持连接通道，双方 都可以主动发送数据。一般在游戏开发或股票开发这种要求即时性很强并且保持发送数据量比较大的场合使用。主要使用类是CFSocketRef。</p>
-</li>
-<li><p>TCP和UDP的区别<br> TCP全称是Transmission Control Protocol，中文名为传输控制协议，它可以提供可靠的、面向连接的网络数据传递服务。传输控制协议主要包含下列任务和功能：</p>
-</li>
-</ol>
-<ul>
-<li>确保IP数据报的成功传递。</li>
-<li>对程序发送的大块数据进行分段和重组。</li>
-<li>确保正确排序及按顺序传递分段的数据。</li>
-<li>通过计算校验和，进行传输数据的完整性检查。<br>TCP提供的是面向连接的、可靠的数据流传输，而UDP提供的是非面向连接的、不可靠的数据流传输。<br>简单的说，TCP注重数据安全，而UDP数据传输快点，但安全性一般</li>
-</ul>
-<ol>
-<li>简述内存分区情况<br>代码区：存放二进制代码<br>数据区：系统运行时申请内存并初始化，系统退出时由系统释放，存放全局变量，静态变量，常量<br>堆区：通过mallOC等函数或new等操作动态申请得到，徐程序员手动申请释放<br>栈区：函数模块内申请，函数结束时有系统自动释放，存放局部变量函数参数</li>
-</ol>
-<p>7.队列和栈有什么区别<br>都是线性结构<br>队列是一种先进先出的数据结构，它在两端进行操作，一端入队一端出队<br>栈是一种先进后厨的数据结构，它只能在栈顶进行操作，入栈和出栈都在栈顶操作</p>
-<p>8.http协议中 post get区别<br>get 提交数据不安全，数据至于请求行，客户端地址栏可见<br>    提交数据大小有限<br>    方法不可以设置书签<br>post 方法提交数据安全，数据置于消息主体内，客户端不可见<br>提交数据大小没有像限制<br>可以设置书签</p>
-<p>9.iOS系统的结构<br>核心操作系统层，核心服务层，媒体层，界面服务层</p>
-<p>10.简书视图控制器的声明周期<br>Viewdidload    viewwillappear   viewdidapear  viewwilldisappear viewdiddisappear dealloc</p>
-<p>11.tableView 的重用机制<br>UITableView 通过重用单元格来达到节省内存的目的: 通过为每个单元格指定一个重用标识符(reuseIdentifier),即指定了单元格的种类,以及当单元格滚出屏幕时,允许恢复单元格以便重用.对于不同种类的单元格使用不同的ID,对于简单的表格,一个标识符就够了.</p>
-<p>12.解析XML文件有哪几种方式<br>以 DOM 方式解析 XML 文件；以 SAX 方式解析 XML 文件；</p>
-<p>13.Core Foundation中提供了哪几种操作Socket的方法<br> CFNetwork 、 CFSocket 和 BSD Socket </p>
-<p> 14.CFSocket使用有哪几个步骤<br> 创建 Socket 的上下文；创建 Socket ；配置要访问的服务器信息；封装服务器信息；连接服务器；</p>
-<p> 15.有哪几种手势通知方法、写清楚方法名？<br>-(void)touchesBegan:(NSSet<em> )touchedwithEvent:(UIEvent</em> )event;<br>-(void)touchesMoved:(NSSet<em> )touched withEvent:(UIEvent</em> )event;<br>-(void)touchesEnded:(NSSet<em> )touchedwithEvent:(UIEvent</em> )event;<br>-(void)touchesCanceled:(NSSet<em> )touchedwithEvent:(UIEvent</em>)event;</p>
-<p>16.Quatrz 2D的绘图功能的三个核心概念是什么并简述其作用。<br>上下文：主要用于描述图形写入哪里；<br>路径：是在图层上绘制的内容；<br>状态：用于保存配置变换的值、填充和轮廓， alpha 值等。</p>
-<p>17.uiview calayer 关系<br>每个 UIView 内部都有一个 CALayer 在背后提供内容的绘制和显示，并且 UIView 的尺寸样式都由内部的 Layer 所提供。两者都有树状层级结构，layer 内部有 SubLayers，View 内部有 SubViews.但是 Layer 比 View 多了个AnchorPoint<br>在 View显示的时候，UIView 做为 Layer 的 CALayerDelegate,View 的显示内容由内部的 CALayer 的 display<br>CALayer 是默认修改属性支持隐式动画的，在给 UIView 的 Layer 做动画的时候，View 作为 Layer 的代理，Layer 通过 actionForLayer:forKey:向 View请求相应的 action(动画行为)<br>layer 内部维护着三分 layer tree,分别是 presentLayer Tree(动画树),modeLayer Tree(模型树), Render Tree (渲染树),在做 iOS动画的时候，我们修改动画的属性，在动画的其实是 Layer 的 presentLayer的属性值,而最终展示在界面上的其实是提供 View的modelLayer<br>两者最明显的区别是 View可以接受并处理事件，而 Layer 不可以</p>
-  
+		  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -145,7 +113,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2017/04/25/面试题整理2/" data-title="面试题整理2 | Dean Ambrose" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yoursite.com/2017/05/15/面试题3/" data-title="常用算法 | Dean Ambrose" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -159,21 +127,13 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2017/04/23/面试题整理/" title="面试题整理1">
+ <a href="/2017/05/10/基本算法/" title="必须会基本算法">
   <strong>上一篇：</strong><br/>
   <span>
-  面试题整理1</span>
+  必须会基本算法</span>
 </a>
 </div>
 
-
-<div class="next">
-<a href="/2017/05/10/iOS 整体大观/"  title="iOS 核心知识点">
- <strong>下一篇：</strong><br/> 
- <span>iOS 核心知识点
-</span>
-</a>
-</div>
 
 </nav>
 
