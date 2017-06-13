@@ -1,0 +1,520 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Dean Ambrose</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Dean Ambrose">
+    
+
+    
+    <meta name="description" content="title: 基本理论知识复习date: 2017-06-01 23:30:12   tags:###  为什么说OC是动态语言，体现在什么地方这个问题涉及到两个概念，运行时和多态。运行时机制使我们直到运行时才去决定一个对象的类别，以及调用该类对象制定方法。多态：不同对象以自己的方式响应相同的消息的能力。1.动态绑定，运行时再决定对象的类型。2.动态绑定，某个示例对象被确定后其类型便被确定，该对">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dean Ambrose">
+<meta property="og:url" content="http://yoursite.com/2017/06/13/基本理论复习/index.html">
+<meta property="og:site_name" content="Dean Ambrose">
+<meta property="og:description" content="title: 基本理论知识复习date: 2017-06-01 23:30:12   tags:###  为什么说OC是动态语言，体现在什么地方这个问题涉及到两个概念，运行时和多态。运行时机制使我们直到运行时才去决定一个对象的类别，以及调用该类对象制定方法。多态：不同对象以自己的方式响应相同的消息的能力。1.动态绑定，运行时再决定对象的类型。2.动态绑定，某个示例对象被确定后其类型便被确定，该对">
+<meta property="og:updated_time" content="2017-06-13T17:26:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dean Ambrose">
+<meta name="twitter:description" content="title: 基本理论知识复习date: 2017-06-01 23:30:12   tags:###  为什么说OC是动态语言，体现在什么地方这个问题涉及到两个概念，运行时和多态。运行时机制使我们直到运行时才去决定一个对象的类别，以及调用该类对象制定方法。多态：不同对象以自己的方式响应相同的消息的能力。1.动态绑定，运行时再决定对象的类型。2.动态绑定，某个示例对象被确定后其类型便被确定，该对">
+
+    
+    <link rel="alternative" href="www.baidu.com" title="Dean Ambrose" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/shicheng.png">
+    
+    
+    <link rel="apple-touch-icon" href="/img/shicheng.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/shicheng.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/shicheng.png" alt="Dean Ambrose" title="Dean Ambrose"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Dean Ambrose">Dean Ambrose</a></h1>
+				<h2 class="blog-motto">千里之行，始于足下。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/06/13/基本理论复习/" title="" itemprop="url"></a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Dean Ambrose" target="_blank" itemprop="author">Dean Ambrose</a>
+		
+  <p class="article-time">
+    <time datetime="2017-06-13T15:48:08.000Z" itemprop="datePublished"> 发表于 2017-06-13</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#tags"><span class="toc-number">1.</span> <span class="toc-text">tags:</span></a></li></ol>
+		
+		</div>
+		
+		<hr>
+<p>title: 基本理论知识复习<br>date: 2017-06-01 23:30:12  </p>
+<h2 id="tags"><a href="#tags" class="headerlink" title="tags:"></a>tags:</h2><p>###</p>
+<ol>
+<li>为什么说OC是动态语言，体现在什么地方<br>这个问题涉及到两个概念，运行时和多态。运行时机制使我们直到运行时才去决定一个对象的类别，以及调用该类对象制定方法。多态：不同对象以自己的方式响应相同的消息的能力。<br>1.动态绑定，运行时再决定对象的类型。<br>2.动态绑定，某个示例对象被确定后其类型便被确定，该对象的属性和响应的消息也被圈圈确定。<br>3.动态加载，开发的时候icon图片，在retina屏设备上要多添加一个@2x的图片，当设备更换的时候图片会自动替换。</li>
+</ol>
+<p>2.MVC MVP MVVM<br>MVP与MVC有着一个重大的区别：在MVP中View并不直接使用Model，它们之间的通信是通过Presenter (MVC中的Controller)来进行的，所有的交互都发生在Presenter内部，而在MVC中View会直接从Model中读取数据而不是通过 Controller。<br>在MVC里，View是可以直接访问Model的！从而，View里会包含Model信息，不可避免的还要包括一些业务逻辑。 在MVC模型里，更关注的Model的不变，而同时有多个对Model的不同显示，即View。所以，在MVC模型里，Model不依赖于View，但是View是依赖于Model的。不仅如此，因为有一些业务逻辑在View里实现了，导致要更改View也是比较困难的，至少那些业务逻辑是无法重用的。MVP模型与视图完全分离，我们可以修改视图而不影响模型。</p>
+<ol>
+<li><p>为什么代理要用WEEk，<br>weak:指明该对象并不负责保持delegate这个对象，delegate这个对象的销毁由外部控制<br>Datasource是在告诉使用者之前的view中都有什么东西，有什么属性啊，属性的值都是多少，是只关于数据的东西。<br>Delegate是在告诉使用者之前的view有什么方法可以供我调用。<br>一个是数据，一个是操作。</p>
+</li>
+<li><p>Block和代理的区别<br>1，“一对一”，对同一个协议，一个对象只能设置一个代理delegate，所以单例对象就不能用代理；<br>2，代理更注重过程信息的传输：比如发起一个网络请求，可能想要知道此时请求是否已经开始、是否收到了数据、数据是否已经接受完成、数据接收失败<br>1，写法更简练，不需要写protocol、函数等等<br>2，block注重结果的传输：比如对于一个事件，只想知道成功或者失败，并不需要知道进行了多少或者额外 的一些信息<br>3，block需要注意防止循环引用</p>
+</li>
+<li><p>属性的本质是什么，包括哪几部分<br> @property = ivar + getter + setter   属性会自动生成自动变量并setter getter</p>
+</li>
+<li><p>如何令自己所写的对象具有拷贝功能<br>若想令自己所写的对象具有拷贝功能，则需实现 NSCopying 协议。如果自定义的对象分为可变版本与不可变版本，那么就要同时实现 NSCopying与 NSMutableCopying协议。</p>
+</li>
+</ol>
+<blockquote>
+<p>需声明该类遵从 NSCopying 协议<br>实现 NSCopying 协议。该协议只有一个方法:</p>
+<ul>
+<li>(id)copyWithZone:(NSZone *)zone;</li>
+</ul>
+</blockquote>
+<ol>
+<li><p>可变集合类 和 不可变集合类的 copy 和 mutablecopy有什么区别？<br>如果对一不可变对象复制，copy是指针复制（浅拷贝）和mutableCopy就是对象复制（深拷贝）。如果是对可变对象复制，都是深拷贝，但是copy返回的对象是不可变的。</p>
+</li>
+<li><p>atomic是绝对的线程安全么<br>atomic所说的线程安全只是保证了getter和setter存取方法的线程安全，并不能保证整个对象是线程安全的</p>
+</li>
+<li><p>UICollectionView自定义layout如何实现<br>实现一个自定义layout的常规做法是继承UICollectionViewLayout类，然后重载下列方法：<br>-(CGSize)collectionViewContentSize<br>返回collectionView的内容的尺寸<br>-(NSArray <em>)layoutAttributesForElementsInRect:(CGRect)rect<br>返回rect中的所有的元素的布局属性<br>返回的是包含UICollectionViewLayoutAttributes的NSArray<br>UICollectionViewLayoutAttributes可以是cell，追加视图或装饰视图的信息，通过不同的UICollectionViewLayoutAttributes初始化方法可以得到不同类型的UICollectionViewLayoutAttributes：<br>layoutAttributesForCellWithIndexPath:<br>layoutAttributesForSupplementaryViewOfKind:withIndexPath:<br>layoutAttributesForDecorationViewOfKind:withIndexPath:<br>-(UICollectionViewLayoutAttributes )layoutAttributesForItemAtIndexPath:(NSIndexPath )indexPath<br>返回对应于indexPath的位置的cell的布局属性<br>-(UICollectionViewLayoutAttributes )layoutAttributesForSupplementaryViewOfKind:(NSString )kind atIndexPath:(NSIndexPath </em>)indexPath<br>返回对应于indexPath的位置的追加视图的布局属性，如果没有追加视图可不重载<br>-(UICollectionViewLayoutAttributes * )layoutAttributesForDecorationViewOfKind:(NSString)decorationViewKind atIndexPath:(NSIndexPath )indexPath<br>返回对应于indexPath的位置的装饰视图的布局属性，如果没有装饰视图可不重载<br>-(BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds<br>当边界发生改变时，是否应该刷新布局。如果YES则在边界变化（一般是scroll到其他地方）时，将重新计算需要的布局信息。</p>
+</li>
+</ol>
+<p>另外需要了解的是，在初始化一个UICollectionViewLayout实例后，会有一系列准备方法被自动调用，以保证layout实例的正确。<br>首先，-(void)prepareLayout将被调用，默认下该方法什么没做，但是在自己的子类实现中，一般在该方法中设定一些必要的layout的结构和初始需要的参数等。<br>之后，-(CGSize) collectionViewContentSize将被调用，以确定collection应该占据的尺寸。注意这里的尺寸不是指可视部分的尺寸，而应该是所有内容所占的尺寸。collectionView的本质是一个scrollView，因此需要这个尺寸来配置滚动行为。<br>接下来-(NSArray *)layoutAttributesForElementsInRect:(CGRect)rect被调用，这个没什么值得多说的。初始的layout的外观将由该方法返回的UICollectionViewLayoutAttributes来决定。<br>另外，在需要更新layout时，需要给当前layout发送 -invalidateLayout，该消息会立即返回，并且预约在下一个loop的时候刷新当前layout，这一点和UIView的setNeedsLayout方法十分类似。在-invalidateLayout后的下一个collectionView的刷新loop中，又会从prepareLayout开始，依次再调用-collectionViewContentSize和-layoutAttributesForElementsInRect来生成更新后的布局。</p>
+<ol>
+<li><p>xib用StoryBoard开发界面有什么弊端<br>优点：<br>XIB：在编译前就提供了可视化界面，可以直接拖控件，也可以直接给控件添加约束，更直观一些，而且类文件中就少了创建控件的代码，确实简化不少，通常每个XIB对应一个类。<br>Storyboard：在编译前提供了可视化界面，可拖控件，可加约束，在开发时比较直观，而且一个storyboard可以有很多的界面，每个界面对应一个类文件，通过storybard，可以直观地看出整个App的结构。<br>缺点：<br>XIB：需求变动时，需要修改XIB很大，有时候甚至需要重新添加约束，导致开发周期变长。XIB载入相比纯代码自然要慢一些。对于比较复杂逻辑控制不同状态下显示不同内容时，使用XIB是比较困难的。当多人团队或者多团队开发时，如果XIB文件被发动，极易导致冲突，而且解决冲突相对要困难很多。<br>Storyboard：需求变动时，需要修改storyboard上对应的界面的约束，与XIB一样可能要重新添加约束，或者添加约束会造成大量的冲突，尤其是多团队开发。对于复杂逻辑控制不同显示内容时，比较困难。当多人团队或者多团队开发时，大家会同时修改一个storyboard，导致大量冲突，解决起来相当困难。</p>
+</li>
+<li><p>并行和并发的区别<br>并发性（Concurrence）：指两个或两个以上的事件或活动在同一时间间隔内发生。并发的实质是一个物理CPU(也可以多个物理CPU) 在若干道程序之间多路复用，并发性是<br>对有限物理资源强制行使多用户共享以提高效率。<br>并行性（parallelism）指两个或两个以上事件或活动在同一时刻发生。在多道程序环境下，并行性使多个程序同一时刻可在不同CPU上同时执行。<br>区别：一个处理器同时处理多个任务和多个处理器或者是多核的处理器同时处理多个不同的任务。</p>
+</li>
+<li><p>GCD的一些常用的函数<br>一次性函数/延迟执行/队列组/<br>栅栏函数:控制队列中任务的执行顺序,前面的所有任务执行完毕之后执行栅栏函数,自己执行完毕之后再之后后面的任务</p>
+</li>
+<li><p>NSCache优于NSDIctionary的几点</p>
+<blockquote>
+<p>当系统资源将要耗尽时，NSCache具备自动删减缓冲的功能。并且还会先删减“最久未使用”的对象。<br>NSCache不拷贝键，而是保留键。因为并不是所有的键都遵从拷贝协议（字典的键是必须要支持拷贝协议的，有局限性）。<br>NSCache是线程安全的：不编写加锁代码的前提下，多个线程可以同时访问NSCache。</p>
+</blockquote>
+</li>
+<li><p>知不知道Designated Initializer？使用它的时候有什么需要注意的问题？(指定初始化函数)<br>指定初始化函数对一个类来说非常重要，通常参数也是最多的，试想每次我们需要创建一个自定义类都需要一堆参数，那岂不是很痛苦。便利初始化函数就是用来帮我们解决这个问题的，可以让我们比较的创建对象，同时又可以保证类的成员变量被设置为默认的值。<br>子类如果有指定初始化函数，那么指定初始化函数实现时必须调用它的直接父类的指定初始化函数<br>如果子类有指定初始化函数，那么便利初始化函数必须调用自己的其它初始化函数(包括指定初始化函数以及其他的便利初始化函数)，不能调用super的初始化函数。</p>
+</li>
+<li><p>实现description方法能取到什么效果<br>NSLog(@”%@”, objectA);这会自动调用objectA的description方法来输出ObjectA的描述信息.<br>2.description方法默认返回对象的描述信息(默认实现是返回类名和对象的内存地址)<br>3.description方法是基类NSObject 所带的方法,因为其默认实现是返回类名和对象的内存地址, 这样的话,使用NSLog输出OC对象,意义就不是很大,因为我们并不关心对象的内存地址,比较关心的是对象内部的一些成变量的值。因此,会经常重写description方法,覆盖description方法 的默认实现</p>
+</li>
+<li><p>objc使用什么机制管理对象内存<br>1).MRC(manual retain-release)手动内存管理2).ARC(automatic reference counting)自动引用计数3).Garbage collection (垃圾回收)但是iOS不支持垃圾回收, ARC作为LLVM(编译器的架构系统,用c++编写而成的) 3.0编译器的一项特性, 在iOS5.0 (Xcode4) 版本后推出的自动内存管理, 苹果推荐使用ARC技术来管理内存, 节约时间 , 提高效率 , 减少代码量 , 降低出错几率. 开发者不需要再手动写入retain,release,autorelease三个关键字,手动管理内存, 编译器将自动在代码合适的地方插入retain,release,autorelease进行内存管理.ARC的判断准则, 只要没有强指针指向对象, 对象就会被释放.</p>
+</li>
+<li><p>block的实质是什么？一共有几种block？都是什么情况下生成的？<br>block一共有3种类型的block_NSConcreteGlobalBlock 全局静态_NSConcreteStackBlock 保存在栈中，出函数作用域就销毁_NSConcreteMallocBlock 保存在堆中，retainCount == 0销毁<br>本质上是一个指向结构体的指针</p>
+</li>
+</ol>
+<p>默认情况下，在block中访问的外部变量是复制过去的，即：写操作不对原变量生效。但是你可以加上__block来让其写操作生效，</p>
+<ol>
+<li><p>类方法和实例方法有什么区别<br>类方法(Class Method) 有时被称为工厂方法(Factory Method)或者方便方法(Convenience method)。工厂方法的称谓明显和一般意义上的工厂方法不同，从本质上来说，类方法可以独立于对象而执行，所以在其他的语言里面类方法有的时候被称为静态方法。<br>注意点一：类方法<br>1，类方法可以调用类方法。<br>2，类方法不可以调用实例方法，但是类方法可以通过创建对象来访问实例方法。<br>3，类方法不可以使用实例变量。类方法可以使用self，因为self不是实例变量。<br>4，类方法作为消息，可以被发送到类或者对象里面去（实际上，就是可以通过类或者对象调用类方法的意思）。</p>
+</li>
+<li><p>分类，能用分类做什么？内部是如何实现的？它为什么会覆盖掉原来的方法<br>在runtime层，category用结构体category_t（在objc-runtime-new.h中可以找到此定义），它包含了<br>1)、类的名字（name）<br>2)、类（cls）<br>3)、category中所有给类添加的实例方法的列表（instanceMethods）<br>4)、category中所有添加的类方法的列表（classMethods）<br>5)、category实现的所有协议的列表（protocols）<br>6)、category中添加的所有属性（instanceProperties）</p>
+</li>
+</ol>
+<p>static char const * const ObjectTagKey;</p>
+<p>@implementation NSObject (ExampleCategoryWithProperty)<br>@dynamic objectTag;</p>
+<ul>
+<li><p>(id)objectTag {<br>  return objc_getAssociatedObject(self, ObjectTagKey);<br>}</p>
+</li>
+<li><p>(void)setObjectTag:(id)newObjectTag {<br>  objc_setAssociatedObject(self, ObjectTagKey, newObject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);<br>}</p>
+</li>
+</ul>
+<ol>
+<li><p>objc中向一个nil对象发送消息将会发生什么？<br>在 Objective-C 中向 nil 发送消息是完全有效的——只是在运行时不会有任何作用:<br>objc是动态语言，每个方法在运行时会被动态转为消息发送，即：objc_msgSend(receiver, selector)。<br>objc是动态语言，每个方法在运行时会被动态转为消息发送，即：objc_msgSend(receiver, selector)。</p>
+</li>
+<li><p>有没有用过运行时，用它都能做什么<br>1、互换方法的实现 动态添加方法 动态添加属性 获取类中所有的成员变量和属性</p>
+</li>
+</ol>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2017/06/13/基本理论复习/" data-title="Dean Ambrose" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/06/01/SDWebimage缓存机制/" title="SDWebImage 缓存机制">
+  <strong>上一篇：</strong><br/>
+  <span>
+  SDWebImage 缓存机制</span>
+</a>
+</div>
+
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#tags"><span class="toc-number">1.</span> <span class="toc-text">tags:</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.jianshu.com" target="_blank" title="简书">简书</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://guthub.com" target="_blank" title="GitHub">GitHub</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://cocoachina.com" target="_blank" title="cocoachina">cocoachina</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://mybigorange.github.io" target="_blank" title="Ambrose&#39;s Blog">Ambrose&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="www.baidu.com" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Dean Ambrose Page in Github. <br/>
+			Welcome to my bog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5767005756" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="Dean Ambrose">Dean Ambrose</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
