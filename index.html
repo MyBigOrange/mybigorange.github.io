@@ -81,6 +81,125 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2017/06/14/代码规范/" title="代码规范总结" itemprop="url">代码规范总结</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Dean Ambrose" target="_blank" itemprop="author">Dean Ambrose</a>
+		
+  <p class="article-time">
+    <time datetime="2017-06-14T15:54:02.000Z" itemprop="datePublished"> 发表于 2017-06-14</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="代码规范总结"><a href="#代码规范总结" class="headerlink" title="代码规范总结"></a>代码规范总结</h1><p>看完大神门写的代码再回头看自己的觉得怎么看别扭，还是很多细节的地方唯有写到位，这里全部记录一下需要注意的地方，敲一下记到脑子里的东西才是自己的。</p>
+<p>github上已经有大神给处理详细的规范 <a href="https://github.com/NYTimes/objective-c-style-guide" target="_blank" rel="external">NYTimes</a> ,留个地址方便查询吧，多看多敲重要的事情心里再念两遍。</p>
+<p>每个人在一些细节上都有自己的习惯，所以没有绝对的规范，适合自己的才是最好的！</p>
+<h3 id="iOS-规范"><a href="#iOS-规范" class="headerlink" title="iOS 规范"></a>iOS 规范</h3><p>1.变量</p>
+<blockquote>
+<p>无论是类、属性、文件等命名含义一定要清楚，让人不需要看注释就知道是啥意思，一目了然，如果相似的添加注释标明。</p>
+<p>驼峰式命名（类的名称需要大驼峰式命名）</p>
+<p>枚举内容的命名需要以改枚举类型名称开头</p>
+<p>方法名要按着方法的实际作用命名</p>
+<p>属性多的时候标注每个属性的具体作用和类型</p>
+<p>系统常用类作实例变量声明时只使用后缀减少长度（ VC、View、Lbl、Btn、Img、ImageView、Array、Dict、Str、Set等）</p>
+</blockquote>
+<p>2.常量 (这块儿在属性声明时候很重要！！！)</p>
+<blockquote>
+<p>常量以相关类名作为前缀</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">static const NSTimeInterval XTSignInViewControllerFadeOutAnimationDuration = 0.4;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>建议使用类型常量，不建议使用#define预处理指令，除非那些全局很多地方需要使用的。（预处理指令不具备类型信息，切可以被任意修改）<br>对外公开某个常量（如果我们需要发送某个通知，那么就需要在不同的地方拿到这个通知的字符串，显然这个通知字符串是固定的，不能被修改，可以在不同的地方获取，这个时候就需要定义一个外界课件的字符串常量）</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//头文件</div><div class="line">extern NSString *const XTCacheControllerDidClearCacheNotification;</div><div class="line">//实现文件</div><div class="line">static NSString * const XTCacheControllerDidClearCacheNotification = @&quot;XTCacheControllerDidClearCacheNotification&quot;;</div><div class="line">static const CGFloat XTCImageThumbnailHeight = 50.0f;</div></pre></td></tr></table></figure>
+<p>3.宏</p>
+<blockquote>
+<p> 宏、常量名都要使用大写字母，用下划线‘_’分割单词</p>
+<p>宏定义中如果包含表达式或变量，表达式和变量必须用小括号括起来。</p>
+</blockquote>
+<p>4.CGRect函数</p>
+<blockquote>
+<p>CGFloat x = CGRectGetMinX(frame); 取代 CGFloat x = frame.origin.x; </p>
+</blockquote>
+<p>5.范型<br>建议在定义NSArray和NSDictionary时使用泛型，可以保证程序的安全性：</p>
+<p>6.字面量语法<br>尽量使用字面量值来创建 NSString , NSDictionary , NSArray , NSNumber 这些不可变对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">NSArray *names = @[@&quot;Brian&quot;, @&quot;Matt&quot;, @&quot;Chris&quot;, @&quot;Alex&quot;, @&quot;Steve&quot;, @&quot;Paul&quot;];</div><div class="line">代替</div><div class="line">NSArray *names = [NSArray arrayWithObjects:@&quot;Brian&quot;, @&quot;Matt&quot;, @&quot;Chris&quot;, @&quot;Alex&quot;, @&quot;Steve&quot;, @&quot;Paul&quot;, nil];</div></pre></td></tr></table></figure>
+<p>7.属性</p>
+<blockquote>
+<p>小驼峰命名<br>属性的关键字按照 原子性，读写，内存管理的顺序 依次排列<br>Block 使用的是copy(栈Block需要复制到堆上再进行操作)<br>形容词性的BOOL属性的getter应该加上is前缀，@property (assign, getter=isEditable) BOOL editable;<br>实例化一个对象是需要耗费资源的，如果这个对象里的某个属性的实例化要调用很多配置和计算，就需要懒加载它，在使用它的前一刻对它进行实例化，但是也有对这种做法的争议：getter方法可能会产生某些副作用，例如如果它修改了全局变量，可能会产生难以排查的错误。<br>除了init和dealloc方法，建议都是用点语法访问属性。<br>不要滥用点语法，区分好方法调用和属性访问<br>尽量使用不可变对象（建议尽量把对外公布出来的属性设置为只读，在实现文件内部设为读写）</p>
+</blockquote>
+<p>8.方法</p>
+<blockquote>
+<p>方法名中不应使用and，而且签名要与对应的参数名保持高度一致<br>方法实现时，如果参数过长，则令每个参数占用一行，以冒号对齐。<br>私有方法应该在实现文件中申明<br>方法名用小写字母开头的单词组合而成<br>方法名加前缀区分作用</p>
+</blockquote>
+<p>9.面向协议编程<br>如果某些功能（方法）具备可复用性，我们就需要将它们抽取出来放入一个抽象接口文件中（在iOS中，抽象接口即协议），让不同类型的对象遵循这个协议，从而拥有相同的功能。<br>因为协议是不依赖于某个对象的，所以通过协议，我们可以解开两个对象之间的耦合</p>
+<p>10.iOS 中委托的设计</p>
+<blockquote>
+<p>在iOS开发中的委托模式包含了delegate（代理）和datasource（数据源）。虽然二者同属于委托模式，但是这两者是有区别的。这个区别就是二者的信息流方向是不同的：<br>delegate ：事件发生的时候，委托者需要通知代理。（信息流从委托者到代理）<br>datasource：委托者需要从数据源拉取数据。（信息流从数据源到委托者）<br>代理方法的第一个参数必须为委托者<br>遵循代理过多的时候，换行对齐显示<br>代理的方法需要明确必须执行和可不执行</p>
+</blockquote>
+<p>11.类</p>
+<blockquote>
+<p> 类的名称应该以公司字母缩写为前缀；创建子类的时候，应该把代表子类特点的部分放在前缀和父类名的中间<br>指定初始化方法(designated initializer)是提供所有的（最多的）参数的初始化方法，间接初始化方法(secondary initializer)有一个或部分参数的初始化方法。<br>所有返回类对象和实例对象的方法都应该使用instancetype<br> 在类的头文件中尽量少引用其他头文件（@class的使用 不在A的头文件中引入B的头文件，就不会一并引入B的全部内容，这样就减少了编译时间。可以避免循环引用：因为如果两个类在自己的头文件中都引入了对方的头文件，那么就会导致其中一个类无法被正确编译）</p>
+</blockquote>
+<p>12.类的布局<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">#pragma mark - Life Cycle Methods</div><div class="line">- (instancetype)init</div><div class="line">- (void)dealloc</div><div class="line"></div><div class="line">- (void)viewWillAppear:(BOOL)animated</div><div class="line">- (void)viewDidAppear:(BOOL)animated</div><div class="line">- (void)viewWillDisappear:(BOOL)animated</div><div class="line">- (void)viewDidDisappear:(BOOL)animated</div><div class="line"></div><div class="line">#pragma mark - Override Methods</div><div class="line"></div><div class="line">#pragma mark - Intial Methods</div><div class="line"></div><div class="line">#pragma mark - Network Methods</div><div class="line"></div><div class="line">#pragma mark - Target Methods</div><div class="line"></div><div class="line">#pragma mark - Public Methods</div><div class="line"></div><div class="line">#pragma mark - Private Methods</div><div class="line"></div><div class="line">#pragma mark - UITableViewDataSource  </div><div class="line">#pragma mark - UITableViewDelegate  </div><div class="line"></div><div class="line">#pragma mark - Lazy Loads</div><div class="line"></div><div class="line">#pragma mark - NSCopying  </div><div class="line"></div><div class="line">#pragma mark - NSObject  Methods</div></pre></td></tr></table></figure></p>
+<p>13.分类 </p>
+<blockquote>
+<p>分类添加的方法需要添加前缀和下划线<br>把类的实现代码分散到便于管理的多个分类中<br>通过分类机制，可以把类代码分成很多个易于管理的功能区，同时也便于调试。因为分类的方法名称会包含分类的名称，可以马上看到该方法属于哪个分类中。</p>
+</blockquote>
+<p>14.单例</p>
+<blockquote>
+<p>单例不能作为容器对象来使用<br>使用dispatch_once来生成单例</p>
+</blockquote>
+<p>15.方法注释<br>一个函数(方法)必须有一个字符串文档来解释，除非它：非公开，私有函数。很短。显而易见。<br>而其余的，包括公开接口，重要的方法，分类，以及协议，都应该伴随文档（注释）：以/开始<br>第二行识总结性的语第三行永远是空行在与第二行开头对齐的位置写剩下的注释。</p>
+<p>16.多用队列，少用同步锁来避免资源抢夺</p>
+<blockquote>
+<p>将写操作放入栅栏快中，让他们单独执行；将读取操作并发执行。<br>使用串行同步队列来将读写操作都安排到同一个队列里</p>
+</blockquote>
+<p>17.实现description方法打印自定义对象信息</p>
+<p>18.NSArray&amp; NSMutableArray</p>
+<blockquote>
+<p>非空判断<br>取下标的时候要判断是否越界<br>取第一个元素或最后一个元素的时候使用firtstObject和lastObject</p>
+</blockquote>
+<p>Xcode工程文件的物理路径要和逻辑路径保持一致。<br>手动标明警告和错误<br>忽略没有使用变量的编译警告</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2017/06/13/基本理论复习/" title="基本理论知识复习" itemprop="url">基本理论知识复习</a>
   </h1>
   <p class="article-author">By
@@ -759,59 +878,6 @@
 <p>4.服务器发送通知点开以后启用一下回调<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">- (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo &#123;</div><div class="line">    NSDictionary *apsInfo = [userInfo objectForKey:@&quot;aps&quot;];</div><div class="line"></div><div class="line">    NSString *alert = [apsInfo objectForKey:@&quot;alert&quot;];</div><div class="line">    NSLog(@&quot;Received Push Alert: %@&quot;, alert);</div><div class="line"></div><div class="line">    NSString *sound = [apsInfo objectForKey:@&quot;sound&quot;];</div><div class="line">    NSLog(@&quot;Received Push Sound: %@&quot;, sound);</div><div class="line"></div><div class="line">    NSString *badge = [apsInfo objectForKey:@&quot;badge&quot;];</div><div class="line">    NSLog(@&quot;Received Push Badge: %@&quot;, badge);</div><div class="line">    application.applicationIconBadgeNumber = [[apsInfo objectForKey:@&quot;badge&quot;] integerValue];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>消息json格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">　　&quot;aps&quot; :</div><div class="line">           &#123; &quot;alert&quot; :</div><div class="line">                      &#123;</div><div class="line">                        &quot;action-loc-key&quot; : &quot;显示&quot; ,</div><div class="line">                        &quot;body&quot; : &quot;This is the alert text&quot;</div><div class="line">                       &#125;,</div><div class="line">             &quot;badge&quot; : 1,</div><div class="line">             &quot;sound&quot; : &quot;default&quot; &#125;,</div><div class="line">　　&quot;server&quot; : &#123; &quot;serverId&quot; : 1, &quot;name&quot; : &quot;Server name&quot;&#125;</div><div class="line">　　&#125;</div></pre></td></tr></table></figure></p>
 <p>之前项目都用到了一直懒得整理，现在借鉴DevYuan的博客重新梳理一下，慢慢再往上添加修改内容，每天进步一点点！</p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/04/05/urlschema/" title="urlschema" itemprop="url">urlschema</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Dean Ambrose" target="_blank" itemprop="author">Dean Ambrose</a>
-		
-  <p class="article-time">
-    <time datetime="2017-04-05T13:16:07.000Z" itemprop="datePublished"> 发表于 2017-04-05</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h3 id="什么是URLSchema"><a href="#什么是URLSchema" class="headerlink" title="什么是URLSchema"></a>什么是URLSchema</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">urlSchema是为方便app之间互相调用而设计的。你可以通过一个类似URL的链接，通过系统的OpenURl来打开该app，并可以传递一些参数。每个URL必须能唯一标识一个APP，如果你设置的URL与别的APP的URL冲突，此时，你的APP不一定会被调用起来，原因是当APP在安装的时候就已经在系统里面注册了此APP的URL Scheme，如果你的一致但是是后安装的，那么系统不会调用你的APP，因为你的APP设置的URL scheme被覆盖了。</div></pre></td></tr></table></figure>
-<h3 id="URLSchema有什么作用"><a href="#URLSchema有什么作用" class="headerlink" title="URLSchema有什么作用"></a>URLSchema有什么作用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">大家知道在IOS系统里面APP之间是相互隔离的，IOS系统里面完成类似于三方功能如支付、搜索跳转、导航等等跨APP的功能，苹果就使用了URL Scheme来实现了这个功能。通过各个APP设计的符合苹果的统一规范的URL Scheme，系统就会自动去调用相关的APP来完成你的请求。</div><div class="line"></div><div class="line">比如：我们的APP需要使用支付宝的三方支付功能、我的APP需要使用微信分享好的文章，那么此时就可以通过URL Scheme来传递这些数据到支付宝APP或者微信APP，系统会通过这些APP的URL Scheme来调起这些APP，完成你所需要做的跨APP的功能。</div></pre></td></tr></table></figure>
-<h3 id="怎么使用URLSchema"><a href="#怎么使用URLSchema" class="headerlink" title="怎么使用URLSchema"></a>怎么使用URLSchema</h3><p><img src="http://ooyerqo96.bkt.clouddn.com/2026235-e01c4d5915a9e024.png" alt="princeple -w400"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">1. 配置你的APP 要为 iOS 程序添加自定义协议的支持是一件很方便的事，只需要在程序的 Info.plist 添加一个 URL types 节点就可以了。在这个节点里，可以设置这个程序所支持的自定义协议名称，像 http、ftp 这种，一般我们可以设置为程序英文名称，像淘宝客户端中就设置了 taobao，这样 taobao:// 这个形式的 URL 就会关联到淘宝客户端的 App。</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">2.其次 处理使用你的URL Scheme来调起你的APP的请求 如果你的APP为TestB，如果处理成功的Scheme如包含了TestBAPP://callsuccess，那么说明你调用其他的APP成功了。如果不是，那么说明是别的APP如TestAAPP调用了你的APP，此时在你的APPDelegate里面添加如下函数以及实现处理，这里是直接返回告诉TestAAPP调用成功的标识TestAAPP://callsuccess：</div><div class="line"></div><div class="line">- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url  </div><div class="line">&#123;  </div><div class="line">// Do something with the url here  </div><div class="line">if (!url)  </div><div class="line">&#123;  </div><div class="line">return NO;  </div><div class="line">&#125;  </div><div class="line">NSString *handleUrl = [url absoluteString];  </div><div class="line">if ([handleUrl isEqualToString:@&quot;TestBApp://callsuccess&quot;]) &#123;  </div><div class="line">return YES;  </div><div class="line">&#125;else&#123;  </div><div class="line">NSString *urlstr = @&quot;TestAAPP:/com.baidu.sidepath.TestA&amp;_callback=TestAApp://callsuccess&quot;;  </div><div class="line">NSURL *handlbackeUrl = [NSURL URLWithString:urlstr];  </div><div class="line">[[UIApplication sharedApplication] openURL:handlbackeUrl];</div></pre></td></tr></table></figure>
 
         
         

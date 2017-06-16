@@ -81,6 +81,59 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2017/04/05/urlschema/" title="urlschema" itemprop="url">urlschema</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Dean Ambrose" target="_blank" itemprop="author">Dean Ambrose</a>
+		
+  <p class="article-time">
+    <time datetime="2017-04-05T13:16:07.000Z" itemprop="datePublished"> 发表于 2017-04-05</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h3 id="什么是URLSchema"><a href="#什么是URLSchema" class="headerlink" title="什么是URLSchema"></a>什么是URLSchema</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">urlSchema是为方便app之间互相调用而设计的。你可以通过一个类似URL的链接，通过系统的OpenURl来打开该app，并可以传递一些参数。每个URL必须能唯一标识一个APP，如果你设置的URL与别的APP的URL冲突，此时，你的APP不一定会被调用起来，原因是当APP在安装的时候就已经在系统里面注册了此APP的URL Scheme，如果你的一致但是是后安装的，那么系统不会调用你的APP，因为你的APP设置的URL scheme被覆盖了。</div></pre></td></tr></table></figure>
+<h3 id="URLSchema有什么作用"><a href="#URLSchema有什么作用" class="headerlink" title="URLSchema有什么作用"></a>URLSchema有什么作用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">大家知道在IOS系统里面APP之间是相互隔离的，IOS系统里面完成类似于三方功能如支付、搜索跳转、导航等等跨APP的功能，苹果就使用了URL Scheme来实现了这个功能。通过各个APP设计的符合苹果的统一规范的URL Scheme，系统就会自动去调用相关的APP来完成你的请求。</div><div class="line"></div><div class="line">比如：我们的APP需要使用支付宝的三方支付功能、我的APP需要使用微信分享好的文章，那么此时就可以通过URL Scheme来传递这些数据到支付宝APP或者微信APP，系统会通过这些APP的URL Scheme来调起这些APP，完成你所需要做的跨APP的功能。</div></pre></td></tr></table></figure>
+<h3 id="怎么使用URLSchema"><a href="#怎么使用URLSchema" class="headerlink" title="怎么使用URLSchema"></a>怎么使用URLSchema</h3><p><img src="http://ooyerqo96.bkt.clouddn.com/2026235-e01c4d5915a9e024.png" alt="princeple -w400"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">1. 配置你的APP 要为 iOS 程序添加自定义协议的支持是一件很方便的事，只需要在程序的 Info.plist 添加一个 URL types 节点就可以了。在这个节点里，可以设置这个程序所支持的自定义协议名称，像 http、ftp 这种，一般我们可以设置为程序英文名称，像淘宝客户端中就设置了 taobao，这样 taobao:// 这个形式的 URL 就会关联到淘宝客户端的 App。</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">2.其次 处理使用你的URL Scheme来调起你的APP的请求 如果你的APP为TestB，如果处理成功的Scheme如包含了TestBAPP://callsuccess，那么说明你调用其他的APP成功了。如果不是，那么说明是别的APP如TestAAPP调用了你的APP，此时在你的APPDelegate里面添加如下函数以及实现处理，这里是直接返回告诉TestAAPP调用成功的标识TestAAPP://callsuccess：</div><div class="line"></div><div class="line">- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url  </div><div class="line">&#123;  </div><div class="line">// Do something with the url here  </div><div class="line">if (!url)  </div><div class="line">&#123;  </div><div class="line">return NO;  </div><div class="line">&#125;  </div><div class="line">NSString *handleUrl = [url absoluteString];  </div><div class="line">if ([handleUrl isEqualToString:@&quot;TestBApp://callsuccess&quot;]) &#123;  </div><div class="line">return YES;  </div><div class="line">&#125;else&#123;  </div><div class="line">NSString *urlstr = @&quot;TestAAPP:/com.baidu.sidepath.TestA&amp;_callback=TestAApp://callsuccess&quot;;  </div><div class="line">NSURL *handlbackeUrl = [NSURL URLWithString:urlstr];  </div><div class="line">[[UIApplication sharedApplication] openURL:handlbackeUrl];</div></pre></td></tr></table></figure>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2017/03/29/直播原理/" title="直播 浅析" itemprop="url">直播 浅析</a>
   </h1>
   <p class="article-author">By
