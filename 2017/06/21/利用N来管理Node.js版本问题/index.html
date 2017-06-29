@@ -4,26 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>ionic2 跨平台iOS 项目一 | Dean Ambrose</title>
+    <title>利用N来管理Node.js版本问题 | Dean Ambrose</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Dean Ambrose">
     
 
     
-    <meta name="description" content="#ionic 跨平台创建应用 ##技术应用为了开发HTML5，除了最新使用reactNative等之外，目前首选稳定的ionic + AngularJS 来开发iOS和Android。Ionic是一款可以使用html5构建混合移动应用的用户界面框架，它自称是“本地与Html5的结合”。该框架提供了很多基本的移动用户界面范例，例如像列表（lists）、标签页栏（tabbars）和触发开关（toggl">
+    <meta name="description" content="最近跟着做ionic2项目，用到node.js，但是官网上的有低版本的6.0,以及最新的8.0,都不太符合要求，升到8.0后才知道不行，搜了搜记录一下利用N来降低版本的问题。 123456789N是node的一个模块 1.  安装 sudo npm install -g n   （安装完成之后，直接输入n后输出当前已经安装的node版本以及正在使用的版本（前面有一个o），你可以通过移动上下方向键来">
 <meta name="keywords">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ionic2 跨平台iOS 项目一">
-<meta property="og:url" content="http://yoursite.com/2017/06/20/2017-06-22/index.html">
+<meta property="og:title" content="利用N来管理Node.js版本问题">
+<meta property="og:url" content="http://yoursite.com/2017/06/21/利用N来管理Node.js版本问题/index.html">
 <meta property="og:site_name" content="Dean Ambrose">
-<meta property="og:description" content="#ionic 跨平台创建应用 ##技术应用为了开发HTML5，除了最新使用reactNative等之外，目前首选稳定的ionic + AngularJS 来开发iOS和Android。Ionic是一款可以使用html5构建混合移动应用的用户界面框架，它自称是“本地与Html5的结合”。该框架提供了很多基本的移动用户界面范例，例如像列表（lists）、标签页栏（tabbars）和触发开关（toggl">
-<meta property="og:image" content="http://ooyerqo96.bkt.clouddn.com/2017062018.45.22.png">
-<meta property="og:updated_time" content="2017-06-26T01:29:07.000Z">
+<meta property="og:description" content="最近跟着做ionic2项目，用到node.js，但是官网上的有低版本的6.0,以及最新的8.0,都不太符合要求，升到8.0后才知道不行，搜了搜记录一下利用N来降低版本的问题。 123456789N是node的一个模块 1.  安装 sudo npm install -g n   （安装完成之后，直接输入n后输出当前已经安装的node版本以及正在使用的版本（前面有一个o），你可以通过移动上下方向键来">
+<meta property="og:updated_time" content="2017-06-27T01:07:32.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ionic2 跨平台iOS 项目一">
-<meta name="twitter:description" content="#ionic 跨平台创建应用 ##技术应用为了开发HTML5，除了最新使用reactNative等之外，目前首选稳定的ionic + AngularJS 来开发iOS和Android。Ionic是一款可以使用html5构建混合移动应用的用户界面框架，它自称是“本地与Html5的结合”。该框架提供了很多基本的移动用户界面范例，例如像列表（lists）、标签页栏（tabbars）和触发开关（toggl">
-<meta name="twitter:image" content="http://ooyerqo96.bkt.clouddn.com/2017062018.45.22.png">
+<meta name="twitter:title" content="利用N来管理Node.js版本问题">
+<meta name="twitter:description" content="最近跟着做ionic2项目，用到node.js，但是官网上的有低版本的6.0,以及最新的8.0,都不太符合要求，升到8.0后才知道不行，搜了搜记录一下利用N来降低版本的问题。 123456789N是node的一个模块 1.  安装 sudo npm install -g n   （安装完成之后，直接输入n后输出当前已经安装的node版本以及正在使用的版本（前面有一个o），你可以通过移动上下方向键来">
 
     
     <link rel="alternative" href="www.baidu.com" title="Dean Ambrose" type="application/atom+xml">
@@ -83,14 +81,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/06/20/2017-06-22/" title="ionic2 跨平台iOS 项目一" itemprop="url">ionic2 跨平台iOS 项目一</a>
+      <a href="/2017/06/21/利用N来管理Node.js版本问题/" title="利用N来管理Node.js版本问题" itemprop="url">利用N来管理Node.js版本问题</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Dean Ambrose" target="_blank" itemprop="author">Dean Ambrose</a>
 		
   <p class="article-time">
-    <time datetime="2017-06-20T14:44:02.000Z" itemprop="datePublished"> 发表于 2017-06-20</time>
+    <time datetime="2017-06-21T12:40:02.000Z" itemprop="datePublished"> 发表于 2017-06-21</time>
     
   </p>
 </header>
@@ -103,39 +101,8 @@
 		
 		</div>
 		
-		<p>#ionic 跨平台创建应用</p>
-<p>##技术应用<br>为了开发HTML5，除了最新使用reactNative等之外，目前首选稳定的ionic + AngularJS 来开发iOS和Android。<br>Ionic是一款可以使用html5构建混合移动应用的用户界面框架，它自称是“本地与Html5的结合”。该框架提供了很多基本的移动用户界面范例，例如像列表（lists）、标签页栏（tabbars）和触发开关（toggleswitches）这样的简单条目。它还提供了更加复杂的可视化布局示例，例如在下面显示内容的滑出式菜单。<br>Cordova是一款开放源代码的App开发框架，旨在让开发者使用HTML、JavaScript、CSS等WebAPIs开发跨平台的移动平台应用程序，其原名称之为PhoneGap，Adobe收购Nitobi公司后，PhoneGap商标保留，代码贡献给了Apache基金会，而Apache将其命名为ApacheCallback，其后发布新版本时，定名为ApacheCordova。<br>Cordova是一个行动设备的API接口集，利用javascript存取这些接口可以调用诸如摄影机、罗盘等硬件系统资源。配合上一些基于HTML5、CSS3技术的UI框架，如jQueryMobile、DojoMobile或SenchaTouch，开发者得以快速地开发跨平台App而不需要编写任何的原生代码，因为Cordova本身仍是一个原生程式，为App打包时依然需要用到这些系统平台的SDK。</p>
-<p>##环境搭建</p>
-<ol>
-<li>安装npm/node.js（node.js自带npm，到nodejs官网<a href="https://nodejs.org/en/" target="_blank" rel="external">nodejs</a>自行下载）</li>
-<li>安装ionic/cordova (sudo npm install -g cordova ionic)</li>
-</ol>
-<p>##项目生成</p>
-<ol>
-<li>cd ./Desktop (进入桌面生成Demo文件项目)</li>
-<li><p>ionic start ionicDemo –v2 可以在项目名称后加上不同参数（blank、tabs、sidemenu）， 其中blank等参数是几种app样式，可根据需要选择不同参数，不写的话默认是tabs样式；–v2是指按照ionic2的版本来创建项目，如果不写–v2则会创建ionic1项目)</p>
-</li>
-<li><p>创建成功以后项目目录结构如图<br><img src="http://ooyerqo96.bkt.clouddn.com/2017062018.45.22.png" alt="ionic目录结构"></p>
-</li>
-<li><p>cd ionicDemo（cd到目录结构文件夹打开项目）<br> ionic serve<br>(执行完毕后Ionic会自动帮我们打开我们的默认浏览器并跳转到我们的应用页面，浏览器打开页面时Ionic已经给我们开启了livereload模式，开启之后我们编辑www下的文件后保存时Ionic会通过websocket通知浏览器刷新页面，我们就不用每次修改完毕手动刷新页面了。)</p>
-</li>
-<li><p>平台安装<br>ionic platform add android<br>ionic platform add ios<br>可以查看你已经添加的平台列表，终端输入：<br>ionic platform list<br>安装ios模拟器，终端输入：<br>npm install -g ios-sim<br>安装好后，cd到项目目录后，开始编译项目，终端输入：<br>ionic build ios<br>运行项目可以使用Xcode，也可以使用终端，终端输入：<br>ionic run ios</p>
-</li>
-</ol>
-<p>##目录结构详解</p>
-<p>这是一个典型的Cordova项目结构</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">src/index.html是 Ionic 2 应用的主入口文件，其目的是设置脚本和CSS引导，然后开始运行我们的应用程序。 我们不会在这个文件中花费大量的时间。</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">src/app/app.component.ts在该文件能找到我们的预编译代码。这是Ionic 2应用程序的大部分工作起始的地方。当我们运行 ionic serve 时， app 中的代码将被编译成当前浏览器能够执行的JavaScript版本（当前是ES5）。也就是说我们可以使用TypeScript或更高级别的 ES6+ 进行开发，而在编译时会自动降级为浏览器可识别的版本。</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">每个应用程序都有一个根组件，用于控制应用程序的其余部分。在这个组件中，我们设置了模版文件app.html</div></pre></td></tr></table></figure>
-<p>最简单的ionic系统项目结构就是这样的，慢慢往里边添加空间简单测试一下吧！</p>
-<p>ionic2项目学习路线</p>
-<ol>
-<li>熟悉一下TypeScript的基本语法和使用；</li>
-<li>掌握Angular2的基本原理和开发思路；</li>
-<li>熟悉Ionic 2的所有Components和API；</li>
-<li>了解Cordova的使用方法和插件。</li>
-</ol>
-<p>多学多练！</p>
+		<p>最近跟着做ionic2项目，用到node.js，但是官网上的有低版本的6.0,以及最新的8.0,都不太符合要求，升到8.0后才知道不行，搜了搜记录一下利用N来降低版本的问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">N是node的一个模块</div><div class="line"> </div><div class="line">1.  安装 sudo npm install -g n</div><div class="line">   （安装完成之后，直接输入n后输出当前已经安装的node版本以及正在使用的版本（前面有一个o），你可以通过移动上下方向键来选择要使用的版本，最后按回车生效）</div><div class="line">2.  想要安装你想要的额版本 直接 n 版本号 </div><div class="line">3.  安装最新的版本 n latest</div><div class="line">    安装稳定版本 n stable</div><div class="line">    删除某个版本 n rm 0.10.1 </div><div class="line">    以指定的版本来执行脚本 n use 0.10.21 some.js</div></pre></td></tr></table></figure>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -148,7 +115,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yoursite.com/2017/06/20/2017-06-22/" data-title="ionic2 跨平台iOS 项目一 | Dean Ambrose" data-tsina="null" class="share clearfix">
+	  <div data-url="http://yoursite.com/2017/06/21/利用N来管理Node.js版本问题/" data-title="利用N来管理Node.js版本问题 | Dean Ambrose" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -162,13 +129,21 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2017/06/14/代码规范/" title="代码规范及注意事项">
+ <a href="/2017/06/20/ionic跨平台项目/" title="ionic2 跨平台iOS 项目一">
   <strong>上一篇：</strong><br/>
   <span>
-  代码规范及注意事项</span>
+  ionic2 跨平台iOS 项目一</span>
 </a>
 </div>
 
+
+<div class="next">
+<a href="/2017/06/24/git 常用终端命令记录/"  title="Git常用命令记录">
+ <strong>下一篇：</strong><br/> 
+ <span>Git常用命令记录
+</span>
+</a>
+</div>
 
 </nav>
 
