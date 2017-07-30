@@ -81,28 +81,44 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/03/20/mweb应用说明/" title="mweb应用" itemprop="url">mweb应用</a>
+      <a href="/2017/07/10/自定义按钮图片文字位置/" title="多样式按钮总结" itemprop="url">多样式按钮总结</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
 		
   <p class="article-time">
-    <time datetime="2017-03-20T15:34:07.000Z" itemprop="datePublished"> 发表于 2017-03-20</time>
+    <time datetime="2017-07-09T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-10</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <h1 id="Markdown-syntax-guide-and-writing-on-MWeb"><a href="#Markdown-syntax-guide-and-writing-on-MWeb" class="headerlink" title="Markdown syntax guide and writing on MWeb"></a>Markdown syntax guide and writing on MWeb</h1><h1 id="markdown-title"><a href="#markdown-title" class="headerlink" title="markdown title"></a>markdown title</h1><h2 id="markdown-subtitle"><a href="#markdown-subtitle" class="headerlink" title="markdown subtitle"></a>markdown subtitle</h2><h2 id="Philosophy"><a href="#Philosophy" class="headerlink" title="Philosophy"></a>Philosophy</h2><blockquote>
-<p>Markdown is intended to be as easy-to-read and easy-to-write as is feasible.<br>Readability, however, is emphasized above all else. A Markdown-formatted document should be publishable as-is, as plain text, without looking like it’s been marked up with tags or formatting instructions.<br>Markdown’s syntax is intended for one purpose: to be used as a format for <em>writing</em> for the web.</p>
-<p>“&gt;”is what ?__</p>
+        <h2 id="按钮样式"><a href="#按钮样式" class="headerlink" title="按钮样式"></a>按钮样式</h2><p>按钮是应用中最常见的,最基本的一个控件。按钮的样式多种多样，系统默认样式为左右结构，图片在左边，文字在右边。系统按钮完全无法满足开发的需求，我们只能自己定制出想要的样式。既包含文字又包含图片的按钮有下面四种样式：</p>
+<blockquote>
+<p>图片在上，文字在下<br>图片在左，文字在右<br>图片在下，文字在上<br>图片在右，文字在左</p>
 </blockquote>
+<p>不管怎么排布，归根结底只有两个方法 UIEdgeInsetsMake 和 UIEdgeInsetsMake，学会使用这两个方法想怎么排版怎么排</p>
+<p>这里使用别人写好的展示一下 <a href="http://www.jianshu.com/p/547a21ad9993" target="_blank" rel="external">原文链接</a></p>
+<ol>
+<li>新建一个UIButton的分类，下面是具体声明和实现</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">#import &lt;UIKit/UIKit.h&gt;</div><div class="line">// 定义一个枚举（包含了四种类型的button）</div><div class="line">typedef NS_ENUM(NSUInteger, MKButtonEdgeInsetsStyle) &#123;</div><div class="line">    MKButtonEdgeInsetsStyleTop, // image在上，label在下</div><div class="line">    MKButtonEdgeInsetsStyleLeft, // image在左，label在右</div><div class="line">    MKButtonEdgeInsetsStyleBottom, // image在下，label在上</div><div class="line">    MKButtonEdgeInsetsStyleRight // image在右，label在左</div><div class="line">&#125;;</div><div class="line"></div><div class="line">@interface UIButton (ImageTitleSpacing)</div><div class="line"></div><div class="line">/**</div><div class="line"> *  设置button的titleLabel和imageView的布局样式，及间距</div><div class="line"> *</div><div class="line"> *  @param style titleLabel和imageView的布局样式</div><div class="line"> *  @param space titleLabel和imageView的间距</div><div class="line"> */</div><div class="line">- (void)layoutButtonWithEdgeInsetsStyle:(MKButtonEdgeInsetsStyle)style</div><div class="line">                        imageTitleSpace:(CGFloat)space;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure>
+<ol>
+<li>实现文件</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div></pre></td><td class="code"><pre><div class="line">#import &quot;UIButton+ImageTitleSpacing.h&quot;</div><div class="line"></div><div class="line">@implementation UIButton (ImageTitleSpacing)</div><div class="line"></div><div class="line">- (void)layoutButtonWithEdgeInsetsStyle:(MKButtonEdgeInsetsStyle)style</div><div class="line">                        imageTitleSpace:(CGFloat)space &#123;</div><div class="line">    /**</div><div class="line">     *  知识点：titleEdgeInsets是title相对于其上下左右的inset，跟tableView的contentInset是类似的，</div><div class="line">     *  如果只有title，那它上下左右都是相对于button的，image也是一样；</div><div class="line">     *  如果同时有image和label，那这时候image的上左下是相对于button，右边是相对于label的；title的上右下是相对于button，左边是相对于image的。</div><div class="line">     */</div><div class="line"></div><div class="line">    // 1. 得到imageView和titleLabel的宽、高</div><div class="line">    CGFloat imageWith = self.imageView.frame.size.width;</div><div class="line">    CGFloat imageHeight = self.imageView.frame.size.height;</div><div class="line"></div><div class="line">    CGFloat labelWidth = 0.0;</div><div class="line">    CGFloat labelHeight = 0.0;</div><div class="line">    if ([UIDevice currentDevice].systemVersion.floatValue &gt;= 8.0) &#123;</div><div class="line">        // 由于iOS8中titleLabel的size为0，用下面的这种设置</div><div class="line">        labelWidth = self.titleLabel.intrinsicContentSize.width;</div><div class="line">        labelHeight = self.titleLabel.intrinsicContentSize.height;</div><div class="line">    &#125; else &#123;</div><div class="line">        labelWidth = self.titleLabel.frame.size.width;</div><div class="line">        labelHeight = self.titleLabel.frame.size.height;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // 2. 声明全局的imageEdgeInsets和labelEdgeInsets</div><div class="line">    UIEdgeInsets imageEdgeInsets = UIEdgeInsetsZero;</div><div class="line">    UIEdgeInsets labelEdgeInsets = UIEdgeInsetsZero;</div><div class="line"></div><div class="line">    // 3. 根据style和space得到imageEdgeInsets和labelEdgeInsets的值</div><div class="line">     /**</div><div class="line">        MKButtonEdgeInsetsStyleTop, // image在上，label在下</div><div class="line">        MKButtonEdgeInsetsStyleLeft, // image在左，label在右</div><div class="line">        MKButtonEdgeInsetsStyleBottom, // image在下，label在上</div><div class="line">        MKButtonEdgeInsetsStyleRight // image在右，label在左</div><div class="line">      */</div><div class="line">    switch (style) &#123;</div><div class="line">        case MKButtonEdgeInsetsStyleTop:</div><div class="line">        &#123;</div><div class="line">            imageEdgeInsets = UIEdgeInsetsMake(-labelHeight-space/2.0, 0, 0, -labelWidth);</div><div class="line">            labelEdgeInsets = UIEdgeInsetsMake(0, -imageWith, -imageHeight-space/2.0, 0);</div><div class="line">        &#125;</div><div class="line">            break;</div><div class="line">        case MKButtonEdgeInsetsStyleLeft:</div><div class="line">        &#123;</div><div class="line">            imageEdgeInsets = UIEdgeInsetsMake(0, -space/2.0, 0, space/2.0);</div><div class="line">            labelEdgeInsets = UIEdgeInsetsMake(0, space/2.0, 0, -space/2.0);</div><div class="line">        &#125;</div><div class="line">            break;</div><div class="line">        case MKButtonEdgeInsetsStyleBottom:</div><div class="line">        &#123;</div><div class="line">            imageEdgeInsets = UIEdgeInsetsMake(0, 0, -labelHeight-space/2.0, -labelWidth);</div><div class="line">            labelEdgeInsets = UIEdgeInsetsMake(-imageHeight-space/2.0, -imageWith, 0, 0);</div><div class="line">        &#125;</div><div class="line">            break;</div><div class="line">        case MKButtonEdgeInsetsStyleRight:</div><div class="line">        &#123;</div><div class="line">            imageEdgeInsets = UIEdgeInsetsMake(0, labelWidth+space/2.0, 0, -labelWidth-space/2.0);</div><div class="line">            labelEdgeInsets = UIEdgeInsetsMake(0, -imageWith-space/2.0, 0, imageWith+space/2.0);</div><div class="line">        &#125;</div><div class="line">            break;</div><div class="line">        default:</div><div class="line">            break;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // 4. 赋值</div><div class="line">    self.titleEdgeInsets = labelEdgeInsets;</div><div class="line">    self.imageEdgeInsets = imageEdgeInsets;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure>
+<ol>
+<li>使用方法</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// 导入头文件</div><div class="line">#import &quot;UIButton+ImageTitleSpacing.h&quot;</div><div class="line">// 我们随意创建一个按钮比如button，在设置完按钮的图片、标题和frame后，只需要加上如下代码：</div><div class="line">[button layoutButtonWithEdgeInsetsStyle: 这里填样式 imageTitleSpace: 这里填写图片和文字的间距];</div></pre></td></tr></table></figure>
+<p>##还有一种通过继承的方式实现</p>
+<p>新建一个继承自UIButton的类，重写layoutSubviews 方法，自己设置图片和文字的位置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">#import &quot;TSSquareButton.h&quot;</div><div class="line"></div><div class="line">@implementation TSSquareButton</div><div class="line"></div><div class="line">- (instancetype)initWithFrame:(CGRect)frame &#123;</div><div class="line">    if (self = [super initWithFrame:frame]) &#123;</div><div class="line">        // 设置图片的其他属性</div><div class="line">        self.titleLabel.textAlignment = NSTextAlignmentCenter;</div><div class="line">        self.titleLabel.font = [UIFont systemFontOfSize:12.0];</div><div class="line">        [self setBackgroundColor:[UIColor whiteColor]];</div><div class="line">        [self setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];</div><div class="line">    &#125;</div><div class="line">    return self;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 重写layoutSubviews方法，手动设置按钮子控件的位置</div><div class="line">- (void)layoutSubviews &#123;</div><div class="line">    [super layoutSubviews];</div><div class="line"></div><div class="line">    self.imageView.TS_width = self.TS_width * 0.4;</div><div class="line">    self.imageView.TS_height = self.imageView.TS_width;</div><div class="line">    self.imageView.TS_y = self.TS_height * 0.25;</div><div class="line">    self.imageView.TS_centerX = self.TS_width * 0.5;</div><div class="line"></div><div class="line">    self.titleLabel.TS_width = self.TS_width;</div><div class="line">    self.titleLabel.TS_y = self.imageView.TS_buttom ;</div><div class="line">    self.titleLabel.TS_height = 25;</div><div class="line">    self.titleLabel.TS_x = 0;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure>
+
         
         
         <p class="article-more-link">
-          
-            <a href="/2017/03/20/mweb应用说明/#more">Read More</a>
           
        </p>
     </div>
@@ -135,28 +151,613 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/01/15/Hexo发布文章/" title="Hello World" itemprop="url">Hello World</a>
+      <a href="/2017/07/09/使用故事版添加圆角/" title="通过storyboard的 运行时属性runtime attribute,可以对Button设置圆角或者边框" itemprop="url">通过storyboard的 运行时属性runtime attribute,可以对Button设置圆角或者边框</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
 		
   <p class="article-time">
-    <time datetime="2017-01-15T15:34:07.000Z" itemprop="datePublished"> 发表于 2017-01-15</time>
+    <time datetime="2017-07-08T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-09</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">$ hexo deploy</div><div class="line"></div><div class="line">$ hexo d -g 发布 （本人使用Mweb直接创建。md文件所以创建好后只需要发布一下就可以了）</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+        <p>##通过storyboard的 运行时属性runtime attribute,可以对Button设置圆角或者边框</p>
+<p>#####1.很多人都知道,通常设置一个 Button后者其他的UIView子类的圆角,需要使用如下的语句</p>
+<p><span style="font-size:18px;">self.button.layer.cornerRadius=10;//即可</span><span style="font-size:18px;">说明:这会用到layer图层的属性来实现,原因是在一个 UIView子类中</span><br>UIView本身只是用来监听事件,而真正显示内容的是layer图层,这当然也包含动画的实现,比如我们对一个view做动画</p>
+<p>实际上也是对layer做的动画;</p>
+<p>#####2.但是,总有一些有好奇心的人想知道如何通过,storyboard/xib 设置 一个button或者UIView的圆角:<br>通过我的研究,我找到一个很强大的方法,可以设置storybord无法添加的属性,比如圆角,或者边框</p>
+<p>这个方法就是runtime Attribute运行时属性,也就是在 运行时你设置的这个属性才会起作用,这样体现了oC语言的动态特性和运行时(runtime)的强大</p>
+<p><img src="http://ooyerqo96.bkt.clouddn.com/891788-20160421153006616-1281846780.png" alt="添加圆角"></p>
+<p>类似的你还可以添加其他很多属性，但是一定要注意 别写错名称了，否则肯定会报错。</p>
+<p>另外提醒直接用masktoBounds 会造成离屏渲染，小号性能，不建议使用，最常见的画一个圆角不就行啦，解决问题的办法好多种，那种性能最好选哪个。</p>
+<p>给Layer添加分类也可以决绝好多类似相关属性设置，分类扩展方法，注意添加属性的话需要使用runtime添加。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/08/Undefined symbols for architecture i386/" title="Undefined symbols for architecture" itemprop="url">Undefined symbols for architecture</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-07T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-08</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>##Undefined symbols for architecture i386:问题解决</p>
+<p><a href="http://blog.csdn.net/azhou_hui/article/details/18312047" target="_blank" rel="external">原文传送门</a></p>
+<p>多个人共同操作同一个项目或拷贝项目时，京城会出现类似的问题：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Undefined symbols for architecture i386:</div><div class="line">&quot;_OBJC_CLASS_$_xx文件名&quot;, referenced from:</div></pre></td></tr></table></figure>
+<p><img src="http://ooyerqo96.bkt.clouddn.com/16102839_SHWv.jpg" alt="报错图片"></p>
+<p>大概有下面4种可能，前三种网上好多人都说过了，而其中第四种情况是最近刚刚被困绕过的，如果前三种方法都使用后也不能解决，可以考虑排查一下第四种可能</p>
+<p>###相关工程文件未导入<br><img src="http://ooyerqo96.bkt.clouddn.com/16102840_LwFm.jpg" alt=""><br>你可以直接在这里＋进来，也可以在左边工程目录中把文件全部重新导人一遍(多人操作工程时，一般这种解决办法)</p>
+<h3 id="framework文件未导入"><a href="#framework文件未导入" class="headerlink" title=".framework文件未导入"></a>.framework文件未导入</h3><p><img src="http://ooyerqo96.bkt.clouddn.com/16102910_nNAh.jpg" alt=""><br>把xx文件库＋进来，本问题”_OBJC<em>CLASS</em>$_ASIdentifierManager”, 就是因为AdSupport.Framework类库未加上</p>
+<p>###路径缺失<br><img src="http://ooyerqo96.bkt.clouddn.com/16102941_k6VZ.jpg" alt=""><br>检查是否某些文件路径未加入进来或者写错了</p>
+<p>###所提示的文件内创建了未实现的类的对象<br>这种情况多是由于编码人员失误造成的，只在.h文件中生命了类，但未在对应的.m文件中实现；<br>排查的话可以查看一下代码，或者分段注释一下可疑部分，看看是否还会提示，修正一般很容易，但就是这样的编译错误提示很难联想到，当然也可能是自己确实比较菜鸟，这里就权当给自己之后提个醒吧；</p>
+<p>工程编译报出：Undefined symbols for architecture i386:和”_OBJC<em>CLASS</em>$_xx”, referenced from:错误，问题大致是由于上面这几种情况，把各个方面检查下基本就ok了</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/07/Undefined architecture i386/" title="CPU 架构" itemprop="url">CPU 架构</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-06T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-07</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>##iPhone架构<br>真机或模拟器调试的时候经常报出架构问题，有些第三方封装的库并不是全部支持，所以需要了解一下，一遍自己以后封装的时候支持条件。</p>
+<p>###简述<br>ARM处理器，因其功耗低和尺寸小而闻名，几乎所有的手机处理器都基于ARM,苹果当然也不例外。</p>
+<p>armv6、armv7、armv7s、arm64都是ARM处理器的指令集，所有指令集原则上都是向下兼容的。如 iPhone 4s的CPU默认指令集为armv7指令集，但它可以同时也兼容armv6的指令集，只是在使用armv6的时候无法充分发挥其性能(无法发挥armv7指令集中得新特性)。</p>
+<p>iOS模拟器没有运行ARM指令集，编译运行的是x86指令集(或i386)，所以只有在iOS设备上才会执行设备对应ARM指令集。</p>
+<p>###模拟器<br>4s-5: i386<br>5s-6s Plus: x86_64</p>
+<p>###真机<br>armv6: iPhone、iPhone 2、iPhone 3G、iPod Touch(第一代)、iPod Touch(第二代)<br>armv7: iPhone 3Gs、iPhone 4、iPhone 4s、iPad、iPad 2<br>armv7s: iPhone 5、iPhone 5c (静态库只要支持了armv7,就可以在armv7s的架构上运行)<br>arm64(注:无armv64): iPhone 5s、iPhone 6、iPhone 6 Plus、iPhone 6s、iPhone 6s Plus、iPad Air、iPad Air2、iPad mini2、iPad mini3</p>
+<p>###设置如下图<br><img src="http://ooyerqo96.bkt.clouddn.com/20150930103014973.jpeg" alt="setting"></p>
+<p>Architectures:<br>指明选定的Target要求被编译生成的二进制包所支持的指令集，支持指令集是通过编译生成对应的二进制数据包实现的。如果支持的指令集数目有多个，就会编译出包含多个指令集代码的数据包，从而造成最终编译生成的包很大。</p>
+<p>Valid Architectures:<br>指明可能支持的指令集并非Architectures列表中指明的指令集都会被支持，Valid Architectures限制可能被支持的指令集的范围，即Valid Architectures 和 Architectures 列表的交集，才是Xcode最终生成二进制包所支持的指令集。<br>比如:将Architectures支持arm指令集设置为: armv7, armv7s,对应的Valid Architectures的支持的指令集设置为:armv7s,arm64,那么此时Xcode生成二进制包所支持的指令集只有armv7s。</p>
+<p>Build Active Architecture Only：<br>指明是否只编译当前连接设备所支持的指令集。<br>该选项起作用的条件有两个，必须同时满足才会起作用：</p>
+<ol>
+<li>其值设置为YES</li>
+<li><p>Xcode成功连接调试设备<br>假定我们将Build Active Architecture Only值设置为YES，同时Xcode连接上手机 iPhone 5s（匹配指令集arm64）</p>
+</li>
+<li><p>第一种情况<br>Architectures:  armv7, armv7s, arm64<br>ValidArchitectures:  armv6, armv7s, arm64<br>生成二进制包支持的指令集： arm64 </p>
+</li>
+<li><p>第二种情况<br>Architectures: armv6, armv7, armv7s<br>Valid Architectures:  armv6, armv7s, arm64<br>生成二进制包支持的指令集： armv7s </p>
+</li>
+<li><p>第三种情况<br>Architectures:  armv6, armv7<br>Valid Architectures: armv6, armv7s, arm64<br>生成二进制包支持的指令集： armv7</p>
+</li>
+<li><p>第四种情况<br>Architectures: armv6<br>Valid Architectures: armv6, armv7s, arm64<br>生成二进制包支持的指令集： 虽然编译成功了，但是并没有任何目标生成， 因为从XCode4.5开始，就不再支持armv6指令集，所以列表中写了也是白写。</p>
+</li>
+<li><p>第五种情况<br>Architectures: armv7, armv7s, arm64<br>Valid Architectures: armv7，armv7s<br>生成二进制包支持的指令集： 编译出错信息</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[objc] view plain copy</div><div class="line">No architectures to compile for (ONLY_ACTIVE_ARCH=YES, active arch=arm64, VALID_ARCHS=armv7 armv7s) </div><div class="line">```  </div><div class="line">可以看出：当Build Active Architecture Only起作用时：</div><div class="line">连接的手机指令集匹配是由高到低（arm64 &gt; armv7s &gt; armv7）依次匹配的。</div><div class="line"> </div><div class="line">如连接手机为iPhone 5s，其默认指令集为arm64，若Architectures列表为armv7, armv7s,则会选取armv7s指令集为目标指令集，如果此时Valid Architectures列表中包含该指令集，则成功生成的二进制包只支持armv7s指令集，若alid Architectures列表不包含此指令集，则编译将会出错：</div></pre></td></tr></table></figure>
+<p>[objc] view plain copy<br>No architectures to compile for (ONLY_ACTIVE_ARCH=YES, active arch=armv7s, VALID_ARCHS=armv7 arm64)<br>```<br>同样的，若Architectures列表为armv7，则会选取armv7作为目标指令集，若Valid Architectures列表中包含了armv7指令集，则能够成功生成二进制包，其支持的指令集只有armv7，若Valid Architectures列表中不包含armv7，则编译失败。</p>
+<p>建议：通常Debug模式设置值为Yes，Release模式设置为No。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/06/章鱼哥问答/" title="章鱼哥问答" itemprop="url">章鱼哥问答</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-05T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-06</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>1、64位操作系统，64位编译器  sizeof(int) sizeof(char)  sizeof(int <em>) sizeof(char </em>) 分别是多少<br>答： 4 1 4 1<br>2、64位操作系统，一个结构 struct aStruct{int a; char b; int c; char d}; 此时 sizeof(struct aStruct) 是多少？ 如果是 struct aStruct{int a; char b; char d; int c}；此时 sizeof(struct aStruct) 是多少？为啥？<br>答： A：4  1对齐为4   4  1对齐为4<br>               B：4   1对齐为4        1前面的这个4还可以放三个，所以这个就放在前面的4里了      4<br>3、全局并发队列和自定义并发队列的区别，如果现在有两种任务需要并发处理，其中一种是：任务单位小，数量多  另一种是：任务单位大，数量少 分别应该使用哪种队列处理？为什么？<br>答： 96楼那个说的很明白了，不是这么分的，   全局省去了多次创建销毁的操作。  自定义便于自己管理。   和任务大小没关系，一般都是自定义的线程处理专门的任务，全局的做一些简单的常规操作。<br>4、为了防止循环引用，我们都知道使用weak(self); 但是程序中偶尔会见到strong(self); 这种用法，请问：strong(self)的应用场景是什么？<br>答： 关于weak的strong的所有问题，眼光还是要放在销毁，讲道理的说提前释放的情况并不多见，常见的还是应为强引用，最后引用计数没变成0，最后对象没销毁。详情看我这篇博文，<a href="http://www.jianshu.com/p/5d1b7568418b。" target="_blank" rel="external">http://www.jianshu.com/p/5d1b7568418b。</a><br>5、为了防止循环引用，我们都知道使用weak(self)，是不是所有的block 如果内部需要使用对象本身，都需要使用weakself？举例说明<br>答： 看这篇博文 <a href="http://www.jianshu.com/p/5d1b7568418b。" target="_blank" rel="external">http://www.jianshu.com/p/5d1b7568418b。</a><br>6、现有一个对象a，对象a 强持有了自定义对象b、c、d, 是不是可以说，当a的dealloc 只要执行了 我就可以认为内存没有泄漏了？如果不是的话，请举出例子让a对象完全释放。<br>答： 当一个对象的引用第一次成为1的时候，这个对象就初始化成功了，等到它再一次变成0的时候，会给runloop发送一条消息，然后runloop在合适的时候会执行dealloc方法，所以dealloc方法调用了，那么这个对象必然被销毁了。但是a b c d是四个不同的对象，全部销毁，必然是abcd都执行了dealloc方法，这里能保证a没有内存泄露。<br>7、类方法和对象方法的区别何在？类方法的生存周期？ 相对与对象方法，哪类处理适合使用类方法？<br>答：这是NSObject的头文件，自己观察一下，总结出自己的看法，才有用。</p>
+<p>8、kvo监听是否一定是在主线程完成的？如果不是，请举例说明<br>答：不是，KVO的本质就是监听对象的属性进行赋值的时候有没有调用setter方法. 如果有调用setter方法, 就会接收到属性变更的通知, 反之则没有.  所以，眼光放在setter的现成。<br>9、某同事开启了一个NSTimer,但是无论如何这个timer都跑不起来，作为他的老大，代码看起来没什么问题，以你10年ios的开发经验，第一反应是问题出在哪？<br>答:  没有10年经验，先看初始化，如果是scheduledTimerWithTimeInterval看runloop type，如果不是scheduled看加没加进runloop。<br>10、多线程编程种，死锁产生的条件是什么？死锁是不是只在主线程发生？<br>答： 不是，先看死锁定义，死锁是指两个或两个以上的进程在执行过程中，由于竞争资源或者由于彼此通信而造成的一种阻塞的现象，若无外力作用，它们都将无法推进下去。此时称系统处于死锁状态或系统产生了死锁，这些永远在互相等待的进程称为死锁进程。<br>通常死锁的题，只要两个现成线程互为条件就可以触发死锁了。    蛋说我要一只鸡来生下我。 鸡说我要一个蛋才能创建。<br>在<br>11、举出一个例子，说明dispatch_sync 的应用场景<br>答：  答第10题的时候我们可以用到dispatch_sync，在主线程写下这个代码就产生死锁了。<br>dispatch_sync(dispatch_get_main_queue(), ^{<br>                NSLog(@“你看不到我打印。”);<br>            });<br>12、如何创建一个常驻线程？<br>答:  建议使用runloop，详情可以看下我的这个博文：<a href="http://www.jianshu.com/p/b9a4f55001fe" target="_blank" rel="external">http://www.jianshu.com/p/b9a4f55001fe</a><br>13、我们知道，多线程读写，只要有1个写，就有可能出现并发问题，解决方案可以用锁，但我们又知道锁的效率不高，并且破坏程序结构，加锁的代码通常并不易理清逻辑，那么，还有什么样的手段能实现这个目的？（考虑队列） 如何实现？<br>答： 你也说了读不会有问题，写才会有问题，所以区分读写咯。       读 并行 写 串行。    大家可以搜一下，基于现成安全的多读单写。<br>14、基于13题的前提，假如现在有一个模型，写操作较少，但是读操作非常多，如何优化13题的模型，使之达到：写操作串行，读操作并行的效果？（考虑队列和dispatch_barrier函数族）<br>答：这道题和上面的题其实就是在考api咯，答案括号都给出来了。<br>15、dispatch_group函数族的应用场景是什么？假如现在让你使用信号量（dispatch_semaphore）来模拟类似的功能，如何实现？<br>答：这道题还是考api，  场景批量上传图片， dispatch_group，NSOperationQueue，还是NSOperationQueue好用一些。gcd主要是方便。<br>16、原子操作atomic 修饰的变量本身是否可以认为是线程安全的？ 如果不是，那什么类型的变量可以认为是安全的，又有什么样的变量是不安全的？举例说明即可<br>答：  你要是问我  atomic，和nonatomic的区别，我就说atomic是线程安全的。 现在直接问atomic，我在改口说不安全，会不会显得我很流氓。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/05/swift强行解包问题/" title="swift强制解包问题" itemprop="url">swift强制解包问题</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-04T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-05</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="unexpectedly-found-nil-while-unwrapping-an-Optional-value"><a href="#unexpectedly-found-nil-while-unwrapping-an-Optional-value" class="headerlink" title="unexpectedly found nil while unwrapping an Optional value"></a>unexpectedly found nil while unwrapping an Optional value</h2><p>首先来说一下Swift中的optional，可选项，他是一个枚举类型，有一下两个值</p>
+<blockquote>
+<p>none             表示没值<br>some(Wrapped)    某一类值</p>
+</blockquote>
+<p>原始可选项的定义：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">let x:Optional = 10</div></pre></td></tr></table></figure></p>
+<p>简单的定义<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">let y: Int? = 20</div></pre></td></tr></table></figure></p>
+<p>此时打印x和Y<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">print (x + y)</div></pre></td></tr></table></figure></p>
+<p>编译器报错，根据编译器的提示修改如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">print (x! + y!)     //结果为30且没有Optional关键字</div></pre></td></tr></table></figure></p>
+<p>此时我们回头把x重新定义为空，其他不变<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">let x: Int? = nil</div></pre></td></tr></table></figure></p>
+<p>此时程序又会崩溃到print,同事控制台打印fatal error: unexpectedly found nil while unwrapping an Optional value”意思是在解包的时候发现了nil值</p>
+<p>Swift中,’!’:强行解包,从可选值中强行获取对应的非空值,如果真的遇见nil,程序直接崩溃.就是说不同类型之间的值不能直接运算!如果没有值是nil(Optional枚举中的none),nil不是任何数据类型,不能参与计算</p>
+<p>编写程序时灵活应用 可选型，强制解包问题。强制解包参数一定不能为空。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/04/终端打ipa包/" title="终端打包IPA" itemprop="url">终端打包IPA</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-03T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-04</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>使用xcode命令打包相对来说比较慢，打包比较频繁的话会很麻烦的，现在使用中端三行命令来解决这个问题。</p>
+<p>一定要配置好证书和描述文件，一定要配置好证书和描述文件</p>
+<p>##方式一 xcodebuild、xcrun进行打包<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">xcodebuild : 通过工程文件，生成 app 文件。</div><div class="line">xcrun : 通过 app 文件，来生成 ipa 文件。(包含了签名的过程)</div></pre></td></tr></table></figure></p>
+<p>###步骤</p>
+<ol>
+<li>使用xcodebuild命令打包成 .app 文件这里以我们的 DemoTest 为例。打开终端， cd 到工程文件夹下。</li>
+<li>终端执行：xcodebuild -project DemoTest.xcodeproj -target DemoTest -configuration Release</li>
+<li>继续执行：xcrun -sdk iphoneos -v PackageApplication ./build/Release-iphoneos/DemoTest.app -o ~/Desktop/DemoTest.ipa<br>（说明：-v 对应的是 .app 文件的相对路径， –o 对应 ipa 文件保存的路径和文件名。这里直接放在桌面了。）</li>
+</ol>
+<p>三部生成IPA包，然后配合上部自签名开启HTTPS本地服务器，搞定频繁安装包的过程。</p>
+<p>##方式二 xctool进行自动打包</p>
+<p>参考网页地址:<a href="http://www.tuicool.com/articles/uIZRZjy" target="_blank" rel="external">http://www.tuicool.com/articles/uIZRZjy</a></p>
+<pre><code>1、确保安装了xctool
+        没有安装xctool，可以用brew安装，没有安装brew的，可以通过搜索安装brew，然后执行如下操作安装xctool
+        安装命令：sudo brew install xctool                
+</code></pre><p>介绍下xctool命令：<br>xctool 是FaceBook开源的一个命令行工具，用来替代苹果的xcodebuild工具。<br>    先附上打包用的参考代码,如下:    </p>
+<p>#</p>
+<p>cd AutoProject                    //进入项目目录</p>
+<p>#</p>
+<p>buildDay=$(date +%Y%m%d)            //获取当前日期</p>
+<p>buildTime=$(date +%Y%m%d%H%M)     //获取当前时间 </p>
+<p>profile=”xxxx”      //设置打包配置文件</p>
+<p>#</p>
+<p>buildConfiguration=”QA”     //build时用的证书</p>
+<p>buildPath=”../ArchiveProduction/QA/${buildDay}/Auto<em>QA</em>${buildTime}.xcarchive”     //build后归档的文件目录</p>
+<p>ipaName=”../ipa/QA/${buildDay}/Auto<em>QA</em>${buildTime}.ipa”     //打好包放置位置</p>
+<p>#</p>
+<p>xctool -scheme AutoProject -configuration ${buildConfiguration} clean     //clean下工程</p>
+<p>xctool -scheme AutoProject -configuration ${buildConfiguration} archive -archivePath ${buildPath}        //对项目进行Archive, 将xcarchive文件导出到指定目录</p>
+<p>xcodebuild -exportArchive -exportFormat IPA -archivePath ${buildPath} -exportPath ${ipaName} -            exportProvisioningProfile “$profile”                    //生成的ipa文件导出到指定目录, 此处依然使用的是xcodebuild进行打包, 待优化</p>
+<p>以上代码是从参考文件copy过来的，只是进行了相应的注释， 具体进行打包，需要进行适当的调整命令</p>
+<h2 id="方式三-xcodebuild"><a href="#方式三-xcodebuild" class="headerlink" title="方式三 xcodebuild"></a>方式三 xcodebuild</h2><p> 参考apple文档：<a href="https://developer.apple.com/library/prerelease/mac/documentation/Darwin/Reference/ManPages/man1/xcodebuild.1.html" target="_blank" rel="external">https://developer.apple.com/library/prerelease/mac/documentation/Darwin/Reference/ManPages/man1/xcodebuild.1.html</a></p>
+<p> xcodebuild -project “${TARGET}.xcodeproj”  -target ${TARGET} CODE_SIGN_IDENTITY=”${IDENTITY}” clean        //将project clean下</p>
+<p> xcodebuild -workspace MyWorkspace.xcworkspace -scheme MyScheme archive    //进行archive，生成xcarchive文件<br>xcodebuild -exportArchive -exportFormat IPA -archivePath MyMobileApp.xcarchive -exportPath MyMobileApp.ipa -exportProvisioningProfile ‘MyMobileApp Distribution Profile’</p>
+<p>上述最后一个命令行，确实是可以生成.ipa，但是可能会导致不能安装，<a href="https://developer.apple.com/library/prerelease/mac/documentation/Darwin/Reference/ManPages/man1/xcodebuild.1.html" target="_blank" rel="external">https://developer.apple.com/library/prerelease/mac/documentation/Darwin/Reference/ManPages/man1/xcodebuild.1.html</a> ， 链接是apple的官方文档，文档大概的意思将  xcarchive文件作为.ipa方式进行导出。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/03/自动生成自签名HTTPS服务器安装IPA包/" title="本电脑当服务器，https，自动扫码安装ipa" itemprop="url">本电脑当服务器，https，自动扫码安装ipa</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-02T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-03</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>由于频繁测试修改Bug需要经常安装ipa包，但是每次都要连线往手机上安装是不是太麻烦了，在同一个局域网下把自己的电脑自签名生成HTTPS服务器，快速安装，方便省时又省力。</p>
+<p>网上蒲公英。fir都可以上传ipa包生成二维码，不想利用外部服务器想使用自己电脑生成二维码，用 <a href="https://github.com/bumaociyuan/ios-ipa-server" target="_blank" rel="external">ios-ipa-server</a> 这个第三方，简单几步很容易解决。</p>
+<h3 id="下载源码"><a href="#下载源码" class="headerlink" title="下载源码"></a>下载源码</h3><p>$ git clone git@github.com:bumaociyuan/ios-ipa-server.git</p>
+<h3 id="安装依赖包"><a href="#安装依赖包" class="headerlink" title="安装依赖包"></a>安装依赖包</h3><p>$ cd ios-ipa-server<br>$ npm install </p>
+<h3 id="建立link-方便调试"><a href="#建立link-方便调试" class="headerlink" title="建立link 方便调试"></a>建立link 方便调试</h3><p>$ npm link</p>
+<h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><p>$ cd /path/of/ipa<br>$ ios-ipa-server</p>
+<p>运行以后会生成一个 ip 和端口，使用手机访问这个url。进入页面下载即可。</p>
+<p>手机使用safari打开<a href="https://ip:port/download页面" target="_blank" rel="external">https://ip:port/download页面</a><br>第一次打开会弹出警告无法验证服务器，请点击详细信息按钮安装证书，按指示一直点击下一步和完成(强烈推荐使用静态IP，避免每次重新安装证书)<br>点击ipa链接在线安装ipa<br>iOS 10.3 安装方法 Settings &gt; General &gt; About (logically…) &gt; Certificate Trust Settings &gt; Enable Full Trust for Root Certificates</p>
+<p>上边插件工作都给做完了，你也可以自己创建HTTPS链接，具体如下</p>
+<p>一. 打包</p>
+<p>打包的方法就不再叙述了，最后输出 .ipa 包就可以<br>但想要要在线安装，还需要一个 plist 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</div><div class="line">&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;</div><div class="line">&lt;plist version=&quot;1.0&quot;&gt;</div><div class="line">&lt;dict&gt;</div><div class="line">    &lt;key&gt;items&lt;/key&gt;</div><div class="line">    &lt;array&gt;</div><div class="line">        &lt;dict&gt;</div><div class="line">            &lt;key&gt;assets&lt;/key&gt;</div><div class="line">            &lt;array&gt;</div><div class="line">                &lt;dict&gt;</div><div class="line">                    &lt;key&gt;kind&lt;/key&gt;</div><div class="line">                    &lt;string&gt;software-package&lt;/string&gt;</div><div class="line">                    &lt;key&gt;url&lt;/key&gt;</div><div class="line">                    &lt;string&gt;http://172.17.22.124/test.ipa&lt;/string&gt;</div><div class="line">                &lt;/dict&gt;</div><div class="line">            &lt;/array&gt;</div><div class="line">        &lt;key&gt;metadata&lt;/key&gt;</div><div class="line">            &lt;dict&gt;</div><div class="line">                &lt;key&gt;bundle-identifier&lt;/key&gt;</div><div class="line">                &lt;string&gt;com.sunli.test&lt;/string&gt;</div><div class="line">                &lt;key&gt;bundle-version&lt;/key&gt;</div><div class="line">                &lt;string&gt;1.1.0&lt;/string&gt;</div><div class="line">                &lt;key&gt;kind&lt;/key&gt;</div><div class="line">                &lt;string&gt;software&lt;/string&gt;</div><div class="line">                &lt;key&gt;releaseNotes&lt;/key&gt;</div><div class="line">                &lt;string&gt;1.1版本发布&lt;/string&gt;</div><div class="line">                &lt;key&gt;title&lt;/key&gt;</div><div class="line">                &lt;string&gt;testDemo&lt;/string&gt;</div><div class="line">            &lt;/dict&gt;</div><div class="line">        &lt;/dict&gt;</div><div class="line">    &lt;/array&gt;</div><div class="line">&lt;/dict&gt;</div><div class="line">&lt;/plist&gt;</div><div class="line"></div><div class="line"></div><div class="line">//url 中需要填写你的 ipa 包下载地址</div><div class="line">//bundle-identifier 填写你打包时的 bundle id</div><div class="line">//bundle-version 版本号</div><div class="line">//reseaseNotes 发布信息</div><div class="line">//title app名称，下载时会弹出安装提示，提示内容包含 title</div><div class="line"></div><div class="line">在线安装的前提是你的开发者证书已经对 iOS 设备授权，这里不涉及绕过苹果认证的内容</div></pre></td></tr></table></figure>
+<p>二. 启动 apache 服务，配置 Https</p>
+<p>1.启动 Apache<br>Mac OS X 自带了 Apache 服务，我们只需要启动它就可以了<br>在终端中输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apachectl start</div></pre></td></tr></table></figure>
+<p>然后在浏览器中尝试输入 <a href="http://127.0.0.1" target="_blank" rel="external">http://127.0.0.1</a> , 如果出现 It Works！那么就是启动成功<br>站点的默认目录是 /Library/WebServer/Documents/<br>2.开启 Https 服务(因为 iOS7.1 以后， Apple 不再支持 HTTP 方式的 OTA ，所以需要为 Apache 开启 HTTPS 服务)</p>
+<p>(1) 制作OPenSSL证书<br>—&gt;生成服务器私钥<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir /private/etc/apache2/ssl </div><div class="line">cd /private/etc/apache2/ssl</div><div class="line">sudo openssl genrsa -out server.key 1024</div></pre></td></tr></table></figure></p>
+<p>—&gt;生成签署申请<br>需要完整填写各项信息，Common Name必须是服务器 ip 或域名，其他信息可以随意填写</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo openssl req -new -key server.key -out server.csr</div></pre></td></tr></table></figure>
+<p>—&gt;生成CA私钥</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo openssl req  -new -x509 -days 365 -key ca.key -out ca.crt</div></pre></td></tr></table></figure>
+<p>—&gt;创建DemoCA<br>在 ssl 目录下创建 demoCA 文件夹，然后进入 demoCA ，创建一个 index.txt 和 serial ，index.txt 为空， serial 内容为01，然后再创建一个空文件夹 newcerts<br>然后执行命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo openssl ca -in server.csr -out server.crt -cert ca.crt -keyfile ca.key</div></pre></td></tr></table></figure>
+<p>(2) 配置SSL服务<br>—&gt;编辑httpd.conf文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vim /private/etc/apache2/httpd.conf</div></pre></td></tr></table></figure>
+<p>把一下三行注释掉<br>LoadModule ssl_module libexec/apache2/mod_ssl.so<br>Include /private/etc/apache2/extra/httpd-ssl.conf<br>Include /private/etc/apache2/extra/httpd-vhosts.conf</p>
+<p>注意：如果你的 httpd.conf 中缺少了某行，你可以自行添加进去即可。（我的 httpd.conf 中就没有后面两行，自己加上去的）<br>—&gt; 编辑httpd-ssl.conf 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vim /private/etc/apache2/extra/httpd-ssl.conf</div></pre></td></tr></table></figure>
+<p>把一下两行代码注释掉<br>SSLCertificateFile “/private/etc/apache2/server.crt”<br>SSLCertificateKeyFile “/private/etc/apache2/server.key”<br>全文搜索是要注意，可能它的路径和我贴的不一致<br>然后修改路径，改成你的证书文件路径<br>SSLCertificateFile “/private/etc/apache2/ssl/server.crt”<br>SSLCertificateKeyFile “/private/etc/apache2/ssl/server.key”</p>
+<p>—&gt;编辑 httpd-vhosts.conf 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vim /private/etc/apache2/extra/httpd-vhosts.conf</div></pre></td></tr></table></figure>
+<p>在 NameVirtualHost <em>:80 后面添加  NameVirtualHost </em>:443<br>然后在文件末尾添加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;VirtualHost *:443&gt; </div><div class="line">    SSLEngine on </div><div class="line">    SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL</div><div class="line">    SSLCertificateFile /private/etc/apache2/ssl/server.crt</div><div class="line">    SSLCertificateKeyFile /private/etc/apache2/ssl/server.key</div><div class="line">    ServerName 172.17.22.124</div><div class="line">    DocumentRoot &quot;/Library/WebServer/Documents/&quot;</div><div class="line">&lt;/VirtualHost&gt;</div><div class="line"></div><div class="line">//ServerName 填写你的 ip</div><div class="line">//DocumentRoot 填写你的站点路径</div></pre></td></tr></table></figure>
+<p>—&gt; 检查 apachectl 配置</p>
+<p>sudo apachectl configtest  如果它提示：Syntax OK ，那就完成90%了，如果它提示有错，那就要根据错误提示自行解决了</p>
+<p>—&gt; 重启 Apache 服务</p>
+<p>sudo apachectl restart</p>
+<p>这样就可以用 https 访问本地服务器了</p>
+<p>三、建立在线安装服务<br>跳转到你的站点目录，我是 /Library/WebServer/Documents/</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd /Library/WebServer/Documents/</div></pre></td></tr></table></figure>
+<p>然后把 plist 文件，ipa 包，还有前面生成在 ssl 目录中的 ca.crt 文件都拖到站点目录中</p>
+<p>然后新建网页<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vim index.html</div></pre></td></tr></table></figure></p>
+<p>输入以下内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;html&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;a href=&quot;itms-services://?action=download-manifest&amp;url=https://172.17.22.124/test.plist&quot; class=&quot;app_link&quot;&gt;click to install app&lt;/a&gt;</div><div class="line">&lt;br&gt;&lt;br&gt;</div><div class="line">&lt;a title=&quot;iPhone&quot; href=&quot;http://172.17.22.124/ca.crt&quot;&gt;ssl install&lt;/a&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<p>url中必须填写 https 开头的 ipa 包下载地址，然后下载前需要安装 ssl 证书，所以第二行附上 ca.crt 证书的下载地址</p>
+<p>最后在 iphone 的 Safari 浏览器中输入地址 <a href="http://172.17.22.124/index.html" target="_blank" rel="external">http://172.17.22.124/index.html</a> 或者 <a href="https://172.17.22.124/index.html" target="_blank" rel="external">https://172.17.22.124/index.html</a></p>
+<p>先安装证书，再安装 app，大功告成！</p>
+<p>资料：<br>    <a href="http://www.10tiao.com/html/276/201602/405335057/2.html" target="_blank" rel="external">局域网OTA</a></p>
+<pre><code>[http://www.jianshu.com/p/35ca63ec0d8e](http://www.jianshu.com/p/35ca63ec0d8e)
+
+[http://stackoverflow.com/questions/20127138/apache-2-4-configuration-for-ssl-not-working](http://stackoverflow.com/questions/20127138/apache-2-4-configuration-for-ssl-not-working)
+</code></pre>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/02/Ionic2:Angular:cordova/" title="ionic2/cordova/Angular" itemprop="url">ionic2/cordova/Angular</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-01T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-02</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>#架构关系</p>
+<p>大家都知道，现在原生的移动开发在企业上基本很少使用了，大部分企业为了降低成本，选择了webapp，hybrid（混合开发）这两种模式,而 ionic2+Angular+cordova这种框架相对来说有发展前景。</p>
+<p>通俗地讲：ionic是一款基于angularjs的html5移动app开发框架,cordova就是一款可以打包并且可以让js调用原生的移动app框架</p>
+<p>##Ionic：<br>ionic是一个用来开发混合手机应用的，开源的，免费的代码库。可以优化html、css和js的性能，构建高效的应用程序，而且还可以用于构建Sass和AngularJS的优化。ionic会是一个可以信赖的框架。<br>Ionic 2 专注于以标准的 HTML 、 CSS 和 JavaScript 来构建移动站点，并可以通过 Cordova 打包成移动 App，只需编写一次代码，就可以分别部署到 iOS 、Android 等多种移动平台上。</p>
+<p>##Cordova：<br>以前叫PhoneGap，是一个可以与手机原生代码交互的框架，主要用于调用手机功能，比如调用拍照功能，定位功能等。<br>Cordova是贡献给Apache后的开源项目，是从PhoneGap中抽出的核心代码，是驱动PhoneGap的核心引擎。你可以把它们的关系想象成类似于Webkit和Google Chrome的关系<br>Cordova提供了一组设备相关的API，通过这组API，移动应用能够以JavaScript访问原生的设备功能，如摄像头、麦克风等。<br>ngCordova是在Cordova Api基础上封装的一系列开源的AngularJs服务和扩展，让开发者可以方便的在HybridApp开发中调用设备能力，即可以在AngularJs代码中访问设备能力Api。</p>
+<p>##Angularjs：<br>一款优秀的前端js框架，已经被用于Google的多款产品当中。AngularJS有着诸多特性，最为核心的是：MVVM、模块化、自动化双向数据绑定、语义化标签、依赖注入等等</p>
+<p>##Ionic和Angular</p>
+<p>首先要明确的是Ionic是Angular的衍生品，Angular是单独的js库，和jQuery一样能够独立用于开发应用，而Ionic只是对Angular进行了扩展，利用Angular实现了很多符合移动端应用的组件，并搭建了很完善的样式库，是对Angular最成功的应用样例。即使不使用Ionic，Angular也可与任意样式库，如Bootstrap、Foundation等搭配使用，得到想要的页面效果。</p>
+<p>##Ionic/Angular和Cordova</p>
+<p>可能会有人被问道：“Cordova比Ionic/Angular好吗？”，这就很尴尬了，根本是毫无意义的问题。它们在混合开发中扮演的是不同的角色–Ionic/Angular负责页面的实现，而Cordova负责将实现的页面包装成原生应用（Android:apk；iOS:ipa）。就像花生，最内层的花生仁是Angular，花生仁的表皮是Ionic，而最外层的花生壳则是Cordova。包装完成之后我们的页面才有可能调用设备的原生能力，最后才能上传到应用商店被用户使用。</p>
+<p>##Ionic/Angular和Cordova插件</p>
+<p>关于Cordova插件要明确以下几点：<br>Cordova插件的作用是提供一个桥梁供页面和原生通信，首先我们的页面不能直接调用设备能力，所以需要与能够调用设备能力的原生代码（android:Java；ios:OC）通信，此时就需要Cordova插件了。<br>Cordova插件能够再任何Cordova工程中使用，和使用什么前端框架（如Ionic）无关。<br>Ionic 2中封装了Ionic Native，方便了Cordova插件的使用，但在Ionic 2中仍然可以像Ionic 1中一样使用Cordova插件，Ionic Native不是必须的。<br>即使在Ionic 2中使用了Ionic Native，也首先需要手动添加插件，如：cordova plugin add cordova-plugin-pluginName。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/01/签名机制/" title="详解签名机制" itemprop="url">详解签名机制</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-06-30T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-01</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>iOS 签名机制挺复杂，各种证书，Provisioning Profile，entitlements，CertificateSigningRequest，p12，AppID，概念一堆，也很容易出错，本文尝试从原理出发，一步步推出为什么会有这么多概念，希望能有助于理解 iOS App 签名的原理和流程。</p>
+<p>##目的<br>先来看看苹果的签名机制是为了做什么。在 iOS 出来之前，在主流操作系统（Mac/Windows/Linux）上开发和运行软件是不需要签名的，软件随便从哪里下载都能运行，导致平台对第三方软件难以控制，盗版流行。苹果希望解决这样的问题，在 iOS 平台对第三方 App 有绝对的控制权，一定要保证每一个安装到 iOS 上的 App 都是经过苹果官方允许的，怎样保证呢？就是通过签名机制。</p>
+<p>##非对称加密<br>通常我们说的签名就是数字签名，他是基于非对称加密算法实现的，对称加密是通过同一份秘钥加密和解密的，而非对称加密则有两份秘钥，分别是公钥和私钥，用公钥加密的数据，只有私钥才能解密，用私钥加密的数据，只有公钥才能解密。</p>
+<p>##数字签名<br>数字签名的作用是我对某一份数据打个标记，表示我认可了这份数据（签了个名），然后我发送给其他人，其他人可以知道这份数据是经过我认证的，数据没有被篡改过</p>
+<p>首先用一种算法，算出原始数据的摘要。需满足 a.若原始数据有任何变化，计算出来的摘要值都会变化。 b.摘要要够短。这里最常用的算法是 MD5。<br>生成一份非对称加密的公钥和私钥，私钥我自己拿着，公钥公布出去。<br>对一份数据，算出摘要后，用私钥加密这个摘要，得到一份加密后的数据，称为原始数据的签名。把它跟原始数据一起发送给用户。<br>用户收到数据和签名后，用公钥解密得到摘要。同时用户用同样的算法计算原始数据的摘要，对比这里计算出来的摘要和用公钥解密签名得到的摘要是否相等，若相等则表示这份数据中途没有被篡改过，因为如果篡改过，摘要会变化。<br>之所以要有第一步计算摘要，是因为非对称加密的原理限制可加密的内容不能太大（不能大于上述 n 的位数，也就是一般不能大于 1024 位 / 2048 位），于是若要对任意大的数据签名，就需要改成对它的特征值签名，效果是一样的。</p>
+<p>##最简单的签名<br>要实现这个需求很简单，最直接的方式，苹果官方生成一对公私钥，在 iOS 里内置一个公钥，私钥由苹果后台保存，我们传 App 上 App Store 时，苹果后台用私钥对 App 数据进行签名，iOS 系统下载这个 App 后，用公钥验证这个签名，若签名正确，这个 App 肯定是由苹果后台认证的，并且没有被修改过，也就达到了苹果的需求：保证安装的每一个 App 都是经过苹果官方允许的。</p>
+<p>如果我们 iOS 设备安装 App 只有从 App Store 下载这一种方式的话，这件事就结束了，没有任何复杂的东西，只有一个数字签名，非常简单地解决问题。<br>但实际上因为除了从 App Store 下载，我们还可以有三种方式安装一个 App：</p>
+<blockquote>
+<p>1 开发 App 时可以直接把开发中的应用安装进手机进行调试。<br>2 In-House 企业内部分发，可以直接安装企业证书签名后的 App。<br>3 AD-Hoc 相当于企业分发的限制版，限制安装设备数量，较少用。</p>
+</blockquote>
+<p>第一个：开发时安装 App，它有两个个需求：</p>
+<p>安装包不需要传到苹果服务器，可以直接安装到手机上。如果你编译一个 App 到手机前要先传到苹果服务器签名，这显然是不能接受的。<br>苹果必须对这里的安装有控制权，包括： </p>
+<ol>
+<li>经过苹果允许才可以这样安装；</li>
+<li>不能被滥用导致非开发 App 也能被安装。</li>
+</ol>
+<p>苹果这里给出的方案是使用了双层签名：<br>1.在你的 Mac 开发机器生成一对公私钥，这里称为公钥 L，私钥 L。L:Local<br>2苹果自己有固定的一对公私钥，跟上面 App Store 例子一样，私钥在苹果后台，公钥在每个 iOS 设备上。这里称为公钥 A，私钥 A。A:Apple<br>3.把公钥 L 传到苹果后台，用苹果后台里的私钥 A 去签名公钥 L。得到一份数据包含了公钥 L 以及其签名，把这份数据称为证书。<br>4.在开发时，编译完一个 App 后，用本地的私钥 L 对这个 App 进行签名，同时把第三步得到的证书一起打包进 App 里，安装到手机上。<br>5。在安装时，iOS 系统取得证书，通过系统内置的公钥 A，去验证证书的数字签名是否正确。<br>6.验证证书后确保了公钥 L 是苹果认证过的，再用公钥 L 去验证 App 的签名，这里就间接验证了这个 App 安装行为是否经过苹果官方允许。（这里只验证安装行为，不验证 App 是否被改动，因为开发阶段 App 内容总是不断变化的，苹果不需要管。）</p>
+<p>上述流程只解决了上面第一个需求，也就是需要经过苹果允许才可以安装，还未解决第二个避免被滥用的问题。怎么解决呢？苹果再加了两个限制，一是限制在苹果后台注册过的设备才可以安装，二是限制签名只能针对某一个具体的 App。</p>
+<p>在上述第三步，苹果用私钥 A 签名我们本地公钥 L 时，实际上除了签名公钥 L，还可以加上无限多数据，这些数据都可以保证是经过苹果官方认证的，不会有被篡改的可能。可以想到把 允许安装的设备 ID 列表 和 App 对应的 AppID 等数据，都在第三步这里跟公钥 L 一起组成证书，再用苹果私钥 A 对这个证书签名。在最后第 5 步验证时就可以拿到设备 ID 列表，判断当前设备是否符合要求。根据数字签名的原理，只要数字签名通过验证，第 5 步这里的设备 IDs / AppID / 公钥 L 就都是经过苹果认证的，无法被修改，苹果就可以限制可安装的设备和 App，避免滥用。</p>
+<p>##最终流程<br>到这里这个证书已经变得很复杂了，有很多额外信息，实际上除了 设备 ID / AppID，还有其他信息也需要在这里用苹果签名，像这个 App 里 iCloud / push / 后台运行 等权限苹果都想控制，苹果把这些权限开关统一称为 Entitlements，它也需要通过签名去授权。</p>
+<p>实际上一个“证书”本来就有规定的格式规范，上面我们把各种额外信息塞入证书里是不合适的，于是苹果另外搞了个东西，叫 Provisioning Profile，一个 Provisioning Profile 里就包含了证书以及上述提到的所有额外信息，以及所有信息的签名。</p>
+<ol>
+<li>在你的 Mac 开发机器生成一对公私钥，这里称为公钥 L，私钥 L。L:Local</li>
+<li>苹果自己有固定的一对公私钥，跟上面 App Store 例子一样，私钥在苹果后台，公钥在每个 iOS 设备上。这里称为公钥 A，私钥 A。A:Apple<br>3.把公钥 L 传到苹果后台，用苹果后台里的私钥 A 去签名公钥 L。得到一份数据包含了公钥 L 以及其签名，把这份数据称为证书。<br>4.在苹果后台申请 AppID，配置好设备 ID 列表和 App 可使用的权限，再加上第③步的证书，组成的数据用私钥 A 签名，把数据和签名一起组成一个 Provisioning Profile 文件，下载到本地 Mac 开发机。<br>5.在开发时，编译完一个 App 后，用本地的私钥 L 对这个 App 进行签名，同时把第④步得到的 Provisioning Profile 文件打包进 App 里，文件名为 embedded.mobileprovision，把 App 安装到手机上。<br>6.在安装时，iOS 系统取得证书，通过系统内置的公钥 A，去验证 embedded.mobileprovision 的数字签名是否正确，里面的证书签名也会再验一遍。<br>7.确保了 embedded.mobileprovision 里的数据都是苹果授权以后，就可以取出里面的数据，做各种验证，包括用公钥 L 验证 App 签名，验证设备 ID 是否在 ID 列表上，AppID 是否对应得上，权限开关是否跟 App 里的 Entitlements 对应等。</li>
+</ol>
+<p>上面的步骤对应到我们平常具体的操作和概念是这样的：</p>
+<ol>
+<li>对应的是 keychain 里的 “从证书颁发机构请求证书”，这里就本地生成了一堆公私钥，保存的 CertificateSigningRequest 就是公钥，私钥保存在本地电脑里。</li>
+<li>苹果处理，不用管。</li>
+<li>对应把 CertificateSigningRequest 传到苹果后台生成证书，并下载到本地。这时本地有两个证书，一个是第 1 步生成的，一个是这里下载回来的，keychain 会把这两个证书关联起来，因为他们公私钥是对应的，在 XCode 选择下载回来的证书时，实际上会找到 keychain 里对应的私钥去签名。这里私钥只有生成它的这台 Mac 有，如果别的 Mac 也要编译签名这个 App 怎么办？答案是把私钥导出给其他 Mac 用，在 keychain 里导出私钥，就会存成 .p12 文件，其他 Mac 打开后就导入了这个私钥。</li>
+<li>都是在苹果网站上操作，配置 AppID / 权限 / 设备等，最后下载 Provisioning Profile 文件。</li>
+<li>XCode 会通过第 3 步下载回来的证书（存着公钥），在本地找到对应的私钥（第一步生成的），用本地私钥去签名 App，并把 Provisioning Profile 文件命名为 embedded.mobileprovision 一起打包进去。这里对 App 的签名数据保存分两部分，Mach-O 可执行文件会把签名直接写入这个文件里，其他资源文件则会保存在 _CodeSignature 目录下。</li>
+<li>的打包和验证都是 Xcode 和 iOS 系统自动做的事。</li>
+</ol>
+<ol>
+<li>证书： 内容是公钥或私钥，由其他机构对其签名组成的数据包。</li>
+<li>Entitlements： 包含了 App 权限开关列表。</li>
+<li>CertificateSigningRequest： 本地公钥。</li>
+<li>p12： 本地私钥，可以导入到其他电脑。</li>
+<li>Provisioning Profile： 包含了 证书 / Entitlements 等数据，并由苹果后台私钥签名的数据包。</li>
+</ol>
 
         
         
@@ -189,7 +790,7 @@
 
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" rel="prev" href="/page/2/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+    <a class="extend prev" rel="prev" href="/page/2/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/">Next<span></span></a>
   </nav>
 
 </div>

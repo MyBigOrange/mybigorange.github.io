@@ -1,0 +1,496 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>swift json解析分析 | 史成</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="史成">
+    
+
+    
+    <meta name="description" content="很多时候，我们从服务端请求下的数据都是Json格式，我们需要拿这些数据显示到我们的UI界面。 因此，我们的做法基本都会先将json转为方便使用的数据模型，或者也可以直接转字典解决。 在OC中，我们有很多优秀的第三方库帮助我们实现，比如MJExtension、JSONModel等，这些库基本都是利用runtime实现读取属性名并利用kvc重新赋值属性。 在Swift中，由于runtime的局限，比较">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="swift json解析分析">
+<meta property="og:url" content="http://yoursite.com/2017/07/24/swift数据转模型/index.html">
+<meta property="og:site_name" content="史成">
+<meta property="og:description" content="很多时候，我们从服务端请求下的数据都是Json格式，我们需要拿这些数据显示到我们的UI界面。 因此，我们的做法基本都会先将json转为方便使用的数据模型，或者也可以直接转字典解决。 在OC中，我们有很多优秀的第三方库帮助我们实现，比如MJExtension、JSONModel等，这些库基本都是利用runtime实现读取属性名并利用kvc重新赋值属性。 在Swift中，由于runtime的局限，比较">
+<meta property="og:image" content="http://ooyerqo96.bkt.clouddn.com/17-7-27/1120271.jpg">
+<meta property="og:updated_time" content="2017-07-30T08:18:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="swift json解析分析">
+<meta name="twitter:description" content="很多时候，我们从服务端请求下的数据都是Json格式，我们需要拿这些数据显示到我们的UI界面。 因此，我们的做法基本都会先将json转为方便使用的数据模型，或者也可以直接转字典解决。 在OC中，我们有很多优秀的第三方库帮助我们实现，比如MJExtension、JSONModel等，这些库基本都是利用runtime实现读取属性名并利用kvc重新赋值属性。 在Swift中，由于runtime的局限，比较">
+<meta name="twitter:image" content="http://ooyerqo96.bkt.clouddn.com/17-7-27/1120271.jpg">
+
+    
+    <link rel="alternative" href="www.baidu.com" title="史成" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/shicheng.png">
+    
+    
+    <link rel="apple-touch-icon" href="/img/shicheng.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/shicheng.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/shicheng.png" alt="史成" title="史成"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="史成">史成</a></h1>
+				<h2 class="blog-motto">知其然，知其所以然。一天一篇博客，一个星期研究一个第三方Demo，三个月看一本书！ 2017.7.1</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/24/swift数据转模型/" title="swift json解析分析" itemprop="url">swift json解析分析</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-23T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-24</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			
+		
+		</div>
+		
+		<p>很多时候，我们从服务端请求下的数据都是Json格式，我们需要拿这些数据显示到我们的UI界面。</p>
+<p>因此，我们的做法基本都会先将json转为方便使用的数据模型，或者也可以直接转字典解决。</p>
+<p>在OC中，我们有很多优秀的第三方库帮助我们实现，比如MJExtension、JSONModel等，这些库基本都是利用runtime实现读取属性名并利用kvc重新赋值属性。</p>
+<p>在Swift中，由于runtime的局限，比较出名的有SwiftyJSON、ObjectMapper等。</p>
+<p>1、SwiftyJSON本质上仍然是根据JSON结构去取值，使用起来顺手、清晰；</p>
+<p>但这种做法没能妥善解决上述的几个问题，因为它不是机遇model的，我们使用的时候，依然必须制定key去获取value，这在一定程度上不是很友好。</p>
+<p>2、ObjectMapper实现了JSON直接转Model的功能，不过使用起来，代码量会多一点，因为我们必须遵循Mappable协议，制定json内的每一个key和model属性的对应关系。</p>
+<p>比如：构造的class必须满足这三个红框的内容，这对于使用习惯了直接定义Model属性的同学来说，可能会有点不习惯。</p>
+<p><img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/1120271.jpg" alt=""></p>
+<p>今天的主角 HandyJSON就出现了，这个库是阿里一位大神推出的，能够做到JSON转Model一步到位，而且使用起来，非常简洁方便。</p>
+<p>关于HandyJSON原理：</p>
+<p>摘自网上一段说明如下：</p>
+<p>HandyJSON另辟蹊径，采用Swift反射+内存赋值的方式来构造Model实例，保持原汁原味的Swift类定义。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">// 假设这是服务端返回的统一定义的response格式</div><div class="line">class BaseResponse&lt;T: HandyJSON&gt;: HandyJSON &#123;</div><div class="line">    var code: Int? // 服务端返回码</div><div class="line">    var data: T? // 具体的data的格式和业务相关，故用泛型定义</div><div class="line"></div><div class="line">    public required init() &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 假设这是某一个业务具体的数据格式定义</div><div class="line">struct SampleData: HandyJSON &#123;</div><div class="line">    var id: Int?</div><div class="line">&#125;</div><div class="line"></div><div class="line">let sample = SampleData(id: 2)</div><div class="line">let resp = BaseResponse&lt;SampleData&gt;()</div><div class="line">resp.code = 200</div><div class="line">resp.data = sample</div><div class="line"></div><div class="line">let jsonString = resp.toJSONString()! // 从对象实例转换到JSON字符串</div><div class="line">print(jsonString) // print: &#123;&quot;code&quot;:200,&quot;data&quot;:&#123;&quot;id&quot;:2&#125;&#125;</div><div class="line"></div><div class="line">if let mappedObject = JSONDeserializer&lt;BaseResponse&lt;SampleData&gt;&gt;.deserializeFrom(json: jsonString) &#123; // 从字符串转换为对象实例</div><div class="line">    print(mappedObject.data?.id)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>1、HandyJSON支持 JSON直接转Model，定义class时，有两点注意：</p>
+<ul>
+<li><p>必须遵循HandyJSON协议        </p>
+</li>
+<li><p>需要实现空的initializer  (当然Struct结构体 可以不需要init()，下文有说明)</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">class BasicTypes: HandyJSON &#123;</div><div class="line">    var int: Int = 2</div><div class="line">    var doubleOptional: Double?</div><div class="line">    var stringImplicitlyUnwrapped: String!</div><div class="line"></div><div class="line">    required init() &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">let jsonString = &quot;&#123;\&quot;doubleOptional\&quot;:1.1,\&quot;stringImplicitlyUnwrapped\&quot;:\&quot;hello\&quot;,\&quot;int\&quot;:1&#125;&quot;</div><div class="line">if let object = BasicTypes.deserialize(from: jsonString) &#123;</div><div class="line">    // …</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>2、HandyJSON还支持Struct，使用方式与Class基本一致</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">struct BasicTypes: HandyJSON &#123;</div><div class="line">    var int: Int = 2</div><div class="line">    var doubleOptional: Double?</div><div class="line">    var stringImplicitlyUnwrapped: String!</div><div class="line">&#125;</div><div class="line"></div><div class="line">let jsonString = &quot;&#123;\&quot;doubleOptional\&quot;:1.1,\&quot;stringImplicitlyUnwrapped\&quot;:\&quot;hello\&quot;,\&quot;int\&quot;:1&#125;&quot;</div><div class="line">if let object = BasicTypes.deserialize(from: jsonString) &#123;</div><div class="line">    // …</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p> 这里注意一下，虽然Struct自己已经帮助构造了init初始化，但如果我们需要重载init，构造我们自己的初始化，还是需要写一下的。</p>
+<p>3、HandyJSON支持枚举，只需要enum构造时服从HandyJSONEnum协议即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">enum AnimalType: String, HandyJSONEnum &#123;</div><div class="line">    case Cat = &quot;cat&quot;</div><div class="line">    case Dog = &quot;dog&quot;</div><div class="line">    case Bird = &quot;bird&quot;</div><div class="line">&#125;</div><div class="line"></div><div class="line">struct Animal: HandyJSON &#123;</div><div class="line">    var name: String?</div><div class="line">    var type: AnimalType?</div><div class="line">&#125;</div><div class="line"></div><div class="line">let jsonString = &quot;&#123;\&quot;type\&quot;:\&quot;cat\&quot;,\&quot;name\&quot;:\&quot;Tom\&quot;&#125;&quot;</div><div class="line">if let animal = Animal.deserialize(from: jsonString) &#123;</div><div class="line">    print(animal.type?.rawValue)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>4、此外，HandyJSON还支持一些非基础类型、复杂类型，包括嵌套结构，如可选、隐式解包可选、集合等</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">class BasicTypes: HandyJSON &#123;</div><div class="line">    var bool: Bool = true</div><div class="line">    var intOptional: Int?</div><div class="line">    var doubleImplicitlyUnwrapped: Double!</div><div class="line">    var anyObjectOptional: Any?</div><div class="line"></div><div class="line">    var arrayInt: Array&lt;Int&gt; = []</div><div class="line">    var arrayStringOptional: Array&lt;String&gt;?</div><div class="line">    var setInt: Set&lt;Int&gt;?</div><div class="line">    var dictAnyObject: Dictionary&lt;String, Any&gt; = [:]</div><div class="line"></div><div class="line">    var nsNumber = 2</div><div class="line">    var nsString: NSString?</div><div class="line"></div><div class="line">    required init() &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">let object = BasicTypes()</div><div class="line">object.intOptional = 1</div><div class="line">object.doubleImplicitlyUnwrapped = 1.1</div><div class="line">object.anyObjectOptional = &quot;StringValue&quot;</div><div class="line">object.arrayInt = [1, 2]</div><div class="line">object.arrayStringOptional = [&quot;a&quot;, &quot;b&quot;]</div><div class="line">object.setInt = [1, 2]</div><div class="line">object.dictAnyObject = [&quot;key1&quot;: 1, &quot;key2&quot;: &quot;stringValue&quot;]</div><div class="line">object.nsNumber = 2</div><div class="line">object.nsString = &quot;nsStringValue&quot;</div><div class="line"></div><div class="line">let jsonString = object.toJSONString()!</div><div class="line"></div><div class="line">if let object = JSONDeserializer&lt;BasicTypes&gt;.deserializeFrom(json: jsonString) &#123;</div><div class="line">    // ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>5、HandyJSON支持指定从哪个具体路径开始解析，反序列化到Model。</p>
+<p>这个比较常用，因为正常情况下，接口一般都会返回包括错误码，错误消息，正式请求数据等，但我们一般只需要把正式数据转换成Model即可。</p>
+<p>我们可以这样实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">class Cat: HandyJSON &#123;</div><div class="line">    var id: Int64!</div><div class="line">    var name: String!</div><div class="line"></div><div class="line">    required init() &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">let jsonString = &quot;&#123;\&quot;code\&quot;:200,\&quot;msg\&quot;:\&quot;success\&quot;,\&quot;data\&quot;:&#123;\&quot;cat\&quot;:&#123;\&quot;id\&quot;:12345,\&quot;name\&quot;:\&quot;Kitty\&quot;&#125;&#125;&#125;&quot;</div><div class="line"></div><div class="line">if let cat = JSONDeserializer&lt;Cat&gt;.deserializeFrom(json: jsonString, designatedPath: &quot;data.cat&quot;) &#123;</div><div class="line">    print(cat.name)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其中，直接通过 designatedPath 定位到我们需要的节点处。</p>
+<p>6、handyJSON支持有继承关系的Model类，就是说及时某个类没有实现HandyJSON协议，只要父类有实现，依然可以转化model。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">class Animal: HandyJSON &#123;</div><div class="line">    var id: Int?</div><div class="line">    var color: String?</div><div class="line"></div><div class="line">    required init() &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">class Cat: Animal &#123;</div><div class="line">    var name: String?</div><div class="line"></div><div class="line">    required init() &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">let jsonString = &quot;&#123;\&quot;id\&quot;:12345,\&quot;color\&quot;:\&quot;black\&quot;,\&quot;name\&quot;:\&quot;cat\&quot;&#125;&quot;</div><div class="line"></div><div class="line">if let cat = JSONDeserializer&lt;Cat&gt;.deserializeFrom(json: jsonString) &#123;</div><div class="line">    print(cat)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>7、上面都是基本在说JSON转模型，那么反过来实现呢？</p>
+<p>HandyJSON还支持对象转字典、对象转模型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">class BasicTypes: HandyJSON &#123;</div><div class="line">    var int: Int = 2</div><div class="line">    var doubleOptional: Double?</div><div class="line">    var stringImplicitlyUnwrapped: String!</div><div class="line"></div><div class="line">    required init() &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">let object = BasicTypes()</div><div class="line">object.int = 1</div><div class="line">object.doubleOptional = 1.1</div><div class="line">object.stringImplicitlyUnwrapped = “hello&quot;</div><div class="line"></div><div class="line">print(object.toJSON()!) // 序列化到字典</div><div class="line">print(object.toJSONString()!) // 序列化到JSON字符串</div><div class="line">print(object.toJSONString(prettyPrint: true)!) // 序列化为格式化后的JSON字符串</div></pre></td></tr></table></figure>
+<p>附：原文网址 ： <a href="http://www.cnblogs.com/yajunLi/p/7121950.html" target="_blank" rel="external">http://www.cnblogs.com/yajunLi/p/7121950.html</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2017/07/24/swift数据转模型/" data-title="swift json解析分析 | 史成" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/07/23/两大主要框架/" title="Cocoa两大框架">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Cocoa两大框架</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/07/25/AdSupport广告/"  title="Adsupport.framework广告框架植入">
+ <strong>下一篇：</strong><br/> 
+ <span>Adsupport.framework广告框架植入
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ 
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.jianshu.com" target="_blank" title="简书">简书</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://guthub.com" target="_blank" title="GitHub">GitHub</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://cocoachina.com" target="_blank" title="cocoachina">cocoachina</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://mybigorange.github.io" target="_blank" title="Ambrose&#39;s Blog">Ambrose&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="www.baidu.com" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Dean Ambrose Page in Github. <br/>
+			Welcome to my bog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5767005756" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="史成">史成</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

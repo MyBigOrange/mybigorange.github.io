@@ -1,0 +1,562 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>多工程引用podfile规范写法 | 史成</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="史成">
+    
+
+    
+    <meta name="description" content="###podfile多target正规写法 ####什么是Podfile Podfile是一个规范，描述了一个或多个一套工程目标的依赖项 123target &amp;apos;PodfileDemo&amp;apos; do  pod &amp;apos;AFNetworking&amp;apos;, &amp;apos;~&amp;gt; 3.0&amp;apos;end 这是最简单最普遍的写法，针对MyApp这个target引入AFNetwork">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="多工程引用podfile规范写法">
+<meta property="og:url" content="http://yoursite.com/2017/07/29/podfile规范写法及理解/index.html">
+<meta property="og:site_name" content="史成">
+<meta property="og:description" content="###podfile多target正规写法 ####什么是Podfile Podfile是一个规范，描述了一个或多个一套工程目标的依赖项 123target &amp;apos;PodfileDemo&amp;apos; do  pod &amp;apos;AFNetworking&amp;apos;, &amp;apos;~&amp;gt; 3.0&amp;apos;end 这是最简单最普遍的写法，针对MyApp这个target引入AFNetwork">
+<meta property="og:updated_time" content="2017-07-30T09:09:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="多工程引用podfile规范写法">
+<meta name="twitter:description" content="###podfile多target正规写法 ####什么是Podfile Podfile是一个规范，描述了一个或多个一套工程目标的依赖项 123target &amp;apos;PodfileDemo&amp;apos; do  pod &amp;apos;AFNetworking&amp;apos;, &amp;apos;~&amp;gt; 3.0&amp;apos;end 这是最简单最普遍的写法，针对MyApp这个target引入AFNetwork">
+
+    
+    <link rel="alternative" href="www.baidu.com" title="史成" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/shicheng.png">
+    
+    
+    <link rel="apple-touch-icon" href="/img/shicheng.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/shicheng.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/shicheng.png" alt="史成" title="史成"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="史成">史成</a></h1>
+				<h2 class="blog-motto">知其然，知其所以然。一天一篇博客，一个星期研究一个第三方Demo，三个月看一本书！ 2017.7.1</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/29/podfile规范写法及理解/" title="多工程引用podfile规范写法" itemprop="url">多工程引用podfile规范写法</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-28T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-29</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			
+		
+		</div>
+		
+		<p>###podfile多target正规写法</p>
+<p>####什么是Podfile</p>
+<p>Podfile是一个规范，描述了一个或多个一套工程目标的依赖项</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">target &apos;PodfileDemo&apos; do</div><div class="line">  pod &apos;AFNetworking&apos;, &apos;~&gt; 3.0&apos;</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>这是最简单最普遍的写法，针对MyApp这个target引入AFNetworking这个依赖库，也是大家平时用的最多的一种方式。</p>
+<p>下面是个更复杂的一个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"># 下面两行是指明依赖库的来源地址</div><div class="line">source &apos;https://github.com/CocoaPods/Specs.git&apos;</div><div class="line">source &apos;https://github.com/Artsy/Specs.git&apos;</div><div class="line"></div><div class="line"># 说明平台是ios，版本是9.0</div><div class="line">platform :ios, &apos;9.0&apos;</div><div class="line"></div><div class="line"># 忽略引入库的所有警告（强迫症者的福音啊）</div><div class="line">inhibit_all_warnings!</div><div class="line"></div><div class="line"># 针对MyApp target引入AFNetworking</div><div class="line"># 针对MyAppTests target引入OCMock，</div><div class="line">target &apos;PodfileDemo&apos; do </div><div class="line">    pod &apos;AFNetworking&apos;, &apos;~&gt; 3.0&apos; </div><div class="line">    target &apos;MyAppTests&apos; do</div><div class="line">       inherit! :search_paths </div><div class="line">       pod &apos;OCMock&apos;, &apos;~&gt; 2.0.1&apos; </div><div class="line">    end</div><div class="line">end</div><div class="line"># 这个是cocoapods的一些配置,官网并没有太详细的说明,一般采取默认就好了,也就是不写.</div><div class="line">post_install do |installer|       </div><div class="line">   installer.pods_project.targets.each do |target| </div><div class="line">     puts target.name </div><div class="line">   end</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>####主配置</p>
+<p>install! 这个命令是cocoapods声明的一个安装命令，用于安装引入Podfile里面的依赖库。<br>install! 这个命令还有一些个人设置选项，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">install! &apos;cocoapods&apos;, </div><div class="line">  :deterministic_uuids =&gt; false, </div><div class="line">  :integrate_targets =&gt; false</div></pre></td></tr></table></figure>
+<p>还支持其他的选项：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Supported Keys:</div><div class="line"></div><div class="line">:clean</div><div class="line"></div><div class="line">:deduplicate_targets</div><div class="line"></div><div class="line">:deterministic_uuids</div><div class="line"></div><div class="line">:integrate_targets</div><div class="line"></div><div class="line">:lock_pod_sources</div><div class="line"></div><div class="line">:share_schemes_for_development_pods</div></pre></td></tr></table></figure>
+<p>关于以上的配置，官网也没有一个确切的说明，以为我们只需用系统默认即可</p>
+<p>####Dependencies（依赖项）<br>Podfile指定每个target的依赖项</p>
+<ul>
+<li>pod指定特定的依赖库</li>
+<li>podspec可以提供一个API来创建podspecs</li>
+<li>target通过target指定依赖范围</li>
+</ul>
+<p>pod - 指定项目的依赖项</p>
+<p>依赖项规范是由Pod的名称和一个可选的版本组合一起。<br>1&gt; 如果后面不写依赖库的具体版本号，那么cocoapods会默认选取最新版本。</p>
+<p>pod ‘SSZipArchive’<br>2&gt; 如果你想要特定的依赖库的版本，就需要在后面写上具体版本号，格式：</p>
+<p>pod ‘Objection’, ‘0.9’<br>3&gt; 也可以指定版本范围</p>
+<blockquote>
+<p>0.1 高于0.1版本（不包含0.1版本）的任意一个版本<br>= 0.1 高于0.1版本（包含0.1版本）的任意一个版本<br>&lt; 0.1 低于0.1版本（不包含0.1版本）的任意一个<br>&lt;= 0.1低于0.1版本（包含0.1版本）的任意一个<br>~&gt; 0.1.2 版本 0.1.2的版本到0.2 ，不包括0.2。这个基于你指定的版本号的最后一个部分。这个例子等效于&gt;= 0.1.2并且 &lt;0.2.0，并且始终是你指定范围内的最新版本。</p>
+</blockquote>
+<p>####Build configurations（编译配置）</p>
+<p>默认情况下， 依赖项会被安装在所有target的build configuration中。为了调试或者处于其他原因，依赖项只能在给定的build configuration中被启用。<br>下面写法指明只有在Debug和Beta模式下才有启用配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod &apos;PonyDebugger&apos;, :configurations =&gt; [&apos;Debug&apos;, &apos;Beta&apos;]</div></pre></td></tr></table></figure>
+<p>或者，可以弄白名单只指定一个build configurations。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod &apos;PonyDebugger&apos;, :configuration =&gt; &apos;Debug&apos;</div></pre></td></tr></table></figure>
+<p>注意：默认情况下如果不指定具体生成配置，那么会包含在所有的配置中，如果你想具体指定就必须手动指明。</p>
+<p>####Subspecs<br>一般情况我们会通过依赖库的名称来引入，cocoapods会默认安装依赖库的所有内容。<br>我们也可以指定安装具体依赖库的某个子模块，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># 仅安装QueryKit库下的Attribute模块</div><div class="line">pod &apos;QueryKit/Attribute&apos;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># 仅安装QueryKit下的Attribute和QuerySet模块</div><div class="line">pod &apos;QueryKit&apos;, :subspecs =&gt; [&apos;Attribute&apos;, &apos;QuerySet&apos;]</div></pre></td></tr></table></figure>
+<p>Using the files from a local path (使用本地文件)</p>
+<p>我们也可以指定依赖库的来源地址。如果我们想引入我们本地的一个库，可以这样写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod &apos;AFNetworking&apos;, :path =&gt; &apos;~/Documents/AFNetworking&apos;</div></pre></td></tr></table></figure>
+<p>使用这个选项后，Cocoapods会将给定的文件夹认为是Pod的源，并且在工程中直接引用这些文件。这就意味着你编辑的部分可以保留在CocoaPods安装中，如果我们更新本地AFNetworking里面的代码，cocoapods也会自动更新。</p>
+<p>被引用的文件夹可以来自你喜爱的SCM，甚至当前仓库的一个git子模块</p>
+<p>注意：Pod的podspec文件也应该被放在这个文件夹当中</p>
+<p>From a podspec in the root of a library repository (引用仓库根目录的podspec)</p>
+<p>有时我们需要引入依赖库指定的分支或节点，写法如下。</p>
+<p>引入master分支（默认）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod &apos;AFNetworking&apos;, :git =&gt; &apos;https://github.com/gowalla/AFNetworking.git&apos;</div></pre></td></tr></table></figure></p>
+<p>引入指定的分支</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod &apos;AFNetworking&apos;, :git =&gt; &apos;https://github.com/gowalla/AFNetworking.git&apos;, :branch =&gt; &apos;dev&apos;</div></pre></td></tr></table></figure>
+<p>引入某个节点的代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod &apos;AFNetworking&apos;, :git =&gt; &apos;https://github.com/gowalla/AFNetworking.git&apos;, :tag =&gt; &apos;0.7.0&apos;</div></pre></td></tr></table></figure>
+<p>引入某个特殊的提交节点<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod &apos;AFNetworking&apos;, :git =&gt; &apos;https://github.com/gowalla/AFNetworking.git&apos;, :commit =&gt; &apos;082f8319af&apos;</div></pre></td></tr></table></figure></p>
+<p>需要特别注意的是，虽然这样将会满足任何在Pod中的依赖项通过其他Pods 但是podspec必须存在于仓库的根目录中。</p>
+<p>从外部引入podspec引入</p>
+<p>podspec可以从另一个源库的地址引入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod &apos;JSONKit&apos;, :podspec =&gt; &apos;https://example.com/JSONKit.podspec&apos;</div></pre></td></tr></table></figure>
+<p>podspec</p>
+<p>使用给定podspec文件中定义的代码库的依赖关系。如果没有传入任何参数，podspec优先使用根目录，如果是其他情况必须在后面指明。(一般使用默认设置即可)例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"># 不指定表示使用根目录下的podspec，默认一般都会放在根目录下</div><div class="line">podspec</div><div class="line"># 如果podspec的名字与库名不一样，可以通过这样来指定</div><div class="line">podspec :name =&gt; &apos;QuickDialog&apos;</div><div class="line"># 如果podspec不是在根目录下，那么可以通过:path来指定路径</div><div class="line">podspec :path =&gt; &apos;/Documents/PrettyKit/PrettyKit.podspec&apos;</div><div class="line">target</div></pre></td></tr></table></figure>
+<p>在给定的块内定义pod的target（Xcode工程中的target）和指定依赖的范围。一个target应该与Xcode工程的target有关联。默认情况下，target会包含定义在块外的依赖，除非指定不使用inherit!来继承（说的是嵌套的块里的继承问题）</p>
+<p>定义一个简单target ZipApp引入SSZipArchive库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">target &apos;ZipApp&apos; do </div><div class="line">pod &apos;SSZipArchive&apos;</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>定义一个ZipApptarget仅引入SSZipArchive库，定义ZipAppTeststarget 引入Nimble的同时也会继承ZipApptarget里面的SSZipArchive库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">target &apos;ZipApp&apos; do </div><div class="line">pod &apos;SSZipArchive&apos; </div><div class="line">target &apos;ZipAppTests&apos; do</div><div class="line">  inherit! :search_paths </div><div class="line">  pod &apos;Nimble&apos; </div><div class="line">end</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>target块中嵌套多个子块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">target &apos;ShowsApp&apos; do</div><div class="line">  # ShowsApp 仅仅引入ShowsKit</div><div class="line">  pod &apos;ShowsKit&apos; </div><div class="line">  # 引入 ShowsKit 和 ShowTVAuth </div><div class="line">  target &apos;ShowsTV&apos; do </div><div class="line">      pod &apos;ShowTVAuth&apos; </div><div class="line">  end </div><div class="line">  # 引入了Specta和Expecta以及ShowsKit</div><div class="line">  target &apos;ShowsTests&apos; do </div><div class="line">      inherit! :search_paths </div><div class="line">      pod &apos;Specta&apos; </div><div class="line">      pod &apos;Expecta&apos; </div><div class="line">  end</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>抽象target</p>
+<p>定义一个新的抽象目标，它可以方便的用于目标依赖继承。<br>简单写法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">abstract_target &apos;Networking&apos; do</div><div class="line">  pod &apos;AlamoFire&apos; </div><div class="line">  target &apos;Networking App 1&apos; </div><div class="line">  target &apos;Networking App 2&apos;</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>定义一种abstract_target包含多个target</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"># 注意：这是个抽象的target也就是说在工程中并没有这个target引入ShowsKit</div><div class="line">abstract_target &apos;Shows&apos; do</div><div class="line">  pod &apos;ShowsKit&apos;</div><div class="line">  # ShowsiOS target会引入ShowWebAuth库以及继承自Shows的ShowsKit库</div><div class="line">  target &apos;ShowsiOS&apos; do</div><div class="line">      pod &apos;ShowWebAuth&apos;</div><div class="line">  end</div><div class="line">  # ShowsTV target会引入ShowTVAuth库以及继承自Shows的ShowsKit库</div><div class="line">  target &apos;ShowsTV&apos; do</div><div class="line">      pod &apos;ShowTVAuth&apos;</div><div class="line">  end</div><div class="line">  # ShowsTests target引入了Specta和Expecta库，并且指明继承Shows，所以也会引入ShowsKit</div><div class="line">  target &apos;ShowsTests&apos; do</div><div class="line">      inherit! :search_paths </div><div class="line">      pod &apos;Specta&apos; </div><div class="line">      pod &apos;Expecta&apos; </div><div class="line">  end</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>abstract! 和 inherit!</p>
+<p>abstract! 指示当前的target是抽象的，因此不会直接链接Xcode target。<br>inherit! 设置当前target的继承模式。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">target &apos;App&apos; do</div><div class="line"> target &apos;AppTests&apos; do</div><div class="line">    inherit! :search_paths </div><div class="line"> end</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>Target configuration (目标项配置)</p>
+<p>使用target 配置来控制的cocoapods生成project。<br>开始时详细说明您正在使用什么平台上。工程文件里允许您具体说明哪些项目的链接。</p>
+<p>platform</p>
+<p>platform用于指定应建立的静态库的平台。CocoaPods提供了默认的平台版本配置：</p>
+<p>iOS-&gt;4.3<br>OS X-&gt;10.6<br>tvOS-&gt;9.0<br>watchOS-&gt;2.0<br>如果部署目标需要iOS &lt; 4.3，armv6体系结构将被添加到ARCHS。<br>例如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">#指定具体平台和版本</div><div class="line">platform :ios, &apos;4.0&apos;</div><div class="line">platform :ios</div></pre></td></tr></table></figure>
+<p>project<br>如果没有显示的project被指定，那么会默认使用target的父target指定的project作为目标。如果如果没有任何一个target指定目标，那么就会使用和Podefile在同一目录下的project。同样也能够指定是否这些设置在release或者debug模式下生效。为了做到这一点，你必须指定一个名字和:release/:debuge关联起来</p>
+<p>Examples:<br>Specifying the user project</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"># MyGPSApp这个target引入的库只能在FastGPS工程中引用</div><div class="line">target &apos;MyGPSApp&apos; do </div><div class="line">    project &apos;FastGPS&apos; </div><div class="line">    ...</div><div class="line">end</div><div class="line"># 原理同上</div><div class="line">target &apos;MyNotesApp&apos; do </div><div class="line">    project &apos;FastNotes&apos; </div><div class="line">    ...</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>使用自定义的编译配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">project &apos;TestProject&apos;, &apos;Mac App Store&apos; =&gt; :release, &apos;Test&apos; =&gt; :debug</div></pre></td></tr></table></figure>
+<p>inhibit_all_warnings!（强迫症者的福音）</p>
+<p>inhibit_all_warnings! 屏蔽所有来自于cocoapods依赖库的警告。你可以全局定义，也能在子target里面定义，也可以指定某一个库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># 隐藏SSZipArchive的警告而不隐藏ShowTVAuth的警告</div><div class="line">pod &apos;SSZipArchive&apos;, :inhibit_warnings =&gt; true</div><div class="line">pod &apos;ShowTVAuth&apos;, :inhibit_warnings =&gt; false</div></pre></td></tr></table></figure>
+<p>use_frameworks!</p>
+<p>通过指定use_frameworks!要求生成的是framework而不是静态库。<br>如果使用use_frameworks!命令会在Pods工程下的Frameworks目录下生成依赖库的framework<br>如果不使用use_frameworks!命令会在Pods工程下的Products目录下生成.a的静态库</p>
+<p>Workspace</p>
+<p>默认情况下，我们不需要指定，直接使用与Podfile所在目录的工程名一样就可以了。如果要指定另外的名称，而不是使用工程的名称，可以这样指定：</p>
+<p>workspace ‘MyWorkspace’<br>Source</p>
+<p>source是指定pod的来源。如果不指定source，默认是使用CocoaPods官方的source。(建议使用默认设置)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">CocoaPods Master Repository</div><div class="line"># 使用其他来源地址</div><div class="line">source &apos;https://github.com/artsy/Specs.git&apos;</div><div class="line"># 使用官方默认地址（默认）</div><div class="line">source &apos;https://github.com/CocoaPods/Specs.git&apos;</div></pre></td></tr></table></figure>
+<p>Hooks<br>Podfile提供了hook机制，它将在安装过程中调用。hook是全局性的，不存储于每个target中。</p>
+<p>Plugin</p>
+<p>指定应在安装期间使用的插件。使用此方法指定应在安装期间使用的插件，以及当它被调用时，应传递给插件的选项。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># 指定在安装期间使用cocoapods-keys和slather这两个插件</div><div class="line">plugin &apos;cocoapods-keys&apos;, :keyring =&gt; &apos;Eidolon&apos;</div><div class="line">plugin &apos;slather&apos;</div></pre></td></tr></table></figure>
+<p>pre_install</p>
+<p>当我们下载完成，但是还没有安装之时，可以使用hook机制通过pre_install指定要做更改，更改完之后进入安装阶段。<br>格式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">pre_install do |installer| </div><div class="line">    # 做一些安装之前的更改</div><div class="line">end</div></pre></td></tr></table></figure></p>
+<p>post_install</p>
+<p>当我们安装完成，但是生成的工程还没有写入磁盘之时，我们可以指定要执行的操作。<br>比如，我们可以在写入磁盘之前，修改一些工程的配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">post_install do |installer| installer.pods_project.targets.each do |target| </div><div class="line">        target.build_configurations.each do |config| </div><div class="line">            config.build_settings[&apos;GCC_ENABLE_OBJC_GC&apos;] = &apos;supported&apos; </div><div class="line">        end </div><div class="line">    end</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>def</p>
+<p>我们还可以通过def命令来声明一个pod集：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">def &apos;CustomPods&apos;</div><div class="line">   pod &apos;IQKeyboardManagerSwift&apos;</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>然后，我们就可以在需要引入的target处引入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">target &apos;MyTarget&apos; do </div><div class="line">   CustomPods</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>这么写的好处是：如果有多个target，而不同target之间并不全包含，那么可以通过这种方式来分开引入。</p>
+<p>原文网址： <a href="http://www.jianshu.com/p/8a0fd6150159" target="_blank" rel="external">http://www.jianshu.com/p/8a0fd6150159</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2017/07/29/podfile规范写法及理解/" data-title="多工程引用podfile规范写法 | 史成" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/07/28/swift数据存储/" title="swift数据存储">
+  <strong>上一篇：</strong><br/>
+  <span>
+  swift数据存储</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/07/29/swift与OC混合开发/"  title="swift和OC混合开发">
+ <strong>下一篇：</strong><br/> 
+ <span>swift和OC混合开发
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ 
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.jianshu.com" target="_blank" title="简书">简书</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://guthub.com" target="_blank" title="GitHub">GitHub</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://cocoachina.com" target="_blank" title="cocoachina">cocoachina</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://mybigorange.github.io" target="_blank" title="Ambrose&#39;s Blog">Ambrose&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="www.baidu.com" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Dean Ambrose Page in Github. <br/>
+			Welcome to my bog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5767005756" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="史成">史成</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

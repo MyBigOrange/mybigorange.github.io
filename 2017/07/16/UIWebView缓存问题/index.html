@@ -1,0 +1,580 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>UIWebVIew 缓存 | 史成</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="史成">
+    
+
+    
+    <meta name="description" content="###UIWebView 缓存 前言 在开发项目过程中, 难免会使用 HTML 来展示一些页面.在 iOS 中, 使用 UIWebView 的频率还是比较高的.准备工作 我今天使用 Tomcat 来作为 web 容器, 在本机搭建一个 web 服务器, 然后使用 iPhone 访问该 web 页面, 展示和梳理 UIWebview 关于缓存的问题. 如果你对 Tomcat 还不熟悉, 希望你可以先">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UIWebVIew 缓存">
+<meta property="og:url" content="http://yoursite.com/2017/07/16/UIWebView缓存问题/index.html">
+<meta property="og:site_name" content="史成">
+<meta property="og:description" content="###UIWebView 缓存 前言 在开发项目过程中, 难免会使用 HTML 来展示一些页面.在 iOS 中, 使用 UIWebView 的频率还是比较高的.准备工作 我今天使用 Tomcat 来作为 web 容器, 在本机搭建一个 web 服务器, 然后使用 iPhone 访问该 web 页面, 展示和梳理 UIWebview 关于缓存的问题. 如果你对 Tomcat 还不熟悉, 希望你可以先">
+<meta property="og:updated_time" content="2017-07-30T08:13:39.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UIWebVIew 缓存">
+<meta name="twitter:description" content="###UIWebView 缓存 前言 在开发项目过程中, 难免会使用 HTML 来展示一些页面.在 iOS 中, 使用 UIWebView 的频率还是比较高的.准备工作 我今天使用 Tomcat 来作为 web 容器, 在本机搭建一个 web 服务器, 然后使用 iPhone 访问该 web 页面, 展示和梳理 UIWebview 关于缓存的问题. 如果你对 Tomcat 还不熟悉, 希望你可以先">
+
+    
+    <link rel="alternative" href="www.baidu.com" title="史成" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/shicheng.png">
+    
+    
+    <link rel="apple-touch-icon" href="/img/shicheng.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/shicheng.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/shicheng.png" alt="史成" title="史成"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="史成">史成</a></h1>
+				<h2 class="blog-motto">知其然，知其所以然。一天一篇博客，一个星期研究一个第三方Demo，三个月看一本书！ 2017.7.1</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/16/UIWebView缓存问题/" title="UIWebVIew 缓存" itemprop="url">UIWebVIew 缓存</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-15T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-16</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			
+		
+		</div>
+		
+		<p>###UIWebView 缓存</p>
+<p>前言</p>
+<p>在开发项目过程中, 难免会使用 HTML 来展示一些页面.<br>在 iOS 中, 使用 UIWebView 的频率还是比较高的.<br>准备工作</p>
+<p>我今天使用 Tomcat 来作为 web 容器, 在本机搭建一个 web 服务器, 然后使用 iPhone 访问该 web 页面, 展示和梳理 UIWebview 关于缓存的问题.</p>
+<p>如果你对 Tomcat 还不熟悉, 希望你可以先去大概了解一下, 如何在 Mac os 上面安装和使用 Tomcat, 可以参考我的博文: Mac 配置 Tomcat8.</p>
+<p>Tomcat 是一个开放源代码、运行 servlet 和 JSP Web 应用软件的基于 Java 的 Web 应用软件容器.<br>Tomcat Server 是根据 servlet 和 JSP 规范执行的，因此可以说 Tomcat Server 实行了 Apache-Jakarta 规范，且比绝大多数商业应用软件服务器要好.<br>但是 Tomcat 对静态文件、高并发的处理比较弱.</p>
+<p>写这篇文章的时候, 我使用的版本分别是 apache-tomcat-8.5.8, jdk1.8.<br>配置 Tomcat<br>修改 server.xml 文件<br>文件在 Tomcat 的根目录的 conf 目录下, 如我的文件在这个目录:<br>apache-tomcat-8.5.8/conf/server.xml<br>增加如下内容:</p>
+<p><host name="<your local ip>" debug="0" appbase="<base dir>" unpackwars="true" autodeploy="true" xmlvalidation="false" xmlnamespaceaware="false"><br>    <context path="" docbase="<html file path>" debug="0" reloadable="true" crosscontext="true"><br>    <logger classname="org.apache.catalina.logger.FileLogger" directory="logs" prefix="tot_log." suffix=".txt" timestamp="true"><br></logger></context></host><br>注意:<br>1.将上述内容放到  和  节点中间.<br>2.将 name=”<your local="" ip="">“ 中的 <your local="" ip=""> 改为你本机的 ip 地址.<br>查看本机的 ip 地址方法很简单:</your></your></p>
+<p>ifconfig | grep “inet “ | grep -v 127.0.0.1<br>3.将 appBase=”<base dir="">“ 中的 <base dir=""> 改为你的 web 目录.<br>4.将 docBase=”<html file="" path="">“ 中的 <html file="" path=""> 改为你的 html 目录.</html></html></p>
+<p>我的配置如下(部分):</p>
+<pre><code>&lt;Host name=&quot;localhost&quot;  appBase=&quot;webapps&quot;
+        unpackWARs=&quot;true&quot; autoDeploy=&quot;true&quot;&gt;
+    &lt;!-- SingleSignOn valve, share authentication between web applications
+         Documentation at: /docs/config/valve.html --&gt;
+    &lt;!--
+    &lt;Valve className=&quot;org.apache.catalina.authenticator.SingleSignOn&quot; /&gt;
+    --&gt;
+    &lt;!-- Access log processes all example.
+         Documentation at: /docs/config/valve.html
+         Note: The pattern used is equivalent to using pattern=&quot;common&quot; --&gt;
+    &lt;Valve className=&quot;org.apache.catalina.valves.AccessLogValve&quot; directory=&quot;logs&quot;
+           prefix=&quot;localhost_access_log&quot; suffix=&quot;.txt&quot;
+           pattern=&quot;%h %l %u %t &amp;quot;%r&amp;quot; %s %b&quot; /&gt;
+&lt;/Host&gt;
+    &lt;!--mark 配置静态网页. [BEGIN] --&gt;
+    &lt;Host name=&quot;192.168.1.103&quot; debug=&quot;0&quot; appBase=&quot;webapps&quot; unpackWARs=&quot;true&quot; autoDeploy=&quot;true&quot; xmlValidation=&quot;false&quot;  xmlNamespaceAware=&quot;false&quot;&gt;
+        &lt;Context path=&quot;&quot; docBase=&quot;test&quot; debug=&quot;0&quot; reloadable=&quot;true&quot; crossContext=&quot;true&quot;/&gt;
+        &lt;Logger className=&quot;org.apache.catalina.logger.FileLogger&quot; directory=&quot;logs&quot; prefix=&quot;tot_log.&quot; suffix=&quot;.txt&quot; timestamp=&quot;true&quot;/&gt;
+    &lt;/Host&gt;
+    &lt;!--mark 配置静态网页. [END] --&gt;
+&lt;/Engine&gt;
+</code></pre><p>  <br><br>搞定上面的配置, 接下来可以配置相关目录了.</p>
+<p>在 Tomcat 的根目录有个文件夹 webapps, 在 webapps 目录下新建目录 test 即可.<br>构建 HTML 页面<br>在 test 目录, 新建一个 html 文件<br>touch test.html<br>文件内容如下:<br> </p><p><br><em>Sample</em> text</p><p></p>
+<p></p><p><br>Now I input another line, with fancy<u><strong><em>styles</em></strong><br></u>.</p><p></p>
+<p></p><p><br><em>Sample</em> text</p><p></p>
+<p></p><p><br>Now I input another line, with fancy <u><strong><em>styles</em></strong><br></u>.</p><p></p>
+<p></p><p><br>    mark.zhang is itman.<br></p><p></p>
+<p><style><br>.button {<br>    background-color: #4CAF50;<br>    border: none;<br>    color: white;<br>    padding: 15px 32px;<br>    text-align: center;<br>    text-decoration: none;<br>    display: inline-block;<br>    font-size: 86px;<br>    margin: 50px 200px 100px 300px;<br>    cursor: pointer;<br>    border-radius: 15;<br>}<br></style></p>
+<p></p><p><br>   <button type="button" onclick="myFunction()" class="button">Try it</button><br></p><p></p>
+<p><script><br>   function myFunction() {<br>       alert(“Blog: www.veryitman.com”);<br>   };<br></script><br>搭建完成后, 启动 Tomcat 服务器.</p>
+<p>startup.sh<br>在浏览器里面通过 ip:port/test.html 的方式来访问该页面.<br>看到类似下面的效果即表示搭建成功:</p>
+<p>1</p>
+<p>客户端访问</p>
+<p>客户端访问该页面, 使用 UIWebview 来请求(HTTP 协议)页面内容.</p>
+<p>一般请求会使用下面的方法:</p>
+<ul>
+<li>(instancetype)requestWithURL:(NSURL *)URL;<br>该方法的描述如下:</li>
+</ul>
+<p>Creates and returns a URL request for a specified URL with default cache policy and timeout value.<br>The default cache policy is NSURLRequestUseProtocolCachePolicy and the default timeout interval is 60 seconds.<br>大概意思是使用的缓存策略是根据协议来的, 即 NSURLRequestUseProtocolCachePolicy. 超时时间默认是60s.</p>
+<p>也就是说类似如下的请求:</p>
+<p>NSURLRequest *urlReq = [NSURLRequest requestWithURL:url<br>                                            cachePolicy:NSURLRequestUseProtocolCachePolicy<br>                                            timeoutInterval:60.f];<br>如果协议支持缓存的话, UIWebview 请求到的数据就是缓存数据.该缓存是需要 WEB 服务器支持的.</p>
+<p>这里我没有配置 Tomcat 的缓存.可以抓包看下:</p>
+<p>2</p>
+<p>后续博客会分别为大家介绍在 Tomcat 和 Nginx 配置缓存下, 客户端 UIWebview 请求的相关问题.</p>
+<p>客户端显示页面效果:<br>3</p>
+<p>ViewController 代码:</p>
+<p>#import “ViewController.h”<br>static NSString <em> const H5Url = @”<a href="http://192.168.1.104:8080/test.html" target="_blank" rel="external">http://192.168.1.104:8080/test.html</a>“;<br>@interface ViewController () <uiwebviewdelegate><br>@property (nonatomic, strong) UIWebView </uiwebviewdelegate></em>webView;<br>@property (nonatomic, strong) UIButton *refBtn;<br>@end<br>@implementation ViewController</p>
+<ul>
+<li><p>(void)viewDidLoad<br>{<br>  [super viewDidLoad];</p>
+<p>  _webView = [[UIWebView alloc] init];<br>  CGSize boundsSize = self.view.bounds.size;<br>  self.webView.frame = CGRectMake(0, 20, boundsSize.width, boundsSize.height);<br>  self.webView.backgroundColor = [UIColor whiteColor];<br>  self.webView.scrollView.showsHorizontalScrollIndicator = NO;<br>  self.webView.scrollView.showsVerticalScrollIndicator   = NO;<br>  self.webView.scalesPageToFit = YES;<br>  self.webView.delegate = self;<br>  [self.view addSubview:self.webView];</p>
+<p>  UIButton *refreshBtn = [UIButton buttonWithType:UIButtonTypeCustom];<br>  [self.view addSubview:refreshBtn];<br>  [refreshBtn addTarget:self action:@selector(onRefreshWebView) forControlEvents:UIControlEventTouchUpInside];<br>  refreshBtn.backgroundColor = [UIColor redColor];<br>  refreshBtn.layer.masksToBounds = YES;<br>  refreshBtn.layer.cornerRadius = 5.f;<br>  refreshBtn.frame = CGRectMake(50, 250, 200, 50);<br>  [refreshBtn setTitle:@”刷新页面” forState:UIControlStateNormal];<br>  _refBtn = refreshBtn;</p>
+<p>  [self loadDataUsingCache];<br>}</p>
+</li>
+<li><p>(void)webView:(UIWebView <em>)webView didFailLoadWithError:(NSError </em>)error<br>{<br>  NSLog(@”didFailLoadWithError: %@”, error);</p>
+<p>  [self hideLoading];<br>}</p>
+</li>
+<li>(BOOL)webView:(UIWebView <em>)webView shouldStartLoadWithRequest:(NSURLRequest </em>)request<br>navigationType:(UIWebViewNavigationType)navigationType<br>{<br>  NSLog(@”shouldStartLoadWithRequest: %@”, request);<br>  return YES;<br>}</li>
+<li>(void)webViewDidStartLoad:(UIWebView *)webView<br>{<br>  NSLog(@”webViewDidStartLoad”);<br>}</li>
+<li><p>(void)webViewDidFinishLoad:(UIWebView *)webView<br>{<br>  NSLog(@”webViewDidFinishLoad”);</p>
+<p>  [self hideLoading];<br>}<br>/**</p>
+<ul>
+<li>刷新页面.<br>*/</li>
+</ul>
+</li>
+<li><p>(void)onRefreshWebView<br>{<br>  // 方式1: 不使用缓存请求数据<br>  //[self loadDataNoUsingCache];</p>
+<p>  // 方式2: 清除 NSCache 缓存, 再请求数据<br>  [self clearAllCache];<br>  [self loadDataUsingCache];<br>}</p>
+</li>
+<li><p>(void)loadDataUsingCache<br>{<br>  [self showLoading];</p>
+<p>  NSURL *url = [NSURL URLWithString:H5Url];</p>
+<p>  NSURLRequest *urlReq = [NSURLRequest requestWithURL:url</p>
+<pre><code>    cachePolicy:NSURLRequestReturnCacheDataDontLoad
+timeoutInterval:10.f];
+</code></pre><p>  [self.webView loadRequest:urlReq];<br>}</p>
+</li>
+<li><p>(void)loadDataWithProtocol<br>{<br>  [self showLoading];</p>
+<p>  NSURL *url = [NSURL URLWithString:H5Url];</p>
+<p>  [NSURLRequest requestWithURL:url];</p>
+<p>  NSURLRequest *urlReq = [NSURLRequest requestWithURL:url</p>
+<pre><code>    cachePolicy:NSURLRequestUseProtocolCachePolicy
+timeoutInterval:60.f];
+</code></pre><p>  [self.webView loadRequest:urlReq];<br>}</p>
+</li>
+<li><p>(void)loadDataNoUsingCache<br>{<br>  [self showLoading];</p>
+<p>  NSURL <em>url = [NSURL URLWithString:H5Url];<br>  NSURLRequest </em>urlReq = [NSURLRequest requestWithURL:url</p>
+<pre><code>    cachePolicy:NSURLRequestReloadIgnoringCacheData
+timeoutInterval:20.0];
+</code></pre><p>  [self.webView loadRequest:urlReq];<br>}</p>
+</li>
+<li><p>(void)clearAllCache<br>{<br>  // remove cache rsp<br>  [[NSURLCache sharedURLCache] removeAllCachedResponses];</p>
+<p>  [[NSURLCache sharedURLCache] setDiskCapacity:0];<br>  [[NSURLCache sharedURLCache] setMemoryCapacity:0];<br>}</p>
+</li>
+<li>(void)showLoading<br>{<br>  [self.refBtn setTitle:@”刷新中…” forState:UIControlStateNormal];<br>}</li>
+<li>(void)hideLoading<br>{<br>  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{<pre><code>[self.refBtn setTitle:@&quot;刷新页面&quot; forState:UIControlStateNormal];
+</code></pre>  });<br>}<br>@end<br>这里注意下面的 三个方法 :</li>
+</ul>
+<p>// 使用缓存数据, 如果有缓存的话<br>// 使用这个方法, 改变 HTML 或者 JS 代码<br>// 页面不会拉取最新数据, 还是使用之前请求到的数据.<br>// 除非重新刷新</p>
+<ul>
+<li>(void)loadDataUsingCache;<br>// 使用协议缓存, 需要 web 服务器支持.</li>
+<li>(void)loadDataWithProtocol;<br>// 不使用缓存, 加载数据</li>
+<li>(void)loadDataNoUsingCache;<br>另外, 刷新 UIWebview 的方式如下, 有 两种方式 来刷新页面:</li>
+</ul>
+<p>/**</p>
+<ul>
+<li><p>刷新页面.<br>*/</p>
+<ul>
+<li>(void)onRefreshWebView<br>{<br>// 方式1: 不使用缓存请求数据<br>//[self loadDataNoUsingCache];</li>
+</ul>
+<p>// 方式2: 清除 NSCache 缓存, 再请求数据<br>[self clearAllCache];<br>[self loadDataUsingCache];<br>}<br>这种刷新方式, 会重新加载数据.<br>但是不适合多层级的 HTML 页面, 比如你的 HTML 页面有很多层, 想刷新当前页面, 可以使用下面的方式:</p>
+</li>
+</ul>
+<p>// 重新加载当前页面<br>[self.webView reload];</p>
+<p>下面是大致的逻辑</p>
+<p>1 判断请求中的request 是不是使用get方法，据资料显示一些本地请求的协议也会进到这个方法里面来，所以在第一部，要把不相关的请求排除掉。</p>
+<p>2 判断缓存文件夹里面是否存在该文件，如果存在，继续判断文件是否过期，如果过期，则删除。如果文件没有过期，则提取文件，然后组成NSCacheURLResponse返回到方法当中。</p>
+<p>3在有网络的情况下，如果文件夹中不存在该文件，则利用NSConnection这个类发网络请求，再把返回的data和response 数据本地化存储起来，然后组成NSCacheURLResponse返回到方法当中。</p>
+<p>4其中BaseTools和其他没有在本.m文件中定义的类为常用的工具类，这里不一一展开了。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2017/07/16/UIWebView缓存问题/" data-title="UIWebVIew 缓存 | 史成" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/07/15/UIView设置背景图/" title="最佳UIView添加背景图（高性能）">
+  <strong>上一篇：</strong><br/>
+  <span>
+  最佳UIView添加背景图（高性能）</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/07/17/swift自定义xib添加到Storyboard上/"  title="swift自定义xib添加到storyboard注意事项">
+ <strong>下一篇：</strong><br/> 
+ <span>swift自定义xib添加到storyboard注意事项
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ 
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.jianshu.com" target="_blank" title="简书">简书</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://guthub.com" target="_blank" title="GitHub">GitHub</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://cocoachina.com" target="_blank" title="cocoachina">cocoachina</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://mybigorange.github.io" target="_blank" title="Ambrose&#39;s Blog">Ambrose&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="www.baidu.com" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Dean Ambrose Page in Github. <br/>
+			Welcome to my bog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5767005756" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="史成">史成</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -1,0 +1,489 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>终端打包IPA | 史成</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="史成">
+    
+
+    
+    <meta name="description" content="使用xcode命令打包相对来说比较慢，打包比较频繁的话会很麻烦的，现在使用中端三行命令来解决这个问题。 一定要配置好证书和描述文件，一定要配置好证书和描述文件 ##方式一 xcodebuild、xcrun进行打包12xcodebuild : 通过工程文件，生成 app 文件。xcrun : 通过 app 文件，来生成 ipa 文件。(包含了签名的过程) ###步骤  使用xcodebuild命令打">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="终端打包IPA">
+<meta property="og:url" content="http://yoursite.com/2017/07/04/终端打ipa包/index.html">
+<meta property="og:site_name" content="史成">
+<meta property="og:description" content="使用xcode命令打包相对来说比较慢，打包比较频繁的话会很麻烦的，现在使用中端三行命令来解决这个问题。 一定要配置好证书和描述文件，一定要配置好证书和描述文件 ##方式一 xcodebuild、xcrun进行打包12xcodebuild : 通过工程文件，生成 app 文件。xcrun : 通过 app 文件，来生成 ipa 文件。(包含了签名的过程) ###步骤  使用xcodebuild命令打">
+<meta property="og:updated_time" content="2017-07-24T09:23:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="终端打包IPA">
+<meta name="twitter:description" content="使用xcode命令打包相对来说比较慢，打包比较频繁的话会很麻烦的，现在使用中端三行命令来解决这个问题。 一定要配置好证书和描述文件，一定要配置好证书和描述文件 ##方式一 xcodebuild、xcrun进行打包12xcodebuild : 通过工程文件，生成 app 文件。xcrun : 通过 app 文件，来生成 ipa 文件。(包含了签名的过程) ###步骤  使用xcodebuild命令打">
+
+    
+    <link rel="alternative" href="www.baidu.com" title="史成" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/shicheng.png">
+    
+    
+    <link rel="apple-touch-icon" href="/img/shicheng.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/shicheng.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/shicheng.png" alt="史成" title="史成"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="史成">史成</a></h1>
+				<h2 class="blog-motto">知其然，知其所以然。一天一篇博客，一个星期研究一个第三方Demo，三个月看一本书！ 2017.7.1</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/04/终端打ipa包/" title="终端打包IPA" itemprop="url">终端打包IPA</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-03T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-04</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#方式三-xcodebuild"><span class="toc-number">1.</span> <span class="toc-text">方式三 xcodebuild</span></a></li></ol>
+		
+		</div>
+		
+		<p>使用xcode命令打包相对来说比较慢，打包比较频繁的话会很麻烦的，现在使用中端三行命令来解决这个问题。</p>
+<p>一定要配置好证书和描述文件，一定要配置好证书和描述文件</p>
+<p>##方式一 xcodebuild、xcrun进行打包<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">xcodebuild : 通过工程文件，生成 app 文件。</div><div class="line">xcrun : 通过 app 文件，来生成 ipa 文件。(包含了签名的过程)</div></pre></td></tr></table></figure></p>
+<p>###步骤</p>
+<ol>
+<li>使用xcodebuild命令打包成 .app 文件这里以我们的 DemoTest 为例。打开终端， cd 到工程文件夹下。</li>
+<li>终端执行：xcodebuild -project DemoTest.xcodeproj -target DemoTest -configuration Release</li>
+<li>继续执行：xcrun -sdk iphoneos -v PackageApplication ./build/Release-iphoneos/DemoTest.app -o ~/Desktop/DemoTest.ipa<br>（说明：-v 对应的是 .app 文件的相对路径， –o 对应 ipa 文件保存的路径和文件名。这里直接放在桌面了。）</li>
+</ol>
+<p>三部生成IPA包，然后配合上部自签名开启HTTPS本地服务器，搞定频繁安装包的过程。</p>
+<p>##方式二 xctool进行自动打包</p>
+<p>参考网页地址:<a href="http://www.tuicool.com/articles/uIZRZjy" target="_blank" rel="external">http://www.tuicool.com/articles/uIZRZjy</a></p>
+<pre><code>1、确保安装了xctool
+        没有安装xctool，可以用brew安装，没有安装brew的，可以通过搜索安装brew，然后执行如下操作安装xctool
+        安装命令：sudo brew install xctool                
+</code></pre><p>介绍下xctool命令：<br>xctool 是FaceBook开源的一个命令行工具，用来替代苹果的xcodebuild工具。<br>    先附上打包用的参考代码,如下:    </p>
+<p>#</p>
+<p>cd AutoProject                    //进入项目目录</p>
+<p>#</p>
+<p>buildDay=$(date +%Y%m%d)            //获取当前日期</p>
+<p>buildTime=$(date +%Y%m%d%H%M)     //获取当前时间 </p>
+<p>profile=”xxxx”      //设置打包配置文件</p>
+<p>#</p>
+<p>buildConfiguration=”QA”     //build时用的证书</p>
+<p>buildPath=”../ArchiveProduction/QA/${buildDay}/Auto<em>QA</em>${buildTime}.xcarchive”     //build后归档的文件目录</p>
+<p>ipaName=”../ipa/QA/${buildDay}/Auto<em>QA</em>${buildTime}.ipa”     //打好包放置位置</p>
+<p>#</p>
+<p>xctool -scheme AutoProject -configuration ${buildConfiguration} clean     //clean下工程</p>
+<p>xctool -scheme AutoProject -configuration ${buildConfiguration} archive -archivePath ${buildPath}        //对项目进行Archive, 将xcarchive文件导出到指定目录</p>
+<p>xcodebuild -exportArchive -exportFormat IPA -archivePath ${buildPath} -exportPath ${ipaName} -            exportProvisioningProfile “$profile”                    //生成的ipa文件导出到指定目录, 此处依然使用的是xcodebuild进行打包, 待优化</p>
+<p>以上代码是从参考文件copy过来的，只是进行了相应的注释， 具体进行打包，需要进行适当的调整命令</p>
+<h2 id="方式三-xcodebuild"><a href="#方式三-xcodebuild" class="headerlink" title="方式三 xcodebuild"></a>方式三 xcodebuild</h2><p> 参考apple文档：<a href="https://developer.apple.com/library/prerelease/mac/documentation/Darwin/Reference/ManPages/man1/xcodebuild.1.html" target="_blank" rel="external">https://developer.apple.com/library/prerelease/mac/documentation/Darwin/Reference/ManPages/man1/xcodebuild.1.html</a></p>
+<p> xcodebuild -project “${TARGET}.xcodeproj”  -target ${TARGET} CODE_SIGN_IDENTITY=”${IDENTITY}” clean        //将project clean下</p>
+<p> xcodebuild -workspace MyWorkspace.xcworkspace -scheme MyScheme archive    //进行archive，生成xcarchive文件<br>xcodebuild -exportArchive -exportFormat IPA -archivePath MyMobileApp.xcarchive -exportPath MyMobileApp.ipa -exportProvisioningProfile ‘MyMobileApp Distribution Profile’</p>
+<p>上述最后一个命令行，确实是可以生成.ipa，但是可能会导致不能安装，<a href="https://developer.apple.com/library/prerelease/mac/documentation/Darwin/Reference/ManPages/man1/xcodebuild.1.html" target="_blank" rel="external">https://developer.apple.com/library/prerelease/mac/documentation/Darwin/Reference/ManPages/man1/xcodebuild.1.html</a> ， 链接是apple的官方文档，文档大概的意思将  xcarchive文件作为.ipa方式进行导出。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2017/07/04/终端打ipa包/" data-title="终端打包IPA | 史成" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/07/03/自动生成自签名HTTPS服务器安装IPA包/" title="本电脑当服务器，https，自动扫码安装ipa">
+  <strong>上一篇：</strong><br/>
+  <span>
+  本电脑当服务器，https，自动扫码安装ipa</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/07/05/swift强行解包问题/"  title="swift强制解包问题">
+ <strong>下一篇：</strong><br/> 
+ <span>swift强制解包问题
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#方式三-xcodebuild"><span class="toc-number">1.</span> <span class="toc-text">方式三 xcodebuild</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.jianshu.com" target="_blank" title="简书">简书</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://guthub.com" target="_blank" title="GitHub">GitHub</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://cocoachina.com" target="_blank" title="cocoachina">cocoachina</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://mybigorange.github.io" target="_blank" title="Ambrose&#39;s Blog">Ambrose&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="www.baidu.com" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Dean Ambrose Page in Github. <br/>
+			Welcome to my bog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5767005756" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="史成">史成</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

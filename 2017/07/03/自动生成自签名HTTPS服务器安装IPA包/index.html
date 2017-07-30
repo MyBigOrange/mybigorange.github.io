@@ -1,0 +1,505 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>本电脑当服务器，https，自动扫码安装ipa | 史成</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="史成">
+    
+
+    
+    <meta name="description" content="由于频繁测试修改Bug需要经常安装ipa包，但是每次都要连线往手机上安装是不是太麻烦了，在同一个局域网下把自己的电脑自签名生成HTTPS服务器，快速安装，方便省时又省力。 网上蒲公英。fir都可以上传ipa包生成二维码，不想利用外部服务器想使用自己电脑生成二维码，用 ios-ipa-server 这个第三方，简单几步很容易解决。 下载源码$ git clone git@github.com:bum">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="本电脑当服务器，https，自动扫码安装ipa">
+<meta property="og:url" content="http://yoursite.com/2017/07/03/自动生成自签名HTTPS服务器安装IPA包/index.html">
+<meta property="og:site_name" content="史成">
+<meta property="og:description" content="由于频繁测试修改Bug需要经常安装ipa包，但是每次都要连线往手机上安装是不是太麻烦了，在同一个局域网下把自己的电脑自签名生成HTTPS服务器，快速安装，方便省时又省力。 网上蒲公英。fir都可以上传ipa包生成二维码，不想利用外部服务器想使用自己电脑生成二维码，用 ios-ipa-server 这个第三方，简单几步很容易解决。 下载源码$ git clone git@github.com:bum">
+<meta property="og:updated_time" content="2017-07-25T09:16:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="本电脑当服务器，https，自动扫码安装ipa">
+<meta name="twitter:description" content="由于频繁测试修改Bug需要经常安装ipa包，但是每次都要连线往手机上安装是不是太麻烦了，在同一个局域网下把自己的电脑自签名生成HTTPS服务器，快速安装，方便省时又省力。 网上蒲公英。fir都可以上传ipa包生成二维码，不想利用外部服务器想使用自己电脑生成二维码，用 ios-ipa-server 这个第三方，简单几步很容易解决。 下载源码$ git clone git@github.com:bum">
+
+    
+    <link rel="alternative" href="www.baidu.com" title="史成" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/shicheng.png">
+    
+    
+    <link rel="apple-touch-icon" href="/img/shicheng.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/shicheng.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/shicheng.png" alt="史成" title="史成"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="史成">史成</a></h1>
+				<h2 class="blog-motto">知其然，知其所以然。一天一篇博客，一个星期研究一个第三方Demo，三个月看一本书！ 2017.7.1</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/03/自动生成自签名HTTPS服务器安装IPA包/" title="本电脑当服务器，https，自动扫码安装ipa" itemprop="url">本电脑当服务器，https，自动扫码安装ipa</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-02T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-03</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#下载源码"><span class="toc-number">1.</span> <span class="toc-text">下载源码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装依赖包"><span class="toc-number">2.</span> <span class="toc-text">安装依赖包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#建立link-方便调试"><span class="toc-number">3.</span> <span class="toc-text">建立link 方便调试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#运行"><span class="toc-number">4.</span> <span class="toc-text">运行</span></a></li></ol>
+		
+		</div>
+		
+		<p>由于频繁测试修改Bug需要经常安装ipa包，但是每次都要连线往手机上安装是不是太麻烦了，在同一个局域网下把自己的电脑自签名生成HTTPS服务器，快速安装，方便省时又省力。</p>
+<p>网上蒲公英。fir都可以上传ipa包生成二维码，不想利用外部服务器想使用自己电脑生成二维码，用 <a href="https://github.com/bumaociyuan/ios-ipa-server" target="_blank" rel="external">ios-ipa-server</a> 这个第三方，简单几步很容易解决。</p>
+<h3 id="下载源码"><a href="#下载源码" class="headerlink" title="下载源码"></a>下载源码</h3><p>$ git clone git@github.com:bumaociyuan/ios-ipa-server.git</p>
+<h3 id="安装依赖包"><a href="#安装依赖包" class="headerlink" title="安装依赖包"></a>安装依赖包</h3><p>$ cd ios-ipa-server<br>$ npm install </p>
+<h3 id="建立link-方便调试"><a href="#建立link-方便调试" class="headerlink" title="建立link 方便调试"></a>建立link 方便调试</h3><p>$ npm link</p>
+<h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><p>$ cd /path/of/ipa<br>$ ios-ipa-server</p>
+<p>运行以后会生成一个 ip 和端口，使用手机访问这个url。进入页面下载即可。</p>
+<p>手机使用safari打开<a href="https://ip:port/download页面" target="_blank" rel="external">https://ip:port/download页面</a><br>第一次打开会弹出警告无法验证服务器，请点击详细信息按钮安装证书，按指示一直点击下一步和完成(强烈推荐使用静态IP，避免每次重新安装证书)<br>点击ipa链接在线安装ipa<br>iOS 10.3 安装方法 Settings &gt; General &gt; About (logically…) &gt; Certificate Trust Settings &gt; Enable Full Trust for Root Certificates</p>
+<p>上边插件工作都给做完了，你也可以自己创建HTTPS链接，具体如下</p>
+<p>一. 打包</p>
+<p>打包的方法就不再叙述了，最后输出 .ipa 包就可以<br>但想要要在线安装，还需要一个 plist 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</div><div class="line">&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;</div><div class="line">&lt;plist version=&quot;1.0&quot;&gt;</div><div class="line">&lt;dict&gt;</div><div class="line">    &lt;key&gt;items&lt;/key&gt;</div><div class="line">    &lt;array&gt;</div><div class="line">        &lt;dict&gt;</div><div class="line">            &lt;key&gt;assets&lt;/key&gt;</div><div class="line">            &lt;array&gt;</div><div class="line">                &lt;dict&gt;</div><div class="line">                    &lt;key&gt;kind&lt;/key&gt;</div><div class="line">                    &lt;string&gt;software-package&lt;/string&gt;</div><div class="line">                    &lt;key&gt;url&lt;/key&gt;</div><div class="line">                    &lt;string&gt;http://172.17.22.124/test.ipa&lt;/string&gt;</div><div class="line">                &lt;/dict&gt;</div><div class="line">            &lt;/array&gt;</div><div class="line">        &lt;key&gt;metadata&lt;/key&gt;</div><div class="line">            &lt;dict&gt;</div><div class="line">                &lt;key&gt;bundle-identifier&lt;/key&gt;</div><div class="line">                &lt;string&gt;com.sunli.test&lt;/string&gt;</div><div class="line">                &lt;key&gt;bundle-version&lt;/key&gt;</div><div class="line">                &lt;string&gt;1.1.0&lt;/string&gt;</div><div class="line">                &lt;key&gt;kind&lt;/key&gt;</div><div class="line">                &lt;string&gt;software&lt;/string&gt;</div><div class="line">                &lt;key&gt;releaseNotes&lt;/key&gt;</div><div class="line">                &lt;string&gt;1.1版本发布&lt;/string&gt;</div><div class="line">                &lt;key&gt;title&lt;/key&gt;</div><div class="line">                &lt;string&gt;testDemo&lt;/string&gt;</div><div class="line">            &lt;/dict&gt;</div><div class="line">        &lt;/dict&gt;</div><div class="line">    &lt;/array&gt;</div><div class="line">&lt;/dict&gt;</div><div class="line">&lt;/plist&gt;</div><div class="line"></div><div class="line"></div><div class="line">//url 中需要填写你的 ipa 包下载地址</div><div class="line">//bundle-identifier 填写你打包时的 bundle id</div><div class="line">//bundle-version 版本号</div><div class="line">//reseaseNotes 发布信息</div><div class="line">//title app名称，下载时会弹出安装提示，提示内容包含 title</div><div class="line"></div><div class="line">在线安装的前提是你的开发者证书已经对 iOS 设备授权，这里不涉及绕过苹果认证的内容</div></pre></td></tr></table></figure>
+<p>二. 启动 apache 服务，配置 Https</p>
+<p>1.启动 Apache<br>Mac OS X 自带了 Apache 服务，我们只需要启动它就可以了<br>在终端中输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apachectl start</div></pre></td></tr></table></figure>
+<p>然后在浏览器中尝试输入 <a href="http://127.0.0.1" target="_blank" rel="external">http://127.0.0.1</a> , 如果出现 It Works！那么就是启动成功<br>站点的默认目录是 /Library/WebServer/Documents/<br>2.开启 Https 服务(因为 iOS7.1 以后， Apple 不再支持 HTTP 方式的 OTA ，所以需要为 Apache 开启 HTTPS 服务)</p>
+<p>(1) 制作OPenSSL证书<br>—&gt;生成服务器私钥<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir /private/etc/apache2/ssl </div><div class="line">cd /private/etc/apache2/ssl</div><div class="line">sudo openssl genrsa -out server.key 1024</div></pre></td></tr></table></figure></p>
+<p>—&gt;生成签署申请<br>需要完整填写各项信息，Common Name必须是服务器 ip 或域名，其他信息可以随意填写</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo openssl req -new -key server.key -out server.csr</div></pre></td></tr></table></figure>
+<p>—&gt;生成CA私钥</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo openssl req  -new -x509 -days 365 -key ca.key -out ca.crt</div></pre></td></tr></table></figure>
+<p>—&gt;创建DemoCA<br>在 ssl 目录下创建 demoCA 文件夹，然后进入 demoCA ，创建一个 index.txt 和 serial ，index.txt 为空， serial 内容为01，然后再创建一个空文件夹 newcerts<br>然后执行命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo openssl ca -in server.csr -out server.crt -cert ca.crt -keyfile ca.key</div></pre></td></tr></table></figure>
+<p>(2) 配置SSL服务<br>—&gt;编辑httpd.conf文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vim /private/etc/apache2/httpd.conf</div></pre></td></tr></table></figure>
+<p>把一下三行注释掉<br>LoadModule ssl_module libexec/apache2/mod_ssl.so<br>Include /private/etc/apache2/extra/httpd-ssl.conf<br>Include /private/etc/apache2/extra/httpd-vhosts.conf</p>
+<p>注意：如果你的 httpd.conf 中缺少了某行，你可以自行添加进去即可。（我的 httpd.conf 中就没有后面两行，自己加上去的）<br>—&gt; 编辑httpd-ssl.conf 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vim /private/etc/apache2/extra/httpd-ssl.conf</div></pre></td></tr></table></figure>
+<p>把一下两行代码注释掉<br>SSLCertificateFile “/private/etc/apache2/server.crt”<br>SSLCertificateKeyFile “/private/etc/apache2/server.key”<br>全文搜索是要注意，可能它的路径和我贴的不一致<br>然后修改路径，改成你的证书文件路径<br>SSLCertificateFile “/private/etc/apache2/ssl/server.crt”<br>SSLCertificateKeyFile “/private/etc/apache2/ssl/server.key”</p>
+<p>—&gt;编辑 httpd-vhosts.conf 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vim /private/etc/apache2/extra/httpd-vhosts.conf</div></pre></td></tr></table></figure>
+<p>在 NameVirtualHost <em>:80 后面添加  NameVirtualHost </em>:443<br>然后在文件末尾添加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;VirtualHost *:443&gt; </div><div class="line">    SSLEngine on </div><div class="line">    SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL</div><div class="line">    SSLCertificateFile /private/etc/apache2/ssl/server.crt</div><div class="line">    SSLCertificateKeyFile /private/etc/apache2/ssl/server.key</div><div class="line">    ServerName 172.17.22.124</div><div class="line">    DocumentRoot &quot;/Library/WebServer/Documents/&quot;</div><div class="line">&lt;/VirtualHost&gt;</div><div class="line"></div><div class="line">//ServerName 填写你的 ip</div><div class="line">//DocumentRoot 填写你的站点路径</div></pre></td></tr></table></figure>
+<p>—&gt; 检查 apachectl 配置</p>
+<p>sudo apachectl configtest  如果它提示：Syntax OK ，那就完成90%了，如果它提示有错，那就要根据错误提示自行解决了</p>
+<p>—&gt; 重启 Apache 服务</p>
+<p>sudo apachectl restart</p>
+<p>这样就可以用 https 访问本地服务器了</p>
+<p>三、建立在线安装服务<br>跳转到你的站点目录，我是 /Library/WebServer/Documents/</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd /Library/WebServer/Documents/</div></pre></td></tr></table></figure>
+<p>然后把 plist 文件，ipa 包，还有前面生成在 ssl 目录中的 ca.crt 文件都拖到站点目录中</p>
+<p>然后新建网页<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vim index.html</div></pre></td></tr></table></figure></p>
+<p>输入以下内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;html&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;a href=&quot;itms-services://?action=download-manifest&amp;url=https://172.17.22.124/test.plist&quot; class=&quot;app_link&quot;&gt;click to install app&lt;/a&gt;</div><div class="line">&lt;br&gt;&lt;br&gt;</div><div class="line">&lt;a title=&quot;iPhone&quot; href=&quot;http://172.17.22.124/ca.crt&quot;&gt;ssl install&lt;/a&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<p>url中必须填写 https 开头的 ipa 包下载地址，然后下载前需要安装 ssl 证书，所以第二行附上 ca.crt 证书的下载地址</p>
+<p>最后在 iphone 的 Safari 浏览器中输入地址 <a href="http://172.17.22.124/index.html" target="_blank" rel="external">http://172.17.22.124/index.html</a> 或者 <a href="https://172.17.22.124/index.html" target="_blank" rel="external">https://172.17.22.124/index.html</a></p>
+<p>先安装证书，再安装 app，大功告成！</p>
+<p>资料：<br>    <a href="http://www.10tiao.com/html/276/201602/405335057/2.html" target="_blank" rel="external">局域网OTA</a></p>
+<pre><code>[http://www.jianshu.com/p/35ca63ec0d8e](http://www.jianshu.com/p/35ca63ec0d8e)
+
+[http://stackoverflow.com/questions/20127138/apache-2-4-configuration-for-ssl-not-working](http://stackoverflow.com/questions/20127138/apache-2-4-configuration-for-ssl-not-working)
+</code></pre>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2017/07/03/自动生成自签名HTTPS服务器安装IPA包/" data-title="本电脑当服务器，https，自动扫码安装ipa | 史成" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/07/02/Ionic2:Angular:cordova/" title="ionic2/cordova/Angular">
+  <strong>上一篇：</strong><br/>
+  <span>
+  ionic2/cordova/Angular</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/07/04/终端打ipa包/"  title="终端打包IPA">
+ <strong>下一篇：</strong><br/> 
+ <span>终端打包IPA
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#下载源码"><span class="toc-number">1.</span> <span class="toc-text">下载源码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装依赖包"><span class="toc-number">2.</span> <span class="toc-text">安装依赖包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#建立link-方便调试"><span class="toc-number">3.</span> <span class="toc-text">建立link 方便调试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#运行"><span class="toc-number">4.</span> <span class="toc-text">运行</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.jianshu.com" target="_blank" title="简书">简书</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://guthub.com" target="_blank" title="GitHub">GitHub</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://cocoachina.com" target="_blank" title="cocoachina">cocoachina</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://mybigorange.github.io" target="_blank" title="Ambrose&#39;s Blog">Ambrose&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="www.baidu.com" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Dean Ambrose Page in Github. <br/>
+			Welcome to my bog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5767005756" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="史成">史成</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -1,0 +1,513 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>swift数据存储 | 史成</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="史成">
+    
+
+    
+    <meta name="description" content="之前用惯了OC的各种存储，换到swift以后，大相径庭，这里记录一下供以后查阅 ###1.使用NSUserDefaults存储数据 NSUserDefaults：一般我们拿它用来保存应用程序设置和属性、用户保存的数据,用户的手机不管是关机or开机时候都会保存在本地(除非你把他删除了),它一般可以存储类型包括:字符,数组,字典,NSData,NSNumber以及基本数据类型都可. 123456789">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="swift数据存储">
+<meta property="og:url" content="http://yoursite.com/2017/07/28/swift数据存储/index.html">
+<meta property="og:site_name" content="史成">
+<meta property="og:description" content="之前用惯了OC的各种存储，换到swift以后，大相径庭，这里记录一下供以后查阅 ###1.使用NSUserDefaults存储数据 NSUserDefaults：一般我们拿它用来保存应用程序设置和属性、用户保存的数据,用户的手机不管是关机or开机时候都会保存在本地(除非你把他删除了),它一般可以存储类型包括:字符,数组,字典,NSData,NSNumber以及基本数据类型都可. 123456789">
+<meta property="og:updated_time" content="2017-07-30T08:44:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="swift数据存储">
+<meta name="twitter:description" content="之前用惯了OC的各种存储，换到swift以后，大相径庭，这里记录一下供以后查阅 ###1.使用NSUserDefaults存储数据 NSUserDefaults：一般我们拿它用来保存应用程序设置和属性、用户保存的数据,用户的手机不管是关机or开机时候都会保存在本地(除非你把他删除了),它一般可以存储类型包括:字符,数组,字典,NSData,NSNumber以及基本数据类型都可. 123456789">
+
+    
+    <link rel="alternative" href="www.baidu.com" title="史成" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/shicheng.png">
+    
+    
+    <link rel="apple-touch-icon" href="/img/shicheng.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/shicheng.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/shicheng.png" alt="史成" title="史成"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="史成">史成</a></h1>
+				<h2 class="blog-motto">知其然，知其所以然。一天一篇博客，一个星期研究一个第三方Demo，三个月看一本书！ 2017.7.1</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/28/swift数据存储/" title="swift数据存储" itemprop="url">swift数据存储</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-27T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-28</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			
+		
+		</div>
+		
+		<p>之前用惯了OC的各种存储，换到swift以后，大相径庭，这里记录一下供以后查阅</p>
+<p>###1.使用NSUserDefaults存储数据</p>
+<p>NSUserDefaults：一般我们拿它用来保存应用程序设置和属性、用户保存的数据,用户的手机不管是关机or开机时候都会保存在本地(除非你把他删除了),它一般可以存储类型包括:字符,数组,字典,NSData,NSNumber以及基本数据类型都可.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">/*  使用NSUserDefaults对普通数据对象储存   */</div><div class="line"></div><div class="line">    /**</div><div class="line">     储存</div><div class="line"></div><div class="line">     - parameter key:   key</div><div class="line">     - parameter value: value</div><div class="line">     */</div><div class="line">    class func setNormalDefault(key:String, value:AnyObject?)&#123;</div><div class="line">        if value == nil &#123;</div><div class="line">            NSUserDefaults.standardUserDefaults().removeObjectForKey(key)</div><div class="line">        &#125;</div><div class="line">        else&#123;</div><div class="line">            NSUserDefaults.standardUserDefaults().setObject(value, forKey: key)</div><div class="line">            // 同步</div><div class="line">            NSUserDefaults.standardUserDefaults().synchronize()</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     通过对应的key移除储存</div><div class="line"></div><div class="line">     - parameter key: 对应key</div><div class="line">     */</div><div class="line">    class func removeNormalUserDefault(key:String?)&#123;</div><div class="line">        if key != nil &#123;</div><div class="line">            NSUserDefaults.standardUserDefaults().removeObjectForKey(key!)</div><div class="line">            NSUserDefaults.standardUserDefaults().synchronize()</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     通过key找到储存的value</div><div class="line"></div><div class="line">     - parameter key: key</div><div class="line"></div><div class="line">     - returns: AnyObject</div><div class="line">     */</div><div class="line">    class func getNormalDefult(key:String)-&gt;AnyObject?&#123;</div><div class="line">        return NSUserDefaults.standardUserDefaults().valueForKey(key)</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>简单使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">private func userDefaultStoreData()&#123;</div><div class="line">        Tool.setNormalDefault(&quot;name&quot;, value: &quot;Rookie&quot;)</div><div class="line">        let value = Tool.getNormalDefult(&quot;name&quot;)</div><div class="line">        print(&quot;测试NSUserDefaults 简单对象储存\\(value)&quot;)</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>###2.通过write写入方式存储为plist属性列表<br>write写入方式也是一种把数据永久保存在磁盘中储存方式,一般步骤:1)获取路径(一般有两种方式:使用NSSearchPathForDirectoriesInDomains或URLsForDirectory;使用NSHomeDirectory➕相应的路径);2)向文件中写入数据;3)从文件中读取数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">     创建文件</div><div class="line"></div><div class="line">     - parameter name:        文件名</div><div class="line">     - parameter fileBaseUrl: url</div><div class="line"></div><div class="line">     - returns: 文件路径</div><div class="line">     */</div><div class="line">   class func creatNewFiles(name:String, fileBaseUrl:NSURL) -&gt; String&#123;</div><div class="line">        let manager = NSFileManager.defaultManager()</div><div class="line">        let file = fileBaseUrl.URLByAppendingPathComponent(name)</div><div class="line"></div><div class="line">        let exist = manager.fileExistsAtPath(file.path!)</div><div class="line">        if !exist &#123;</div><div class="line">            let createFilesSuccess = manager.createFileAtPath(file.path!, contents: nil, attributes: nil)</div><div class="line">            print(&quot;文件创建结果: \\(createFilesSuccess)&quot;)</div><div class="line">        &#125;</div><div class="line">        return String(file)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     读取文件</div><div class="line"></div><div class="line">     - parameter name:        文件名</div><div class="line">     - parameter fileBaseUrl: url</div><div class="line"></div><div class="line">     - returns: 读取数据</div><div class="line">     */</div><div class="line">    class func readTheFlies(name:String , fileBaseUrl:NSURL) -&gt;NSString&#123;</div><div class="line">        let file = fileBaseUrl.URLByAppendingPathComponent(name)</div><div class="line">       //  print(file)</div><div class="line">        let readHandler = try! NSFileHandle(forReadingFromURL:file)</div><div class="line">        let data = readHandler.readDataToEndOfFile()</div><div class="line">        let readString = NSString(data: data, encoding: NSUTF8StringEncoding)</div><div class="line">        return readString!</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">// MARK:-  存储plist属性列表</div><div class="line">    private func savePlistFiles()&#123;</div><div class="line">        // 储存的沙盒路径</div><div class="line">        let manager = NSFileManager.defaultManager()</div><div class="line">        let urlForCatch = manager.URLsForDirectory(NSSearchPathDirectory.CachesDirectory, inDomains: NSSearchPathDomainMask.UserDomainMask)</div><div class="line">        let url = urlForCatch.first! as NSURL</div><div class="line">        let fileName = &quot;RookieSon.plist&quot;</div><div class="line">        // 创建文件</div><div class="line">        let filesPath = Tool.creatNewFiles(fileName, fileBaseUrl: url)</div><div class="line">        // 储存数据</div><div class="line">        let saveDataInfo = NSMutableArray()</div><div class="line">        saveDataInfo.addObject(&quot;我不是代码的创造者&quot;)</div><div class="line">        saveDataInfo.addObject(&quot;我只是代码的搬运工&quot;)</div><div class="line">        saveDataInfo.addObject(&quot;以后争取做代码的创造者&quot;)</div><div class="line">        //        print(saveDataInfo)</div><div class="line">        // 写入文件</div><div class="line">        saveDataInfo.writeToURL(NSURL(string: filesPath)!, atomically: true)</div><div class="line"></div><div class="line">        // 读取文件</div><div class="line">        let readDataInfo = Tool.readTheFlies(fileName, fileBaseUrl: url)</div><div class="line">        print(readDataInfo)</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>###3.NSKeyedArchiver采用归档的形式来保存数据<br>NSKeyedArchiver保存数据对象需要遵守NSCoding协议，并且该对象对应的类必须提供encodeWithCoder:和initWithCoder:方法,简单的说就是告诉系统怎么对对象进行编码，怎么对对象进行解码.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">class Person: NSObject &#123;</div><div class="line"></div><div class="line">    var name:String?</div><div class="line">    var phone:String?</div><div class="line"></div><div class="line">    // 构造方法</div><div class="line">    init(name:String!,phone:String!) &#123;</div><div class="line">        self.name = name</div><div class="line">        self.phone = phone</div><div class="line"></div><div class="line">        super.init()</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // 从NSObject解析回来</div><div class="line"></div><div class="line">    init(coder aDecoder:NSCoder!)&#123;</div><div class="line">        self.name=aDecoder.decodeObjectForKey(&quot;name&quot;) as? String</div><div class="line">        self.phone=aDecoder.decodeObjectForKey(&quot;phone&quot;) as? String</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //编码成object,哪些属性需要归档，怎么归档</div><div class="line">    func encodeWithCoder(aCoder:NSCoder!)&#123;</div><div class="line">        aCoder.encodeObject(name,forKey:&quot;name&quot;)</div><div class="line">        aCoder.encodeObject(phone,forKey:&quot;phone&quot;)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">private func  archiveSaveDataInfo()&#123;</div><div class="line">    // 储存自定义对象</div><div class="line">    let userDefault = NSUserDefaults.standardUserDefaults()</div><div class="line">    let mo = Person(name: &quot;RookieYX&quot;, phone: &quot;123456&quot;)</div><div class="line">    // 实例对象转化成NSData</div><div class="line">    let moData:NSData = NSKeyedArchiver.archivedDataWithRootObject(mo)</div><div class="line">    // 储存NSData对象</div><div class="line">    userDefault.setObject(moData, forKey: &quot;myMo&quot;)</div><div class="line">    // 自定义对象读取</div><div class="line">    let myMoData = userDefault.objectForKey(&quot;myMo&quot;) as! NSData</div><div class="line">    // 解档</div><div class="line">    let myM= NSKeyedUnarchiver.unarchiveObjectWithData(myMoData) as! Person</div><div class="line">    print(myM)</div><div class="line"></div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>使用以上技术实现一个简单的网络图片的本地缓存</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">     传递一个uiimageView，和图片路径，设置图片，异步操作</div><div class="line"></div><div class="line">     - parameter newsImageView: UIImageView</div><div class="line">     - parameter imageString:   网络图片地址</div><div class="line">     */</div><div class="line">   class func setImagesViewData(newsImageView:UIImageView,imageString:String)&#123;</div><div class="line">        // 获取文件路径</div><div class="line">        var catePath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory,NSSearchPathDomainMask.AllDomainsMask, true)</div><div class="line">        print(catePath)</div><div class="line">        let cateImagesUrl:NSURL = NSURL(fileURLWithPath: &quot;\\(catePath.first)/\\(imageString.Rookie_MD5())&quot;)//获取缓存加密后的路径</div><div class="line"></div><div class="line">        //缓存存在直接加载</div><div class="line">        if let cateReadData:NSData  = NSData(contentsOfURL: cateImagesUrl)&#123;</div><div class="line">            newsImageView.image = UIImage(data: cateReadData);</div><div class="line">        &#125;</div><div class="line">        else&#123;</div><div class="line">            newsImageView.image = UIImage(named: &quot;load.jpg&quot;);//默认图片</div><div class="line">            //这里我们做个异步处理,用来加载图片</div><div class="line">            let session = NSURLSession.sharedSession();</div><div class="line">            let task = session.dataTaskWithURL(NSURL(string: imageString)!, completionHandler: &#123; (imageData:NSData?, resp:NSURLResponse?, error:NSError?) in</div><div class="line">                if let error = error &#123;</div><div class="line">                    print(&quot;连接网络失败1:\\(error)&quot;);</div><div class="line">                &#125;else&#123;</div><div class="line">                    // 当我们加载完数据了回主线程修改图片</div><div class="line">                    if let endImageData = imageData&#123;</div><div class="line">                        dispatch_sync(dispatch_get_main_queue(), &#123;</div><div class="line">                            newsImageView.image = UIImage(data: endImageData)</div><div class="line">                        &#125;)</div><div class="line">                        // 写入本地</div><div class="line">                        endImageData.writeToURL(cateImagesUrl, atomically: true)</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;)</div><div class="line"></div><div class="line">            // 启动任务</div><div class="line">            task.resume()</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>###4.fmdb本地存储</p>
+<p>####核心类<br>FMDB有三个主要的类</p>
+<ul>
+<li><p>FMDatabase<br>一个FMDatabase对象就代表一个单独的SQLite数据库用来执行SQL语句</p>
+</li>
+<li><p>FMResultSet<br>使用FMDatabase执行查询后的结果集</p>
+</li>
+<li><p>FMDatabaseQueue<br>用于在多线程中执行多个查询或更新，它是线程安全的</p>
+</li>
+</ul>
+<p>####通过指定SQLite数据库文件路径来创建FMDatabase对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">FMDatabase *db = [FMDatabase databaseWithPath:path];</div><div class="line"></div><div class="line">if(![db open])</div><div class="line">&#123;</div><div class="line">    NSLog(@&quot;数据库打开失败！&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p> 文件路径有三种情况:</p>
+<blockquote>
+<p>具体文件路径</p>
+<ul>
+<li>如果不存在会自动创建<br>空字符串@””</li>
+<li>会在临时目录创建一个空的数据库</li>
+<li>当FMDatabase连接关闭时，数据库文件也被删除<br>nil</li>
+<li>会创建一个内存中临时数据库，当FMDatabase连接关闭时，数据库会被销毁</li>
+</ul>
+</blockquote>
+<p>####执行更新查询</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">################## 更新方法  ################</div><div class="line">在FMDB中，除查询以外的所有操作，都称为“更新”,create、drop、insert、update、delete等使用executeUpdate:方法执行更新</div><div class="line"></div><div class="line">- (BOOL)executeUpdate:(NSString*)sql,...</div><div class="line"></div><div class="line">- (BOOL)executeUpdateWithFormat:(NSString*)format,...</div><div class="line"></div><div class="line">- (BOOL)executeUpdate:(NSString*)sql withArgumentsInArray:(NSArray *)arguments</div><div class="line"></div><div class="line">n示例</div><div class="line">[db executeUpdate:@&quot;UPDATE t_student SET age = ?WHERE name = ?;&quot;, @20, @&quot;Jack&quot;]</div><div class="line"></div><div class="line">-------------------------------------------------------------</div><div class="line">################################## 查询方法 ##################################</div><div class="line">(FMResultSet *)executeQuery:(NSString*)sql,... </div><div class="line"></div><div class="line">(FMResultSet *)executeQueryWithFormat:(NSString *)format,...</div><div class="line"></div><div class="line">(FMResultSet *)executeQuery:(NSString *)sql withArgumentsInArray:(NSArray *)arguments</div><div class="line"></div><div class="line">示例</div><div class="line">//查询数据</div><div class="line">FMResultSet *rs = [db executeQuery:@&quot;SELECT * FROM t_student&quot;];</div><div class="line"></div><div class="line">//遍历结果集</div><div class="line">while([rs next])</div><div class="line">&#123;</div><div class="line">    NSString *name = [rs stringForColumn:@&quot;name&quot;];</div><div class="line"></div><div class="line">    int age = [rs intForColumn:@&quot;age&quot;];</div><div class="line"></div><div class="line">    double score = [rs doubleForColumn:@&quot;score&quot;];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>####FMDatabaseQueue</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">FMDatabase这个类是线程不安全的，如果在多个线程中同时使用一个FMDatabase实例，会造成数据混乱等问题为了保证线程安全，FMDB提供方便快捷的FMDatabaseQueue类</div><div class="line">FMDatabaseQueue的创建:</div><div class="line"></div><div class="line"> FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:path];</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">使用事务</div><div class="line">[queue inTransaction:^(FMDatabase *db, BOOL *rollback) &#123;</div><div class="line">    [db executeUpdate:@&quot;INSERT INTO t_student(name) VALUES (?)&quot;, @&quot;Jack&quot;];</div><div class="line"></div><div class="line">    [db executeUpdate:@&quot;INSERT INTO t_student(name) VALUES (?)&quot;, @&quot;Rose&quot;];</div><div class="line"></div><div class="line">    [db executeUpdate:@&quot;INSERT INTO t_student(name) VALUES (?)&quot;, @&quot;Jim&quot;];</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">    FMResultSet *rs = [db executeQuery:@&quot;select * from t_student&quot;];</div><div class="line"></div><div class="line">    while ([rs next])</div><div class="line"> &#123;</div><div class="line">        //执行操作</div><div class="line"> &#125;</div><div class="line">&#125;];</div><div class="line"></div><div class="line">事务回滚</div><div class="line">*rollback = YES;</div></pre></td></tr></table></figure>
+<p>####使用</p>
+<ol>
+<li>创建桥接文件，引入头文件</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#import &quot;FMDB.h&quot;</div></pre></td></tr></table></figure>
+<ol>
+<li>FmdbManager</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line">import UIKit</div><div class="line"></div><div class="line">class FmdbManager: NSObject &#123;</div><div class="line"></div><div class="line">    /// 单例</div><div class="line">    static let shareInstance: FmdbManager = FmdbManager()</div><div class="line"></div><div class="line">    override init() &#123;</div><div class="line">        super.init()</div><div class="line">        openDB(&quot;demo.sqlite&quot;)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    var db: FMDatabase?</div><div class="line">    func openDB(name: String)</div><div class="line">    &#123;</div><div class="line">        // 1.拼接路径</div><div class="line">        let path = name.documentDir()</div><div class="line"></div><div class="line">        // 2.创建数据库对象</div><div class="line">        db = FMDatabase(path: path)</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">        // 3.打开数据库</div><div class="line">        // open()特点: 如果数据库文件不存在就创建一个新的, 如果存在就直接打开</div><div class="line">        if !db!.open()</div><div class="line">        &#123;</div><div class="line">            print(&quot;打开数据库失败&quot;)</div><div class="line">            return</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        // 4.创建表</div><div class="line">        if !createTable()</div><div class="line">        &#123;</div><div class="line">            print(&quot;创建数据库失败&quot;)</div><div class="line">            return</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">    创建表</div><div class="line">    */</div><div class="line">    func createTable() -&gt;Bool</div><div class="line">    &#123;</div><div class="line">        // 1.编写SQL语句</div><div class="line">        let sql = &quot;CREATE TABLE IF NOT EXISTS T_Person( \n&quot; +</div><div class="line">            &quot;id INTEGER PRIMARY KEY AUTOINCREMENT, \n&quot; +</div><div class="line">            &quot;name TEXT, \n&quot; +</div><div class="line">            &quot;age INTEGER \n&quot; +</div><div class="line">        &quot;);&quot;</div><div class="line"></div><div class="line">        // 2.执行SQL语句</div><div class="line">        // 注意: 在FMDB中, 除了查询以外的操作都称之为更新</div><div class="line">        return db!.executeUpdate(sql, withArgumentsInArray: nil)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>ViewController</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">import UIKit</div><div class="line"></div><div class="line">class ViewController: UIViewController &#123;</div><div class="line"></div><div class="line">    override func touchesBegan(touches: Set&lt;UITouch&gt;, withEvent event: UIEvent?) &#123;</div><div class="line">        print(&quot;abc&quot;.documentDir())</div><div class="line">//        SQLiteManager.shareInstance.openDB(&quot;demo.sqlite&quot;)</div><div class="line"></div><div class="line"></div><div class="line">        /// DML</div><div class="line">        let sql = &quot;INSERT INTO T_Person \n&quot; +</div><div class="line">            &quot;(name, age) \n&quot; +</div><div class="line">            &quot;VALUES \n&quot; +</div><div class="line">        &quot;(?, ?);&quot;</div><div class="line">//        SQLiteManager.shareInstance.db?.executeUpdate(sql, withArgumentsInArray: nil)</div><div class="line">        SQLiteManager.shareInstance.db?.executeUpdate(sql, withArgumentsInArray: [&quot;ls&quot;, 88])</div><div class="line"></div><div class="line"></div><div class="line">        /// 查询语句</div><div class="line">        let sql2 = &quot;SELECT id, name, age FROM T_Person;&quot;</div><div class="line">        // 1.查询数据库</div><div class="line">        let result = SQLiteManager.shareInstance.db!.executeQuery(sql2, withArgumentsInArray: nil)</div><div class="line"></div><div class="line">        // 2.从结果集中取出数据</div><div class="line">        while result.next()</div><div class="line">        &#123;</div><div class="line">            let id = result.intForColumn(&quot;id&quot;)</div><div class="line">            let name = result.stringForColumn(&quot;name&quot;)</div><div class="line">            let age = result.intForColumn(&quot;age&quot;)</div><div class="line">            print(&quot;\(id), \(name), \(age)&quot;)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>FMDBQueue基本使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">import UIKit</div><div class="line"></div><div class="line">class ViewController: UIViewController &#123;</div><div class="line"></div><div class="line">    override func touchesBegan(touches: Set&lt;UITouch&gt;, withEvent event: UIEvent?) &#123;</div><div class="line">        print(&quot;abc&quot;.documentDir())</div><div class="line">//        SQLiteManager.shareInstance.openDB(&quot;demo.sqlite&quot;)</div><div class="line"></div><div class="line"></div><div class="line">        /// DML</div><div class="line">        let sql = &quot;INSERT INTO T_Person \n&quot; +</div><div class="line">            &quot;(name, age) \n&quot; +</div><div class="line">            &quot;VALUES \n&quot; +</div><div class="line">        &quot;(?, ?);&quot;</div><div class="line">//        SQLiteManager.shareInstance.db?.executeUpdate(sql, withArgumentsInArray: nil)</div><div class="line">        SQLiteManager.shareInstance.db?.executeUpdate(sql, withArgumentsInArray: [&quot;ls&quot;, 88])</div><div class="line"></div><div class="line"></div><div class="line">        /// 查询语句</div><div class="line">        let sql2 = &quot;SELECT id, name, age FROM T_Person;&quot;</div><div class="line">        // 1.查询数据库</div><div class="line">        let result = SQLiteManager.shareInstance.db!.executeQuery(sql2, withArgumentsInArray: nil)</div><div class="line"></div><div class="line">        // 2.从结果集中取出数据</div><div class="line">        while result.next()</div><div class="line">        &#123;</div><div class="line">            let id = result.intForColumn(&quot;id&quot;)</div><div class="line">            let name = result.stringForColumn(&quot;name&quot;)</div><div class="line">            let age = result.intForColumn(&quot;age&quot;)</div><div class="line">            print(&quot;\(id), \(name), \(age)&quot;)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">import UIKit</div><div class="line"></div><div class="line">class SQLiteManager: NSObject &#123;</div><div class="line"></div><div class="line">    /// 单例</div><div class="line">    static let shareInstance: SQLiteManager = SQLiteManager()</div><div class="line"></div><div class="line">    override init()  &#123;</div><div class="line">        super.init()</div><div class="line">        openDB(&quot;demo.sqlite&quot;)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    var dbQueue: FMDatabaseQueue?</div><div class="line"></div><div class="line">    func openDB(name: String) &#123;</div><div class="line">        // 1.拼接路径</div><div class="line">        let path = name.documentDir()</div><div class="line"></div><div class="line">        // 2.创建数据库对象</div><div class="line">        dbQueue = FMDatabaseQueue(path: path)</div><div class="line"></div><div class="line">        // 3.创建表</div><div class="line">        createTable()</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">    创建表</div><div class="line">    */</div><div class="line">    func createTable()  &#123;</div><div class="line">        // 1.编写SQL语句</div><div class="line">        let sql = &quot;CREATE TABLE IF NOT EXISTS T_Person( &quot; +</div><div class="line">            &quot;id INTEGER PRIMARY KEY AUTOINCREMENT, &quot; +</div><div class="line">            &quot;name TEXT,&quot; +</div><div class="line">            &quot;age INTEGER &quot; +</div><div class="line">        &quot;);&quot;</div><div class="line"></div><div class="line">        // 2.执行SQL语句</div><div class="line">        dbQueue?.inDatabase(&#123; (db) -&gt; Void in</div><div class="line">            db.executeUpdate(sql, withArgumentsInArray: nil)</div><div class="line">        &#125;)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">import UIKit</div><div class="line"></div><div class="line">class ViewController: UIViewController &#123;</div><div class="line"></div><div class="line">    override func touchesBegan(touches: Set&lt;UITouch&gt;, withEvent event: UIEvent?) &#123;</div><div class="line">        print(&quot;abc&quot;.documentDir())</div><div class="line">//        SQLiteManager.shareInstance.openDB(&quot;demo.sqlite&quot;)</div><div class="line"></div><div class="line">        /// DML</div><div class="line">        let sql = &quot;INSERT INTO T_Person &quot; +</div><div class="line">            &quot;(name, age) &quot; +</div><div class="line">            &quot;VALUES &quot; +</div><div class="line">        &quot;(?, ?);&quot;</div><div class="line">        // 只要使用inTransaction, 那么在inTransaction闭包中的所有代码都是在事务中执行的</div><div class="line">        SQLiteManager.shareInstance.dbQueue!.inTransaction &#123; (db, rollback) -&gt; Void in</div><div class="line"></div><div class="line">            for i in 0..&lt;10</div><div class="line">            &#123;</div><div class="line">                db.executeUpdate(sql, withArgumentsInArray: [&quot;zs&quot;, 30])</div><div class="line">//                if i ==  5</div><div class="line">//                &#123;</div><div class="line">//                    // OC中的写法: *rollback = YES;</div><div class="line">//                    // Swift2.x中的写法: rollback.memory = true</div><div class="line">//                    // Swift3.0中的写法: rollback?.pointee = true</div><div class="line">//                    rollback.memory = true</div><div class="line">//                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>原文：<a href="http://www.jianshu.com/p/6f52e26f947b" target="_blank" rel="external">http://www.jianshu.com/p/6f52e26f947b</a><br><a href="http://www.jianshu.com/p/efd358d53ffd" target="_blank" rel="external">http://www.jianshu.com/p/efd358d53ffd</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2017/07/28/swift数据存储/" data-title="swift数据存储 | 史成" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/07/27/swift代码规范/" title="swift代码规范大全">
+  <strong>上一篇：</strong><br/>
+  <span>
+  swift代码规范大全</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/07/29/podfile规范写法及理解/"  title="多工程引用podfile规范写法">
+ <strong>下一篇：</strong><br/> 
+ <span>多工程引用podfile规范写法
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ 
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.jianshu.com" target="_blank" title="简书">简书</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://guthub.com" target="_blank" title="GitHub">GitHub</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://cocoachina.com" target="_blank" title="cocoachina">cocoachina</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://mybigorange.github.io" target="_blank" title="Ambrose&#39;s Blog">Ambrose&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="www.baidu.com" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Dean Ambrose Page in Github. <br/>
+			Welcome to my bog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5767005756" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="史成">史成</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

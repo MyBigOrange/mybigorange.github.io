@@ -1,0 +1,474 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>屏幕适配反思整理 | 史成</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="史成">
+    
+
+    
+    <meta name="description" content="###屏幕适配 老生常谈，总会存在适配问题，不管设计稿合理不合理，原理就那么点东西。 设备信息如图： 现在APP设计开发必须考虑适配大、中、小三种屏幕。所以如何做到交付一套设计稿解决适配大中小三屏的问题？设计和开发之间采用什么协作模式？一个基本思路是：1、选择一种尺寸作为设计和开发基准；2、定义一套适配规则，自动适配剩下两种尺寸；3、特殊适配效果给出设计效果。 手机淘宝的团队写作模式 第一步，视觉">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="屏幕适配反思整理">
+<meta property="og:url" content="http://yoursite.com/2017/07/18/适配问题/index.html">
+<meta property="og:site_name" content="史成">
+<meta property="og:description" content="###屏幕适配 老生常谈，总会存在适配问题，不管设计稿合理不合理，原理就那么点东西。 设备信息如图： 现在APP设计开发必须考虑适配大、中、小三种屏幕。所以如何做到交付一套设计稿解决适配大中小三屏的问题？设计和开发之间采用什么协作模式？一个基本思路是：1、选择一种尺寸作为设计和开发基准；2、定义一套适配规则，自动适配剩下两种尺寸；3、特殊适配效果给出设计效果。 手机淘宝的团队写作模式 第一步，视觉">
+<meta property="og:image" content="http://ooyerqo96.bkt.clouddn.com/Screen%20Shot%202017-07-25%20at%2018.00.46.png">
+<meta property="og:image" content="http://ooyerqo96.bkt.clouddn.com/62dd57dee9f859151b8ea6a939968a53_b.jpg">
+<meta property="og:image" content="http://ooyerqo96.bkt.clouddn.com/feffdcc6023e2f17e9000d2e70a34d91_b.jpg">
+<meta property="og:image" content="http://ooyerqo96.bkt.clouddn.com/Screen%20Shot%202017-07-25%20at%2018.13.30.png">
+<meta property="og:image" content="http://ooyerqo96.bkt.clouddn.com/Screen%20Shot%202017-07-25%20at%2018.13.44.png">
+<meta property="og:updated_time" content="2017-07-30T08:15:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="屏幕适配反思整理">
+<meta name="twitter:description" content="###屏幕适配 老生常谈，总会存在适配问题，不管设计稿合理不合理，原理就那么点东西。 设备信息如图： 现在APP设计开发必须考虑适配大、中、小三种屏幕。所以如何做到交付一套设计稿解决适配大中小三屏的问题？设计和开发之间采用什么协作模式？一个基本思路是：1、选择一种尺寸作为设计和开发基准；2、定义一套适配规则，自动适配剩下两种尺寸；3、特殊适配效果给出设计效果。 手机淘宝的团队写作模式 第一步，视觉">
+<meta name="twitter:image" content="http://ooyerqo96.bkt.clouddn.com/Screen%20Shot%202017-07-25%20at%2018.00.46.png">
+
+    
+    <link rel="alternative" href="www.baidu.com" title="史成" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/shicheng.png">
+    
+    
+    <link rel="apple-touch-icon" href="/img/shicheng.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/shicheng.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/shicheng.png" alt="史成" title="史成"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="史成">史成</a></h1>
+				<h2 class="blog-motto">知其然，知其所以然。一天一篇博客，一个星期研究一个第三方Demo，三个月看一本书！ 2017.7.1</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/18/适配问题/" title="屏幕适配反思整理" itemprop="url">屏幕适配反思整理</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-17T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-18</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			
+		
+		</div>
+		
+		<p>###屏幕适配</p>
+<p>老生常谈，总会存在适配问题，不管设计稿合理不合理，原理就那么点东西。</p>
+<p>设备信息如图：<br><img src="http://ooyerqo96.bkt.clouddn.com/Screen%20Shot%202017-07-25%20at%2018.00.46.png" alt="jietu"></p>
+<p>现在APP设计开发必须考虑适配大、中、小三种屏幕。所以如何做到交付一套设计稿解决适配大中小三屏的问题？设计和开发之间采用什么协作模式？一个基本思路是：1、选择一种尺寸作为设计和开发基准；2、定义一套适配规则，自动适配剩下两种尺寸；3、特殊适配效果给出设计效果。</p>
+<p>手机淘宝的团队写作模式<br><img src="http://ooyerqo96.bkt.clouddn.com/62dd57dee9f859151b8ea6a939968a53_b.jpg" alt="taobao"></p>
+<p>第一步，视觉设计阶段，设计师按宽度750px（iPhone 6）做设计稿，除图片外所有设计元素用矢量路径来做。设计定稿后在750px的设计稿上做标注，输出标注图。同时等比放大1.5倍生成宽度1125px的设计稿，在1125px的稿子里切图。第二步，输出两个交付物给开发工程师：一个是程序用到的@3x切图资源，另一个是宽度750px的设计标注图。第三步，开发工程师拿到750px标注图和@3x切图资源，完成iPhone 6（375pt）的界面开发。此阶段不能用固定宽度的方式开发界面，得用自动布局（auto layout），方便后续适配到其它尺寸。第四步，适配调试阶段，基于iPhone 6的界面效果，分别向上向下调试iPhone 6 plus（414pt）和iPhone 5S及以下（320pt）的界面效果。由此完成大中小三屏适配。</p>
+<p>为什么选择iPhone 6作为基准尺寸？<br>当面对大中小三种屏幕需要适配的时候，很容易想到先做好一种屏幕，再去适配剩下两种屏幕。第一个决定是到底以哪种屏幕作为设计和开发的基准尺寸。我们选择中间尺寸的iPhone 6（750px/375pt）作为基准，基于几个原因：<br>1、从中间尺寸向上和向下适配的时候界面调整的幅度最小。375pt下的设计效果适配到414pt和320pt偏差不会太大。假设以414pt为基准做出很优雅的设计，到320pt可能元素之间比例就不是那么回事了，比如图片和文字之间视觉比例可能失调。2、iPhone 6 plus有两种显示模式，标准模式分辨率为1242x2208，放大模式分辨率为1125x2001（即iPhone 6的1.5倍）。可见官方系统里iPhone 6和iPhone 6 plus分辨率之间就存在1.5倍的倍率关系。很多情况下这两种尺寸可以用1.5倍直接等比适配。<br>3、1242x2208这个奇葩的数值是苹果官方都不愿意公开宣传的一个分辨率，不便于记忆和计算栅格。640x1136虽然是广泛应用的一个分辨率，但是大屏时代依然以小尺寸为设计基准显然不合时宜，设计师会停留在小屏的视角做设计。<br>所以，iPhone6的750x1334是最适合基准尺寸。</p>
+<p><strong>前文提到适配策略是先选择iPhone 6作为基准设计尺寸，然后通过一套适配规则自动适配到另外两种尺寸。这套适配规则总结起来就一句话：文字流式，控件弹性，图片等比缩放</strong></p>
+<p><img src="http://ooyerqo96.bkt.clouddn.com/feffdcc6023e2f17e9000d2e70a34d91_b.jpg" alt="shipeiyuanze"></p>
+<p>控件弹性指的是，navigation、cell、bar等适配过程中垂直方向上高度不变；水平方向宽度变化时，通过调整元素间距或元素右对齐的方式实现自适应。这样屏幕越大，在垂直方向上可以显示更多内容，发挥大屏幕的优势。</p>
+<p>按照上述默认适配规则，大中小三种屏幕显示效果均相同。有时候想在大屏幕显示更多内容，需要设计出特殊适配效果。比如App store首页焦点图，从iPhone 6适配到iPhone 6 plus时焦点图尺寸和排版做了特殊处理。底下应用列表也从一排3+个变成一排4+个，真正实现了大屏幕显示更多内容的理念。这些就需要设计师给出相应设计稿。</p>
+<p>有两种适配方式：一种是控件的所有参数等比放大，效果是屏幕上的内容在不同大小设备上完全相同；另一种是控件的大小不变，控件的左右间距随屏幕变化，效果是屏幕越大，显示内容越多。</p>
+<p><img src="http://ooyerqo96.bkt.clouddn.com/Screen%20Shot%202017-07-25%20at%2018.13.30.png" alt=""></p>
+<p><img src="http://ooyerqo96.bkt.clouddn.com/Screen%20Shot%202017-07-25%20at%2018.13.44.png" alt=""></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2017/07/18/适配问题/" data-title="屏幕适配反思整理 | 史成" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/07/17/swift自定义xib添加到Storyboard上/" title="swift自定义xib添加到storyboard注意事项">
+  <strong>上一篇：</strong><br/>
+  <span>
+  swift自定义xib添加到storyboard注意事项</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/07/19/swift中的自定义打印/"  title="swift中自定义DBug模式">
+ <strong>下一篇：</strong><br/> 
+ <span>swift中自定义DBug模式
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ 
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.jianshu.com" target="_blank" title="简书">简书</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://guthub.com" target="_blank" title="GitHub">GitHub</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://cocoachina.com" target="_blank" title="cocoachina">cocoachina</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://mybigorange.github.io" target="_blank" title="Ambrose&#39;s Blog">Ambrose&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="www.baidu.com" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Dean Ambrose Page in Github. <br/>
+			Welcome to my bog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5767005756" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="史成">史成</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

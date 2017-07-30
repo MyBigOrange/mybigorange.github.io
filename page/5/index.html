@@ -1,0 +1,1035 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>史成</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="史成">
+    
+
+    
+    <meta name="description" content="天道酬勤">
+<meta property="og:type" content="website">
+<meta property="og:title" content="史成">
+<meta property="og:url" content="http://yoursite.com/page/5/index.html">
+<meta property="og:site_name" content="史成">
+<meta property="og:description" content="天道酬勤">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="史成">
+<meta name="twitter:description" content="天道酬勤">
+
+    
+    <link rel="alternative" href="www.baidu.com" title="史成" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/shicheng.png">
+    
+    
+    <link rel="apple-touch-icon" href="/img/shicheng.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/shicheng.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/shicheng.png" alt="史成" title="史成"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="史成">史成</a></h1>
+				<h2 class="blog-motto">知其然，知其所以然。一天一篇博客，一个星期研究一个第三方Demo，三个月看一本书！ 2017.7.1</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main">
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/14/基本算法/" title="必须会基本算法" itemprop="url">必须会基本算法</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-14T13:55:03.000Z" itemprop="datePublished"> 发表于 2017-05-14</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>算法，不仅仅要知道，跟重要的是能灵活运用，运用总在不经意之间。</p>
+<h2 id="排序算法"><a href="#排序算法" class="headerlink" title="排序算法"></a>排序算法</h2><ol>
+<li><p>冒泡排序— （两两比较，谁大靠后）最简单的排序<br>比较相邻的元素。如果第一个比第二个大，就交换他们两个。对每一对相邻元素作同样的工作，从开始第一对到结尾的最后一对。在这一点，最后的元素应该会是最大的数。针对所有的元素重复以上的步骤，除了最后一个。持续每次对越来越少的元素重复上面的步骤，直到没有任何一对数字需要比较。<br><img src="http://ooyerqo96.bkt.clouddn.com/1170656-40f22afb455cc9f7.gif" alt="冒泡排序"></p>
+</li>
+<li><p>插入排序—  (将每个数插到有序数组)<br>插入排序就是每一步都将一个待排数据按其大小插入到已经排序的数据中的适当位置，直到全部插入完毕。 插入排序方法分直接插入排序和折半插入排序两种。<br>假定n是数组的长度，首先假设第一个元素被放置在正确的位置上，这样仅需从1到n-1范围内对剩余元素进行排序。对于每次遍历，从0到i-1范围内的元素已经被排好序，每次遍历的任务是：通过扫描前面已排序的子列表，将位置i处的元素定位到从0到i的子列表之内的正确的位置上。<br><img src="http://ooyerqo96.bkt.clouddn.com/1170656-8f8fe207ea0d0609.gif" alt="插入排序"></p>
+</li>
+<li><p>选择排序—（挨个比较、选取最小、从前替换）<br>比如在一个长度为N的无序数组中，在第一趟遍历N个数据，找出其中最小的数值与第一个元素交换，第二趟遍历剩下的N-1个数据，找出其中最小的数值与第二个元素交换……第N-1趟遍历剩下的2个数据，找出其中最小的数值与第N-1个元素交换，至此选择排序完成。</p>
+</li>
+<li><p>快速排序 — （依次分组、依次比较、递归）<br>快速排序（Quicksort）是对冒泡排序的一种改进。它的基本思想是：通过一趟排序将要排序的数据分割成独立的两部分，其中一部分的所有数据都比另外一部分的所有数据都要小，然后再按此方法对这两部分数据分别进行快速排序，整个排序过程可以递归进行，以此达到整个数据变成有序序列。在平均状况下，排序 n 个项目要Ο(n log n)次比较。在最坏状况下则需要Ο(n2)次比较，但这种状况并不常见。快速排序使用分治法(Divide and conquer)策略来把一个串行(list)分为两个子串行(sub-lists)。<br><img src="http://ooyerqo96.bkt.clouddn.com/1170656-aa523ec3ba9a2909.gif" alt="快速排序"></p>
+</li>
+<li><p>堆排序<br>是利用堆积树（堆）这种数据结构所设计的一种排序算法，它是选择排序的一种。可以利用数组的特点快速定位指定索引的元素。堆分为大根堆和小根堆，是完全二叉树。大根堆的要求是每个节点的值都不大于其父节点的值，即A[PARENT[i]] &gt;= A[i]。在数组的非降序排序中，需要使用的就是大根堆，因为根据大根堆的要求可知，最大的值一定在堆顶。</p>
+</li>
+</ol>
+<p>算法步骤：<br>创建一个堆H[0..n-1]<br>把堆首（最大值）和堆尾互换</p>
+<ol>
+<li>把堆的尺寸缩小1，并调用shift_down(0),目的是把新的数组顶端数据调整到相应位置</li>
+<li>重复步骤2，直到堆的尺寸为1</li>
+</ol>
+<p><img src="http://ooyerqo96.bkt.clouddn.com/1170656-fc6040d719b38ba0.gif" alt="堆排序"></p>
+<ol>
+<li>归并排序<br>归并排序（Merge sort，台湾译作：合并排序）是建立在归并操作上的一种有效的排序算法。该算法是采用分治法（Divide and Conquer）的一个非常典型的应用。</li>
+</ol>
+<p>算法步骤：</p>
+<ol>
+<li>申请空间，使其大小为两个已经排序序列之和，该空间用来存放合并后的序列</li>
+<li>设定两个指针，最初位置分别为两个已经排序序列的起始位置</li>
+<li>比较两个指针所指向的元素，选择相对小的元素放入到合并空间，并移动指针到下一位置</li>
+<li>重复步骤3直到某一指针达到序列尾</li>
+<li>将另一序列剩下的所有元素直接复制到合并序列尾</li>
+</ol>
+<p><img src="http://ooyerqo96.bkt.clouddn.com/21_12410_666baa13f022bf3.gif" alt="归并排序"></p>
+<ol>
+<li>希尔排序<br>也称递减增量排序算法，是插入排序的一种高速而稳定的改进版本，先将整个待排元素序列分割成若干个子序列（由相隔某个“增量”的元素组成的）分别进行直接插入排序，然后依次缩减增量再进行排序，待整个序列中的元素基本有序（增量足够小）时，再对全体元素进行一次直接插入排序。因为直接插入排序在元素基本有序的情况下（接近最好情况），效率是很高的</li>
+</ol>
+<p><img src="http://ooyerqo96.bkt.clouddn.com/1170656-1afe3a613ae119f8.gif" alt="希尔算法"></p>
+<ol>
+<li><p>二分查找法<br>是一种在有序数组中查找某一特定元素的搜索算法。搜素过程从数组的中间元素开始，如果中间元素正好是要查找的元素，则搜素过程结束；如果某一特定元素大于或者小于中间元素，则在数组大于或小于中间元素的那一半中查找，而且跟开始一样从中间元素开始比较。如果在某一步骤数组为空，则代表找不到。这种搜索算法每一次比较都使搜索范围缩小一半。折半搜索每次把搜索区域减少一半，时间复杂度为Ο(logn) 。</p>
+</li>
+<li><p>BFPRT(线性查找算法)<br>BFPRT算法解决的问题十分经典，即从某n个元素的序列中选出第k大（第k小）的元素，通过巧妙的分析，BFPRT可以保证在最坏情况下仍为线性时间复杂度。该算法的思想与快速排序思想相似，当然，为使得算法在最坏情况下，依然能达到o(n)的时间复杂度，五位算法作者做了精妙的处理。</p>
+</li>
+</ol>
+<p>算法步骤：</p>
+<ol>
+<li>将n个元素每5个一组，分成n/5(上界)组。</li>
+<li>取出每一组的中位数，任意排序方法，比如插入排序。</li>
+<li>递归的调用selection算法查找上一步中所有中位数的中位数，设为x，偶数个中位数的情况下设定为选取中间小的一个。</li>
+<li>用x来分割数组，设小于等于x的个数为k，大于x的个数即为n-k。</li>
+<li><p>若i==k，返回x；若i<k，在小于x的元素中递归查找第i小的元素；若i>k，在大于x的元素中递归查找第i-k小的元素。<br>终止条件：n=1时，返回的即是i小元素。</k，在小于x的元素中递归查找第i小的元素；若i></p>
+</li>
+<li><p>DFS（深度优先搜索）<br>深度优先搜索算法（Depth-First-Search），是搜索算法的一种。它沿着树的深度遍历树的节点，尽可能深的搜索树的分支。当节点v的所有边都己被探寻过，搜索将回溯到发现节点v的那条边的起始节点。这一过程一直进行到已发现从源节点可达的所有节点为止。如果还存在未被发现的节点，则选择其中一个作为源节点并重复以上过程，整个进程反复进行直到所有节点都被访问为止。DFS属于盲目搜索。<br>深度优先搜索是图论中的经典算法，利用深度优先搜索算法可以产生目标图的相应拓扑排序表，利用拓扑排序表可以方便的解决很多相关的图论问题，如最大路径问题等等。一般用堆数据结构来辅助实现DFS算法。<br>深度优先遍历图算法步骤：</p>
+</li>
+<li>访问顶点v；</li>
+<li>依次从v的未被访问的邻接点出发，对图进行深度优先遍历；直至图中和v有路径相通的顶点都被访问；</li>
+<li><p>若此时图中尚有顶点未被访问，则从一个未被访问的顶点出发，重新进行深度优先遍历，直到图中所有顶点均被访问过为止。<br>上述描述可能比较抽象，举个实例：<br>DFS 在访问图中某一起始顶点 v 后，由 v 出发，访问它的任一邻接顶点 w1；再从 w1 出发，访问与 w1邻 接但还没有访问过的顶点 w2；然后再从 w2 出发，进行类似的访问，… 如此进行下去，直至到达所有的邻接顶点都被访问过的顶点 u 为止。<br>接着，退回一步，退到前一次刚访问过的顶点，看是否还有其它没有被访问的邻接顶点。如果有，则访问此顶点，之后再从此顶点出发，进行与前述类似的访问；如果没有，就再退回一步进行搜索。重复上述过程，直到连通图中所有顶点都被访问过为止。</p>
+</li>
+<li><p>BFS(广度优先搜索)<br>广度优先搜索算法（Breadth-First-Search），是一种图形搜索算法。简单的说，BFS是从根节点开始，沿着树(图)的宽度遍历树(图)的节点。如果所有节点均被访问，则算法中止。BFS同样属于盲目搜索。一般用队列数据结构来辅助实现BFS算法。</p>
+</li>
+</ol>
+<p>算法步骤：</p>
+<ol>
+<li>首先将根节点放入队列中。</li>
+<li>从队列中取出第一个节点，并检验它是否为目标。<br>如果找到目标，则结束搜寻并回传结果。<br>否则将它所有尚未检验过的直接子节点加入队列中。</li>
+<li>若队列为空，表示整张图都检查过了——亦即图中没有欲搜寻的目标。结束搜寻并回传“找不到目标”。</li>
+<li>重复步骤2。</li>
+</ol>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/12/面试题整理3/" title="iOS面试题3" itemprop="url">iOS面试题3</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-12T13:55:03.000Z" itemprop="datePublished"> 发表于 2017-05-12</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <ol>
+<li><p>http的post和get啥区别<br> 1.get是向服务器发索取数据的一种请求，而post是向服务器提交数据的一种请求<br> 2.get没有请求体，post有请求体<br> 3.get请求的数据会暴露在地址栏中，而post请求不会，所以post请求的安全性比get请求号<br> 4.get请求对url长度有限制，而post请求对url长度理论上是不会收限制的，但是实际上各个服务器会规定对post提交数据大小进行限制。</p>
+</li>
+<li><p>XMPP工作原理；xmpp系统特点<br> 1.所有从一个client到另一个client的jabber消息和数据都要通过xmpp server<br> 2.client链接到server<br> 3.server利用本地目录系统的证书对其认证<br> 4.server查找，连接并进行相互认证<br> 5.client间进行交互<br> 特点：1）客户机/服务器通信模式；2）分布式网络；3）简单的客户端；4）XML的数据格式</p>
+</li>
+<li><p>苹果内购实现流程<br> 程序通过bundle存储的plist文件得到产品标识符的列表。<br> 程序向App Store发送请求，得到产品的信息。<br> App Store返回产品信息。<br> 程序把返回的产品信息显示给用户（App的store界面）<br> 用户选择某个产品<br> 程序向App Store发送支付请求<br> App Store处理支付请求并返回交易完成信息。<br> App获取信息并提供内容给用户。</p>
+</li>
+<li><p>gcd产生死锁的原因及解锁的方法<br> 产生死锁的必要条件：1.互斥条件，2.请求与保持条件，3.不剥夺条件，4.循环等待条件。<br> 解决办法：采用异步执行block。</p>
+</li>
+<li><p>简单的说下环信的实现原理<br> 环信是一个即时通讯的服务提供商<br>环信使用的是XMPP协议，它是再XMPP的基础上进行二次开发，对服务器Openfire和客户端进行功能模型的添加和客户端SDK的封装，环信的本质还是使用XMPP，基于Socket的网络通信<br>环信内部实现了数据缓存，会把聊天记录添加到数据库，把附件（如音频文件，图片文件）下载到本地，使程序员更多时间是花到用户体验体验上。</p>
+</li>
+<li><p><strong>block和</strong>weak修饰符的区别<br> 1.<strong>block不管是ARC还是MRC模式下都可以使用，可以修饰对象，还可以修饰基本数据类型。<br> 2.</strong>weak只能在ARC模式下使用，也只能修饰对象（NSString），不能修饰基本数据类型（int）。<br> 3.<strong>block对象可以在block中被重新赋值，</strong>weak不可以。 </p>
+</li>
+<li><p>SDWebImage内部实现过程<br> 1.入口 setImageWithURL:placeholderImage:options: 会先把 placeholderImage 显示，然后 SDWebImageManager 根据 URL 开始处理图片。<br> 2.进入 SDWebImageManager-downloadWithURL:delegate:options:userInfo:，交给 SDImageCache 从缓存查找图片是否已经下载 queryDiskCacheForKey:delegate:userInfo:.<br> 3.先从内存图片缓存查找是否有图片，如果内存中已经有图片缓存，SDImageCacheDelegate 回调 imageCache:didFindImage:forKey:userInfo: 到 SDWebImageManager。<br> 4.SDWebImageManagerDelegate 回调 webImageManager:didFinishWithImage: 到 UIImageView+WebCache 等前端展示图片。<br> 5.如果内存缓存中没有，生成 NSInvocationOperation 添加到队列开始从硬盘查找图片是否已经缓存。<br> 6.根据 URLKey 在硬盘缓存目录下尝试读取图片文件。这一步是在 NSOperation 进行的操作，所以回主线程进行结果回调 notifyDelegate:。<br> 7.如果上一操作从硬盘读取到了图片，将图片添加到内存缓存中（如果空闲内存过小，会先清空内存缓存）。SDImageCacheDelegate 回调 imageCache:didFindImage:forKey:userInfo:。进而回调展示图片。<br> 8.如果从硬盘缓存目录读取不到图片，说明所有缓存都不存在该图片，需要下载图片，回调 imageCache:didNotFindImageForKey:userInfo:。<br> 9.共享或重新生成一个下载器 SDWebImageDownloader 开始下载图片。<br> 10.图片下载由 NSURLConnection 来做，实现相关 delegate 来判断图片下载中、下载完成和下载失败。<br> 11.connection:didReceiveData: 中利用 ImageIO 做了按图片下载进度加载效果。<br> 12.connectionDidFinishLoading: 数据下载完成后交给 SDWebImageDecoder 做图片解码处理。<br> 13.图片解码处理在一个 NSOperationQueue 完成，不会拖慢主线程 UI。如果有需要对下载的图片进行二次处理，最好也在这里完成，效率会好很多。<br> 14.在主线程 notifyDelegateOnMainThreadWithInfo: 宣告解码完成，imageDecoder:didFinishDecodingImage:userInfo: 回调给 SDWebImageDownloader。<br> 15.imageDownloader:didFinishWithImage: 回调给 SDWebImageManager 告知图片下载完成。<br> 16.通知所有的 downloadDelegates 下载完成，回调给需要的地方展示图片。<br> 17.将图片保存到 SDImageCache 中，内存缓存和硬盘缓存同时保存。写文件到硬盘也在以单独 NSInvocationOperation 完成，避免拖慢主线程。<br> 18.SDImageCache 在初始化的时候会注册一些消息通知，在内存警告或退到后台的时候清理内存图片缓存，应用结束的时候清理过期图片。<br> 19.SDWI 也提供了 UIButton+WebCache 和 MKAnnotationView+WebCache，方便使用。<br> 20.SDWebImagePrefetcher 可以预先下载图片，方便后续使用。</p>
+</li>
+<li><p>KVO，NSNotification，delegate及block区别<br> KVO就是cocoa框架实现的观察者模式，一般同KVC搭配使用，通过KVO可以监测一个值的变化，比如View的高度变化。是一对多的关系，一个值的变化会通知所有的观察者。<br>NSNotification是通知，也是一对多的使用场景。在某些情况下，KVO和NSNotification是一样的，都是状态变化之后告知对方。NSNotification的特点，就是需要被观察者先主动发出通知，然后观察者注册监听后再来进行响应，比KVO多了发送通知的一步，但是其优点是监听不局限于属性的变化，还可以对多种多样的状态变化进行监听，监听范围广，使用也更灵活。</p>
+<p> delegate 是代理，就是我不想做的事情交给别人做。比如狗需要吃饭，就通过delegate通知主人，主人就会给他做饭、盛饭、倒水，这些操作，这些狗都不需要关心，只需要调用delegate（代理人）就可以了，由其他类完成所需要的操作。所以delegate是一对一关系。</p>
+<p> block是delegate的另一种形式，是函数式编程的一种形式。使用场景跟delegate一样，相比delegate更灵活，而且代理的实现更直观。</p>
+<p> KVO一般的使用场景是数据，需求是数据变化，比如股票价格变化，我们一般使用KVO（观察者模式）。delegate一般的使用场景是行为，需求是需要别人帮我做一件事情，比如买卖股票，我们一般使用delegate。<br>Notification一般是进行全局通知，比如利好消息一出，通知大家去买入。delegate是强关联，就是委托和代理双方互相知道，你委托别人买股票你就需要知道经纪人，经纪人也不要知道自己的顾客。Notification是弱关联，利好消息发出，你不需要知道是谁发的也可以做出相应的反应，同理发消息的人也不需要知道接收的人也可以正常发出消息。</p>
+</li>
+</ol>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/04/25/面试题整理2/" title="面试题整理2" itemprop="url">面试题整理2</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-04-25T12:42:03.000Z" itemprop="datePublished"> 发表于 2017-04-25</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <ol>
+<li><p>volatile 有什么含义，病给出三个例子<br> 一个定义为volatile的变量是说这个变量可能被意想不到的改变，这样编译器就不会去假设这个变量的值了。精确地说编译器在用到这个变量是必须每次都小心的重新读取这个变量的值，而不是使用保存在寄存器里的备份。（多线程应用中被几个任务共享的变量）</p>
+</li>
+<li><p>static管家字的作用<br> 1.函数体内static变量的作用范围为该函数体，不同于auto变量，该变量的内存纸杯分配一次，因此其值在下次调用时仍然维持上次的值。<br> 2.在模块内static全局变量可以被模块内所有的函数访问，但不能被模块外其他函数访问。<br> 3.在模块内static函数只可能被这一模块内的其他函数调用，这个函数的使用范文被限制在声明他的模块内。<br> 4.在类中的static成员变量主语整个类所拥有，该类的所有对象只有一份拷贝。<br> 5.在类中static成员函数属于整个类所拥有，这个函数不接受this指针，因而只能范文类 的static成员变量</p>
+</li>
+<li><p>线程和进程的区别和联系<br> 进程和线程都是有操作系统所体会的程序运行的基本单元，系统利用该基本单元实现系统对用用的并发性<br> 进程和线程的主要差别再有他呢是不同的操作系统资源管理方式<br> 进程有独立的地址空间，一个进程崩溃后，在保护模式下不会对其他进程产生影响，而线程只是一个进程中不同执行路径<br> 线程有自己的堆栈和局部变量，但是线程之间没有独立的地址空间，一个线程死掉就等于整个进程死掉，所以多进程要比多线程的程序健壮，但在进程切换时，耗费资源较大，小效率要差一些。</p>
+</li>
+<li><p>http和scoket通信的区别<br> http是客户端用http协议进行请求，发送请求时候需要封装http请求头，并绑定请求的数据，服务器一般有web服务器配合（当然也非绝对）。 http请求方式为客户端主动发起请求，服务器才能给响应，一次请求完毕后则断开连接，以节省资源。服务器不能主动给客户端响应（除非采取http长连接 技术）。iphone主要使用类是NSUrlConnection。<br> scoket是客户端跟服务器直接使用socket“套接字”进行连接，并没有规定连接后断开，所以客户端和服务器可以保持连接通道，双方 都可以主动发送数据。一般在游戏开发或股票开发这种要求即时性很强并且保持发送数据量比较大的场合使用。主要使用类是CFSocketRef。</p>
+</li>
+<li><p>TCP和UDP的区别<br> TCP全称是Transmission Control Protocol，中文名为传输控制协议，它可以提供可靠的、面向连接的网络数据传递服务。传输控制协议主要包含下列任务和功能：</p>
+</li>
+</ol>
+<ul>
+<li>确保IP数据报的成功传递。</li>
+<li>对程序发送的大块数据进行分段和重组。</li>
+<li>确保正确排序及按顺序传递分段的数据。</li>
+<li>通过计算校验和，进行传输数据的完整性检查。<br>TCP提供的是面向连接的、可靠的数据流传输，而UDP提供的是非面向连接的、不可靠的数据流传输。<br>简单的说，TCP注重数据安全，而UDP数据传输快点，但安全性一般</li>
+</ul>
+<ol>
+<li>简述内存分区情况<br>代码区：存放二进制代码<br>数据区：系统运行时申请内存并初始化，系统退出时由系统释放，存放全局变量，静态变量，常量<br>堆区：通过mallOC等函数或new等操作动态申请得到，徐程序员手动申请释放<br>栈区：函数模块内申请，函数结束时有系统自动释放，存放局部变量函数参数</li>
+</ol>
+<p>7.队列和栈有什么区别<br>都是线性结构<br>队列是一种先进先出的数据结构，它在两端进行操作，一端入队一端出队<br>栈是一种先进后厨的数据结构，它只能在栈顶进行操作，入栈和出栈都在栈顶操作</p>
+<p>8.http协议中 post get区别<br>get 提交数据不安全，数据至于请求行，客户端地址栏可见<br>    提交数据大小有限<br>    方法不可以设置书签<br>post 方法提交数据安全，数据置于消息主体内，客户端不可见<br>提交数据大小没有像限制<br>可以设置书签</p>
+<p>9.iOS系统的结构<br>核心操作系统层，核心服务层，媒体层，界面服务层</p>
+<p>10.简书视图控制器的声明周期<br>Viewdidload    viewwillappear   viewdidapear  viewwilldisappear viewdiddisappear dealloc</p>
+<p>11.tableView 的重用机制<br>UITableView 通过重用单元格来达到节省内存的目的: 通过为每个单元格指定一个重用标识符(reuseIdentifier),即指定了单元格的种类,以及当单元格滚出屏幕时,允许恢复单元格以便重用.对于不同种类的单元格使用不同的ID,对于简单的表格,一个标识符就够了.</p>
+<p>12.解析XML文件有哪几种方式<br>以 DOM 方式解析 XML 文件；以 SAX 方式解析 XML 文件；</p>
+<p>13.Core Foundation中提供了哪几种操作Socket的方法<br> CFNetwork 、 CFSocket 和 BSD Socket </p>
+<p> 14.CFSocket使用有哪几个步骤<br> 创建 Socket 的上下文；创建 Socket ；配置要访问的服务器信息；封装服务器信息；连接服务器；</p>
+<p> 15.有哪几种手势通知方法、写清楚方法名？<br>-(void)touchesBegan:(NSSet<em> )touchedwithEvent:(UIEvent</em> )event;<br>-(void)touchesMoved:(NSSet<em> )touched withEvent:(UIEvent</em> )event;<br>-(void)touchesEnded:(NSSet<em> )touchedwithEvent:(UIEvent</em> )event;<br>-(void)touchesCanceled:(NSSet<em> )touchedwithEvent:(UIEvent</em>)event;</p>
+<p>16.Quatrz 2D的绘图功能的三个核心概念是什么并简述其作用。<br>上下文：主要用于描述图形写入哪里；<br>路径：是在图层上绘制的内容；<br>状态：用于保存配置变换的值、填充和轮廓， alpha 值等。</p>
+<p>17.uiview calayer 关系<br>每个 UIView 内部都有一个 CALayer 在背后提供内容的绘制和显示，并且 UIView 的尺寸样式都由内部的 Layer 所提供。两者都有树状层级结构，layer 内部有 SubLayers，View 内部有 SubViews.但是 Layer 比 View 多了个AnchorPoint<br>在 View显示的时候，UIView 做为 Layer 的 CALayerDelegate,View 的显示内容由内部的 CALayer 的 display<br>CALayer 是默认修改属性支持隐式动画的，在给 UIView 的 Layer 做动画的时候，View 作为 Layer 的代理，Layer 通过 actionForLayer:forKey:向 View请求相应的 action(动画行为)<br>layer 内部维护着三分 layer tree,分别是 presentLayer Tree(动画树),modeLayer Tree(模型树), Render Tree (渲染树),在做 iOS动画的时候，我们修改动画的属性，在动画的其实是 Layer 的 presentLayer的属性值,而最终展示在界面上的其实是提供 View的modelLayer<br>两者最明显的区别是 View可以接受并处理事件，而 Layer 不可以</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/04/23/面试题整理/" title="面试题整理1" itemprop="url">面试题整理1</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-04-23T14:42:03.000Z" itemprop="datePublished"> 发表于 2017-04-23</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>1.Object-c的类可以多重继承么?可以实现多个接口么?Category是什么?重写一个类的方式用继承好还是分类好?为什么?<br>OC类不可以多重继承，可以实现多个接口，通过实现多个接口可以完成C++的多重继承，Category是类别，一般情况下用分类好，用Category去重写类的方法，仅对本类有效，不会影响到其他类与原有类的关系<br>2.#import 跟#include 又什么区别，@class呢, #import&lt;&gt; 跟 #import””又什么区别?   </p>
+<p> #import是OC导入头文件的关键字，#include是C/C++导入头文件的关键字，使用#import头文件会自动自导入一次，不会重复导入。<br> @class告诉编译器某个类的声明，当执行时才去查看类的实现文件，可以解决头文件的相互包含</p>
+<p> #import&lt;&gt; 用来包含系统的头文件，#import”” 用来包含用户的头文件。<br>3.属性readWrite、readonly、assign、retain、copy、nonatomic各是什么作用，在那种情况下使用<br>readwrite 是可读可写特性，需要生成getter.setter方法时使用<br>readonly 是只读属性，置灰生成getter方法，不会生成setter方法，不希望属性在类外改变时使用<br>assign是赋值特性，setter方法将传入参数赋值给实例变量，仅设置变量时使用<br>copy 赋值特性，setter方法将传入对象赋值一份，需要完全一份新的变量时使用<br>retain 表示特有属性，setter方法传入参数先保留再赋值，传入参数的retaincount会+1<br>nonatomic 非院子操作，决定编译器生成的setter getter是否是院子操作，atomic表示多线程安全，一般使用nonatomic<br>4.写一个setter方法 用于完成 @property （nonatomic,retain） Nssstring <em>name ,写一个setter方法用于完成 @property （nonatomic,copy） NSString </em>name   </p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- (void) setName:(NSString*) str   </div><div class="line">&#123;   </div><div class="line">    name = str;   </div><div class="line">&#125;   </div><div class="line">- (void) setName:(NSString*) str   </div><div class="line">&#123;   </div><div class="line">    id t = [str copy];   </div><div class="line">    name = t;   </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</code></pre><p>5.对于语句 NSString *obj = [[NSData alloc] init] obj 在编译和运行时分别是什么类型的对象？<br>编译时时NSString 类型的，运行时是NSData类型的<br>6.常见Obj-C的数据类型有哪些，和C的基本类型有什么区别?<br>常见Objective-C数据类型有：NSString、NSNumber、NSArray、NSMutabkeArray、NSData、NSDictionary等，这些都是class，创建后便是对象，而C语言的基本类型int 只是一定字节的内存空间，用于存放数值，NSInteger是基本数据类型，并不是NSNumber的子类，当然也不是NSObjective-C的子类。NSIneger是基本数据类型int或long的别名，区别在于NSIntger会根据系统是32位还是64位来决定本身是int还是long.  </p>
+<p>7.id 声明的对象有什么特性<br>id声明的对象具有运行时特性，即可以指向任意类型的object-C 的对象   </p>
+<p>8.原子（atomic）跟非原子nonatomic 属性有什么区别<br>atomic 提供线程安全，是防止在未完成的时候被另外一个线程读取，造成数据错误<br>nonatomic 在自己管理内存环境中，解析的访问器保留并自动释放返回的值，如果指定了nonatmic,那么访问器只是简单的返回这个值。   </p>
+<p>9.类别的作用？继承和类别在实现中有何区别？<br>category 可以在不改变原来代码的情况下往里面添加新的方法，只能添加，不能修改删除，并且如果类别和原来类中的方法产生名冲突，则类别将覆盖原来的方法，因为 类别具有更高的优先级<br>类别的三个主要作用：</p>
+<blockquote>
+<p>将类的实现分散到多个不同文件或者多个不同的框架中<br>创建私有方法的前向引用<br>想对象添加非正式协议<br>继承可以 增加修改或者删除方法，并且可以增加属性   </p>
+</blockquote>
+<p>10.类别和扩展的区别<br>extension 可以添加属性，并且添加的方法必须实现，扩展可以看成一个私有的类</p>
+<p>11.什么事KVO KVC<br>KVC 键-值编码，简介访问对象的属性，使用字符串来标识属性，而不是通过调用存取的方法，直接或通过实例变量访问的机制<br>“当通过KVC调用对象时，比如：[self valueForKey:@”someKey”]时，程序会自动试图通过几种不同的方式解析这个调用。首先查找对象是否带有 someKey 这个方法，如果没找到，会继续查找对象是否带有someKey这个实例变量(iVar)，如果还没有找到，程序会继续试图调用 -(id) valueForUndefinedKey:这个方法。如果这个方法还是没有被实现的话，程序会抛出一个NSUndefinedKeyException异常错误。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[self valueforKey:@&quot;someKey&quot;]</div></pre></td></tr></table></figure></p>
+<p>KVO 键值观察机制，他提供了观察某一属性变化的方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[self addobderver:self forKey:@&quot;highlight&quot; option:0 context:nil]   </div><div class="line">-(void) observerValueForKeyPath:(NSString) keyPath ofObject:(id)object chage:(NSDictionary) chage context:(void *)context</div></pre></td></tr></table></figure></p>
+<p>12.代理的作用?<br>代理的目的是改变或传递控制链，允许一个类在某些特定的时刻通知到其他类，而不需要获取到哪些类的指针，可以减少框架的复杂度，另外一点代理可以理解为java中回调监听机制的一种类似。</p>
+<p>13.可修改不可修改<br>可修改是不可修改的合集，前者在舒适化后的内存空间就是固定不变的，后者是可以添加的，可以动态申请新的内存空间</p>
+<p>14.OC的动态运行时语言是什么意思<br>多态，主要是将数据类型的确定由编译时推迟到运行时。这个问题涉及到两个概念，运行时和多态，简单的来说，运行时机制使我们直到运行时才能去决定一个对象的类别，以及调用该类别对象制定方法‘多态：不同对象以自己的方式相应相同的消息的能力叫做多态。运行时机制是多态的基础。</p>
+<p>15.通知和协议的不同之处<br>协议有控制链的关系，通知没有<br>通知可以一对多，一条消息可以发送给多个消息接受者。<br>代理不能一对多<br>控制链 has-a 单一拥有，和可控制的对应关系 </p>
+<p>16.对于单例的理解<br>在objective-c中要实现一个单例类，至少需要做以下四个步骤：<br>1).为单例对象实现一个静态实例，并初始化，然后设置成nil，<br>2).实现一个实例构造方法检查上面声明的静态实例是否为nil，如果是则新建并返回一个本类的实例，<br>3).重写allocWithZone方法，用来保证其他人直接使用alloc和init试图获得一个新实力的时候不产生一个新实例，<br>4).适当实现allocWitheZone，copyWithZone，release和autorelease。</p>
+<p>17.响应链<br>事件响应链，包括点击事件，画面刷新事件，在视图栈内从上之下或者从下至上传播。   </p>
+<p>18.方法和选择器有何不同<br>selector只是一个方法的名字，method是一个组合体，包含了名字和实现。</p>
+<p>19.延迟加载<br>懒汉模式：只在用到的时候才去初始化，岩石<br>一个延时加载避免内存过高，一个异步加载避免线程阻塞</p>
+<p>20.类NSObject的哪些方法经常被使用<br>NSObject是OC的基类，其由NSObject类及一系列协议构成<br>其中类方法alloc、class、description、 对象方法：init、的allOC、performSelector 等经常被使用。</p>
+<p>21.什么是简便构造方法<br>简便构造方法一般是由CocoaTouch框架提供，如NSNumber的numberWithBOOL： numberWithChar： Foundation下大部分类均有简便狗仔方法，我们可以通过简便构造方法获取息通给我们创建好的对象，并不需要手动释放。</p>
+<p>22.UIView的动画效果有哪些<br>UIViewAnimationOptionCurveEaseInOut UIViewAnimationOptionCurveEaseIn UIViewAnimationOptionCurveEaseOut UIViewAnimationOptionTransitionFlipFromLeft UIViewAnimationOptionTransitionFlipFromRight UIViewAnimationOptionTransitionCurlUpUIViewAnimationOptionTransitionCurlDown</p>
+<p>23.在iPhone应用中如何保存数据</p>
+<ol>
+<li>通过web服务，保存在服务器上。</li>
+<li>通过NSCoder固话机制，将对象保存在文件中</li>
+<li>通过SQLIT额或者coreData保存在文件数据库中</li>
+</ol>
+<p>24.谓词<br>The NSPredicate class is used to define logical conditions used to constrain a search either for a fetch or for in-memory filtering.<br>NSPredicate类是用来定义逻辑条件约束的获取或内存中的过滤搜索</p>
+<p>25.iOS 中的多线程<br>多线程，是Cocoa框架下的多线程，通过Cocoa的封装，可以让我们更为方便的使用线程，做过C++的同学可能会对线程有更多的理解，比如线程的创立，信号量、共享变量有认识，Cocoa框架下会方便很多，它对线程做了封装，有些封装，可以让我们创建的对象，本身便拥有线程，也就是线程的对象化抽象，从而减少我们的工程，提供程序的健壮性。</p>
+<p>GCD是(Grand Central Dispatch)的缩写 ，从系统级别提供的一个易用地多线程类库，具有运行时的特点，能充分利用多核心硬件。GCD的API接口为C语言的函数，函数参数中多数有Block，关于Block的使用参看这里，为我们提供强大的“接口”，对于GCD的使用参见本文</p>
+<p>NSOperation与Queue<br>NSOperation是一个抽象类，它封装了线程的细节实现，我们可以通过子类化该对象，加上NSQueue来同面向对象的思维，管理多线程程序。具体可参看这里：一个基于NSOperation的多线程网络访问的项目。</p>
+<p>NSThread<br>NSThread是一个控制线程执行的对象，它不如NSOperation抽象，通过它我们可以方便的得到一个线程，并控制它。但NSThread的线程之间的并发控制，是需要我们自己来控制的，可以通过NSCondition实现。<br>参看 iOS多线程编程之NSThread的使用<br>其他多线程<br>在Cocoa的框架下，通知、Timer和异步函数等都有使用多线程，(待补充).</p>
+<p>26。项目中什么时候使用GCD什么时候使用NSOpration<br>NSOpetaion的优点是对线程的高度抽象，在项目中使用它回事项目的程序节后更好，自泪花NSOptaion的设计思路，是具有棉线谷底想的优点，是的实现是多线程支持，而节后简单，建议在复杂项目中使用。<br>GCD本身简单易用，对于不复杂的多线程操作，会节省代码量，而Block参数的使用会使代码更为一度，建议在简单项目中使用</p>
+<p>27.什么是Block，BLock的实现原理<br>Block:我们称之为代码块，他类似于一个方法，而每一个方法都是在被调用的时候从硬盘到内存，然后去执行，执行完就消失， 方法的内存不需要我们管理，方法的内存在栈区，Block不想OC的类对象（在堆区），他也是在栈区的，如果我们使用Block作为一个对象的属性，我们会使用copy修饰她，因为他在栈区，我们没办法控制塔的消亡，当我们用copy修饰的时候，息通会把Block的实现拷贝一份到堆区，这样我们对应的属性就拥有该Block的所有权，就可以保证代码块不会提前消亡。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">typedef void(^MyBlock)(void);//block写法比较特殊，一般重命名一下    </div><div class="line">@interface LBS_A_ViewController ()   </div><div class="line">@property (nonatomic,copy)MyBlock block;//定义一个MyBlock属性   </div><div class="line">@end   </div><div class="line">@implementation LBS_A_ViewController    </div><div class="line">-(void)viewDidLoad &#123;   </div><div class="line">     [super viewDidLoad];   </div><div class="line">    //实现一个block 这个block实现代码是在栈区的，也就是说，当viewDidLoad这个方法执行完之后，block就消失了。   </div><div class="line">    void(^block)(void) = ^&#123;   </div><div class="line">        NSLog(@&quot;block的简单使用&quot;);   </div><div class="line">    &#125;;   </div><div class="line">    //赋值给属性_block 此时就完成了copy _block指针指向堆中一块内存(存放的是block的实现代码)，_block就一直拥有了代码块的使用权，直到 LBS_A_ViewCont         roller对象消亡。</div><div class="line">   _block = block;</div></pre></td></tr></table></figure></p>
+<p>28.C 和OC怎么混用<br>OC的编译器处理后缀为.m的文件时，可以识别OC、C的代码，处理.mm的文件时会识别OC、C、C++代码（.cpp文件只能编译C++），OC混编cpp不是问题，只要cpp文件和cpp unclude 的文件中不包含OC的东西就可以使用<br>29.OC中堆栈的区别<br> （1） 管理方式：栈是由编译器自动管理，堆释放工作是由程序员来控制的，容易产生内存泄漏<br> （2） 申请大小：栈是想低地址扩展的数据结构，是一块儿连续的内存区域，也就是说栈顶的地址和栈的最大容量是息通预先设定好的。堆是想高地址扩展的数据结构，是不连续的内存区域。这是由与系统实用链表来存储的空闲内存地址的，自然是不连续的，儿链表的遍历放心啊更是有低地址想高地址。堆的大小受限于计算机系统中的有效虚拟内存。<br>  （3）碎片问题：对于对来讲，频繁的创建释放造成空间的不连续从而造成大量的碎片，使圣墟效率降低。栈不会存在这个问题。<br>  （4）分配方式：栈是机器系统提供的数据结构，计算机会分配专门的寄存器存放栈的地址，压栈出站都有专门的指令执行，这就决定了栈的效率比较高。堆是由C/C++函数库提供的，他的机制很复杂</p>
+<p>30.关键字const有什么含意？修饰类呢?static的作用,用于类呢?还有extern c的作用<br>const 意味着”只读”，下面的声明都是什么意思？<br>const int a;<br>int const a;<br>const int <em> a;<br>int </em> const a;<br>int?const * a const;<br>前两个的作用是一样，a是一个常整型数。<br>第三个意味着a是一个指向常整型数的指针（也就是，整型数是不可修改的，但指针可以）。<br>第四个意思a是一个指向整型数的常指针（也就是说，指针指向的整型数是可以修改的，但指针是不可修改的）。<br>最后一个意味着a是一个指向常整型数的常指针（也就是说，指针指向的整型数是不可修改的，同时指针也是不可修改的）。<br>1).欲阻止一个变量被改变，可以使用 const 关键字。在定义该 const 变量时，通常需要对它进行初<br>始化，因为以后就没有机会再去改变它了；<br>2).对指针来说，可以指定指针本身为 const，也可以指定指针所指的数据为 const，或二者同时指<br>定为 const；<br>3).在一个函数声明中，const 可以修饰形参，表明它是一个输入参数，在函数内部不能改变其值；<br>4).对于类的成员函数，若指定其为 const 类型，则表明其是一个常函数，不能修改类的成员变量；<br>5).对于类的成员函数，有时候必须指定其返回值为 const 类型，以使得其返回值不为“左值”。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/04/20/APNs推送/" title="APNs推送详解" itemprop="url">APNs推送详解</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-04-20T12:42:03.000Z" itemprop="datePublished"> 发表于 2017-04-20</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h3 id="什么是APNs消息推送"><a href="#什么是APNs消息推送" class="headerlink" title="什么是APNs消息推送"></a>什么是APNs消息推送</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">APNs: Apple Push Notification Service的缩写,是苹果的服务器</div><div class="line">平时用的最多的第三方推送：极光推送原理与iOS原生推送差不多。</div></pre></td></tr></table></figure>
+<h3 id="推送步骤"><a href="#推送步骤" class="headerlink" title="推送步骤"></a>推送步骤</h3><p>1、注册：为应用程序申请消息推送服务。此时你的设备会向APNs服务器发送注册请求。<br>2、APNs服务器接受请求，并将deviceToken返给你设备上的应用程序<br>3、客户端应用程序将deviceToken发送给后台服务器程序，后台接收并储存。<br>4、后台服务器向APNs服务器发送推送消息<br>5、APNs服务器将消息发给deviceToken对应设备上的应用程序</p>
+<p><img src="http://ooyerqo96.bkt.clouddn.com/1340708-47499ef73a24d52f.png" alt="priceple -400"></p>
+<h3 id="推送流程"><a href="#推送流程" class="headerlink" title="推送流程"></a>推送流程</h3><blockquote>
+<p>阶段一<br>    1.app向APNs注册该device。 </p>
+<pre><code>2. APNs返回device token给app。 
+3. app将device token 传给app服务端，由服务端保存。
+</code></pre><p>阶段2<br>    1.device和APNs建立长连接。<br>    2.app服务端将device token + 消息打包发给APNs。<br>    3.APNs将消息发送给divice。</p>
+</blockquote>
+<h3 id="客户端操作"><a href="#客户端操作" class="headerlink" title="客户端操作"></a>客户端操作</h3><p>1.注册“通知设置” 允许你的应用在设备上开启通知<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions &#123;</div><div class="line">    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge categories:nil];</div><div class="line">    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];</div><div class="line">    return YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>2.收到“通知设置”的回调，给你的设备注册远程通知<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings &#123;</div><div class="line">    if (notificationSettings.types != UIUserNotificationTypeNone) &#123;</div><div class="line">        [application registerForRemoteNotifications];</div><div class="line">    &#125; else &#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>3.收到注册远程通知的回调，成功将deviceToken发送给app服务器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken &#123;</div><div class="line">    [self sendToProviderWithDiviceToken:deviceToken];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error &#123;</div><div class="line">    NSLog(@&quot;#error in registration:%@&quot;, error);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>4.服务器发送通知点开以后启用一下回调<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">- (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo &#123;</div><div class="line">    NSDictionary *apsInfo = [userInfo objectForKey:@&quot;aps&quot;];</div><div class="line"></div><div class="line">    NSString *alert = [apsInfo objectForKey:@&quot;alert&quot;];</div><div class="line">    NSLog(@&quot;Received Push Alert: %@&quot;, alert);</div><div class="line"></div><div class="line">    NSString *sound = [apsInfo objectForKey:@&quot;sound&quot;];</div><div class="line">    NSLog(@&quot;Received Push Sound: %@&quot;, sound);</div><div class="line"></div><div class="line">    NSString *badge = [apsInfo objectForKey:@&quot;badge&quot;];</div><div class="line">    NSLog(@&quot;Received Push Badge: %@&quot;, badge);</div><div class="line">    application.applicationIconBadgeNumber = [[apsInfo objectForKey:@&quot;badge&quot;] integerValue];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>消息json格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">　　&quot;aps&quot; :</div><div class="line">           &#123; &quot;alert&quot; :</div><div class="line">                      &#123;</div><div class="line">                        &quot;action-loc-key&quot; : &quot;显示&quot; ,</div><div class="line">                        &quot;body&quot; : &quot;This is the alert text&quot;</div><div class="line">                       &#125;,</div><div class="line">             &quot;badge&quot; : 1,</div><div class="line">             &quot;sound&quot; : &quot;default&quot; &#125;,</div><div class="line">　　&quot;server&quot; : &#123; &quot;serverId&quot; : 1, &quot;name&quot; : &quot;Server name&quot;&#125;</div><div class="line">　　&#125;</div></pre></td></tr></table></figure></p>
+<p>之前项目都用到了一直懒得整理，现在借鉴DevYuan的博客重新梳理一下，慢慢再往上添加修改内容，每天进步一点点！</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/04/05/urlschema/" title="urlschema" itemprop="url">urlschema</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-04-05T13:16:07.000Z" itemprop="datePublished"> 发表于 2017-04-05</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h3 id="什么是URLSchema"><a href="#什么是URLSchema" class="headerlink" title="什么是URLSchema"></a>什么是URLSchema</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">urlSchema是为方便app之间互相调用而设计的。你可以通过一个类似URL的链接，通过系统的OpenURl来打开该app，并可以传递一些参数。每个URL必须能唯一标识一个APP，如果你设置的URL与别的APP的URL冲突，此时，你的APP不一定会被调用起来，原因是当APP在安装的时候就已经在系统里面注册了此APP的URL Scheme，如果你的一致但是是后安装的，那么系统不会调用你的APP，因为你的APP设置的URL scheme被覆盖了。</div></pre></td></tr></table></figure>
+<h3 id="URLSchema有什么作用"><a href="#URLSchema有什么作用" class="headerlink" title="URLSchema有什么作用"></a>URLSchema有什么作用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">大家知道在IOS系统里面APP之间是相互隔离的，IOS系统里面完成类似于三方功能如支付、搜索跳转、导航等等跨APP的功能，苹果就使用了URL Scheme来实现了这个功能。通过各个APP设计的符合苹果的统一规范的URL Scheme，系统就会自动去调用相关的APP来完成你的请求。</div><div class="line"></div><div class="line">比如：我们的APP需要使用支付宝的三方支付功能、我的APP需要使用微信分享好的文章，那么此时就可以通过URL Scheme来传递这些数据到支付宝APP或者微信APP，系统会通过这些APP的URL Scheme来调起这些APP，完成你所需要做的跨APP的功能。</div></pre></td></tr></table></figure>
+<h3 id="怎么使用URLSchema"><a href="#怎么使用URLSchema" class="headerlink" title="怎么使用URLSchema"></a>怎么使用URLSchema</h3><p><img src="http://ooyerqo96.bkt.clouddn.com/2026235-e01c4d5915a9e024.png" alt="princeple -w400"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">1. 配置你的APP 要为 iOS 程序添加自定义协议的支持是一件很方便的事，只需要在程序的 Info.plist 添加一个 URL types 节点就可以了。在这个节点里，可以设置这个程序所支持的自定义协议名称，像 http、ftp 这种，一般我们可以设置为程序英文名称，像淘宝客户端中就设置了 taobao，这样 taobao:// 这个形式的 URL 就会关联到淘宝客户端的 App。</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">2.其次 处理使用你的URL Scheme来调起你的APP的请求 如果你的APP为TestB，如果处理成功的Scheme如包含了TestBAPP://callsuccess，那么说明你调用其他的APP成功了。如果不是，那么说明是别的APP如TestAAPP调用了你的APP，此时在你的APPDelegate里面添加如下函数以及实现处理，这里是直接返回告诉TestAAPP调用成功的标识TestAAPP://callsuccess：</div><div class="line"></div><div class="line">- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url  </div><div class="line">&#123;  </div><div class="line">// Do something with the url here  </div><div class="line">if (!url)  </div><div class="line">&#123;  </div><div class="line">return NO;  </div><div class="line">&#125;  </div><div class="line">NSString *handleUrl = [url absoluteString];  </div><div class="line">if ([handleUrl isEqualToString:@&quot;TestBApp://callsuccess&quot;]) &#123;  </div><div class="line">return YES;  </div><div class="line">&#125;else&#123;  </div><div class="line">NSString *urlstr = @&quot;TestAAPP:/com.baidu.sidepath.TestA&amp;_callback=TestAApp://callsuccess&quot;;  </div><div class="line">NSURL *handlbackeUrl = [NSURL URLWithString:urlstr];  </div><div class="line">[[UIApplication sharedApplication] openURL:handlbackeUrl];</div></pre></td></tr></table></figure>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/03/29/直播原理/" title="直播 浅析" itemprop="url">直播 浅析</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-03-29T11:11:07.000Z" itemprop="datePublished"> 发表于 2017-03-29</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>##直播原理<br><img src="http://ooyerqo96.bkt.clouddn.com/1478828600861735.png" alt="princeple -w400"></p>
+<p>主要步骤：</p>
+<p>###音视频采集<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">音视频采集, 网上也有很多大神些的技术博客, demo 等, 我这里边只针对iOS 原声的来介绍以下</div><div class="line">利用AVFoundation框架, 进行音视频采集</div><div class="line">AVCaptureSession // 音视频录制期间管理者 </div><div class="line">AVCaptureDevice // 设备管理者, (用来操作所闪光灯, 聚焦, 摄像头切换等)</div><div class="line">AVCaptureDeviceInput // 音视频输入数据的管理对象</div><div class="line">AVCaptureVideoDataOutput // 视频输出数据的管理者</div><div class="line">AVCaptureAudioDataOutput // 音频输出数据的管理者</div><div class="line">AVCaptureVideoPreviewLayer // 用来展示视频的图像</div><div class="line">注意, 必须要设置音视频输出对象的代理方法, 然后在代理方法中获取sampleBuffer, 然后判断captureOutput是音频还是视频, 来进行音视频数据相应的编码</div><div class="line">- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection &#123;</div><div class="line">&#125;</div><div class="line">也可以利用GPUImageVideoCamera 来进行视频数据的采集获取, 可以利用GPUImage 进行美颜, 添加水印, 人脸识别等</div></pre></td></tr></table></figure></p>
+<h3 id="流媒体"><a href="#流媒体" class="headerlink" title="流媒体"></a>流媒体</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">流媒体是指采用流式传输的方式在网上播放的媒体格式, 是边传边播的媒体，是多媒体的一种!</div><div class="line">然后就是大家需要了解的几个关键词</div><div class="line">帧:视频是由很多连续图像组成, 每一帧就代表一幅静止的图像</div><div class="line">GOP:（Group of Pictures）画面组，一个GOP就是一组连续的画面，每个画面都是一帧，GOP就是很多帧的集合!</div><div class="line">帧的分类:I帧、P帧、B帧</div><div class="line">为了提高压缩比例，降低视频文件的大小，在针对连续动态图像编码时，一般会将连续若干幅图像编码为P、B、I三种帧类型</div><div class="line">I帧:一组连续画面(GOP)的第一个帧, I帧采用帧内压缩法(也成关键帧压缩法), I帧的压缩不依靠与其他帧, 靠尽可能去除图像空间冗余信息来压缩的, 可以单独作为图像!</div><div class="line"></div><div class="line">P帧:预测帧(也叫前向参考帧), P帧的压缩依赖于前一帧, 通过充分降低与图像序列中前面已编码帧的时间冗余信息来压缩传输数据量的编码图像!</div><div class="line"></div><div class="line">B帧:也叫双向预测帧, 当把一帧压缩成B帧时，它根据邻近的前几帧、本帧以及后几帧数据的不同点来压缩本帧，也即仅记录本帧与前后帧的差值。</div><div class="line"></div><div class="line">帧率:就是在1秒钟时间里传输的图片的帧数，也可以理解为图形处理器每秒钟能够刷新几次，通常用FPS表示, 每秒钟帧数 (fps) 愈多，所显示的动作就会愈流畅!</div><div class="line"></div><div class="line">码率: 也成为比特率, 是指每秒传送的比特(bit)数, 比特率越高，传送数据速度越快, 单位为 bps(Bit Per Second)。</div></pre></td></tr></table></figure>
+<p>###音视频编解码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">音视频编解码, 说白了就是对音视频数据进行压缩, 减少数据对空间的占用, 便于网络传输, 存储和使用!</div><div class="line">目前直播常用的音视频编解码方式是h.264/AVC, AAC/MP3</div><div class="line">硬软编解码的区别:</div><div class="line">硬解码：由显卡核心GPU来对高清视频进行解码工作，CPU占用率很低，画质效果比软解码略差一点，需要对播放器进行设置。</div><div class="line">　　优点：播放流畅、低功耗</div><div class="line">　　缺点：受视频格式限制、功耗大、画质没有软解码好</div><div class="line"></div><div class="line">软解码：由CPU负责解码进行播放</div><div class="line">　　优点：不受视频格式限制、画质略好于硬解</div><div class="line">　　缺点：会占用过高的资源、对于高清视频可能没有硬解码流畅(主要看CPU的能力)</div><div class="line"></div><div class="line">苹果API有提供音视频硬编解码接口, 但只针对iOS8.0以上版本!</div><div class="line">利用VideoToolbox 和AudioToolbox 这连个框架进行音视频的硬编码! </div><div class="line">这里附上前辈们的关于VideoToolbox使用的简书, http://www.jianshu.com/p/6dfe49b5dab8</div><div class="line">和AudioToolbox的技术简书http://www.jianshu.com/p/a671f5b17fc1</div></pre></td></tr></table></figure></p>
+<h3 id="流媒体数据封装"><a href="#流媒体数据封装" class="headerlink" title="流媒体数据封装"></a>流媒体数据封装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">TS: 是流媒体封装格式的一种，流媒体封装的好处就是不需要加载索引再播放，大大降低了首次载入的延迟,两个TS片段可以无缝拼接，播放器能连续播放!</div><div class="line">FLV: 也是一种流媒体的封装格式,但他形成的文件极小、加载速度极快，使得网络观看视频文件成为可能,因此FLV格式成为了当今主流视频格式</div></pre></td></tr></table></figure>
+<h3 id="RTMP推流"><a href="#RTMP推流" class="headerlink" title="RTMP推流"></a>RTMP推流</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">RTMP协议是基于TCP/IP 的协议簇;RTMP(Real Time Messaging Protocol)实时消息传送协议是Adobe Systems公司为Flash播放器和服务器之间音频、视频和数据传输 开发的开放协议</div><div class="line">它有多种变种：</div><div class="line">a, RTMP工作在TCP之上，默认使用端口1935；</div><div class="line">b, RTMPE在RTMP的基础上增加了加密功能；</div><div class="line">c, RTMPT封装在HTTP请求之上，可穿透防火墙；</div><div class="line">d, RTMPS类似RTMPT，增加了TLS/SSL的安全功能；</div><div class="line">它是一个互联网TCP/IP体系结构中应用层的协议。RTMP协议中基本的数据单元称为消息（Message）。当RTMP协议在互联网中传输数据的时候，消息会被拆分成更小的单元，称为消息块（Chunk）。RTMP传输媒体数据的过程中，发送端首先把媒体数据封装成消息，然后把消息分割成消息块，最后将分割后的消息块通过TCP协议发送出去。接收端在通过TCP协议收到数据后，首先把消息块重新组合成消息，然后通过对消息进行解封装处理就可以恢复出媒体数据。</div><div class="line">播放一个RTMP协议的流媒体需要经过以下几个步骤：握手，建立连接，建立流，播放。</div><div class="line">demo中RTMP协议推流, 用的是librtmp-iOS框架! 参考https://my.oschina.net/jerikc/blog/501948</div></pre></td></tr></table></figure>
+<p>###集成播放器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">IJKPlayer 是一个基于 ffplay 的轻量级 Android/iOS 视频播放器。API 易于集成；编译配置可裁剪，方便控制安装包大小；支持 硬件加速解码，更加省电。而DanmakuFlameMaster(开源弹幕框架) 架构清晰，简单易用，支持多种高效率绘制方式选择，支持多种自定义功能设置!</div></pre></td></tr></table></figure></p>
+<p>本文参照 <a href="http://www.cnblogs.com/Unclefeng/p/6363152.html" target="_blank" rel="external">Unclefeng的博客</a></p>
+<p>#####直播请参照简书 <a href="http://www.jianshu.com/p/bd42bacbe4cc" target="_blank" rel="external">袁峥iOS直播</a></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/03/26/runloop/" title="runloop 研究" itemprop="url">runloop 研究</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-03-26T11:11:07.000Z" itemprop="datePublished"> 发表于 2017-03-26</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h2 id="runloop概念"><a href="#runloop概念" class="headerlink" title="runloop概念"></a>runloop概念</h2><pre><code>RunLoop是系统中和线程相关的基础架构的组成部分( 和线程相关 )，一个RunLoop是一个事件处理环，系统利用这个事件处理环来安排事务，协调输入的各种事件。当一个iOS应用启动后，如果我们不做任何交互操作，那么该应用默认不会做任何响应，一旦我们触摸了屏幕，或者点击了某个按钮，程序就会立即做出相应的响应，给我们的操作一个反馈。就好像这个应用处于一个时刻准备着的状态，有事要做的时候，它就会马上做。没有事要做的时候，它就等待一样。应用的这一点全是靠RunLoop机制来实现的。RunLoop从字面理解可以把它看做一个运行循环，而且它会事件相关联，所有这里我们也暂时把它当做一个事件运行循环。
+
+苹果官方为我们提供了两个这样的运行循环对象：NSRunLoop 和 CFRunLoopRef。CFRunLoopRef 是在 CoreFoundation 框架内的，它提供了纯 C 函数的 API，所有这些 API 都是线程安全的。NSRunLoop 是基于 CFRunLoopRef 的封装，提供了面向对象的 API，但是这些 API 不是线程安全的。下面结合这两个对象来介绍运行循环
+</code></pre><p>RunLoop机制是用来分发和处理事件的，那么我们来看看RunLoop能处理的事件类型：输入源（input source）和定时源（timer source）<br>输入源（input source）：传递异步事件，消息通常来自于其他线程，处理其他线程的消息，如下载操作执行完毕，要回到主线程中更新UI，这些异步事件就是由RunLoop来监听和管理的。<br>定时源（timer source）：传递同步事件，发生在特定时间，或者时间间隔，如定时检查UI界面上有没有刷新事件、点击事件等等，也就是处理本线程上的事件。</p>
+<pre><code> RunLoop只有在一定的模式下才会运行，就是说要想启动RunLoop就要指定其运行的模式。系统已经提供了RunLoop运行的5种模式，如下：
+NSDefaultRunLoopMode：是RunLoop默认的模式，表示程序空闲。如果我们用NSTimer来每秒打印输出的时候，一旦有手势操作（如滑动、滚动等操作），那么NSTimer就会停止执行。
+UITrackingRunLoopMode：跟踪模式（是UIScrollView专用模式）。上面提到的NSTimer例子，一旦有滚动等操作，RunLoop就会自动从NSDefaultRunLoopMode模式切换到UITrackingRunLoopMode模式，目的就是为了保证滚动的流畅性，给用户提供流畅的体验。
+NSRunLoopCommonMode：这种模式会包含以上两种模式。我们执行滑动操作的同时，NSTimer会始终调用方法来执行打印，但是，一旦所调用的方法中有耗时的操作时，效果就会卡顿。所有在实际开发中，不建议使用该模式。但是，有的需求就是又要有耗时操作又要保证流畅。解决办法就是将耗时操作放到子线程中（子线程RunLoop需要手动启动：CFRunLoopRun(),CFRunLoopStop(CFRunLoopCurrent())停止循环）。
+UIInitializationRunLoopMode：在程序刚启动的时进入该模式，启动完就不在使用。
+GSEventReceiveRunLoopMode：接受系统事件的内部mode，通常用不到。
+</code></pre><h2 id="RunLoop总结："><a href="#RunLoop总结：" class="headerlink" title="RunLoop总结："></a>RunLoop总结：</h2><p>RunLoop是iOS事件响应与任务处理最核心的机制，它贯穿iOS整个系统。<br>RunLoop是一种事件运行循环机制，是保持应用程序持续运行的一种机制。正是由于该机制的存在，应用程序才能在没有事件发生的时候处于休眠状态，有事件发生的时候处于工作状态。以此来节约CPU资源。这也是它的一大特点。<br>NSRunLoop是Cocoa框架中的类，与之对应的，在Core Foundation中是CFRunLoopRef类。两者的区别是前者不是线程安全的，后者是线程安全的，且两者可以相互转化。<br>RunLoop和线程的关系：<br>RunLoop是用来管理线程的，每个线程对应一个RunLoop对象。我们不可以去创建当前线程的RunLoop对象，但是我们可以去获取当前线程的RunLoop。RunLoop就是来监听该线程有无事件发生，如果有就工作，如果没有就休眠。<br>主线程的RunLoop对象默认开启，其他线程默认不开启。<br>RunLoop与AutoreleasePool；<br>RunLoop处理的事件类型；<br>RunLoop的运行模式mode；</p>
+<h2 id="主要应用场景"><a href="#主要应用场景" class="headerlink" title="主要应用场景"></a>主要应用场景</h2><ul>
+<li>RunLoop与NSTimer的结合</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">默认情况下NSTimer被创建好之后，实在DefaultModel下的，所以所以当前页面中有Scroll事件时，Timer事件就会被阻塞，起不到任何反应。</div><div class="line">*解决办法*</div><div class="line">更改NSTimer运行的model，UITranckingRunloopModel</div><div class="line">或者：将NSTimer放到新的线程（非UI）中</div><div class="line">NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(newThread) object:nil];</div><div class="line">    [thread start];</div><div class="line">- (void)newThread&#123;</div><div class="line">    @autoreleasepool&#123;</div><div class="line">        //在当前Run Loop中添加timer，模式是默认的NSDefaultRunLoopMode</div><div class="line">        timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(incrementCounter:) userInfo: nil repeats:YES];</div><div class="line">        //开始执行新线程的Run Loop，如果不启动run loop，timer的事件是不会响应的</div><div class="line">        [[NSRunLoop currentRunLoop] run];</div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">总结</div><div class="line"></div><div class="line">1、如果是在主线程中运行timer，想要timer在某界面有视图滚动时，依然能正常运转，那么将timer添加到RunLoop中时，就需要设置mode 为NSRunLoopCommonModes。</div><div class="line">2、如果是在子线程中运行timer,那么将timer添加到RunLoop中后，Mode设置为NSDefaultRunLoopMode或NSRunLoopCommonModes均可，但是需要保证RunLoop在运行，且其中有任务。</div></pre></td></tr></table></figure>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/03/25/runtime 实用讲解/" title="runtime 参考细节" itemprop="url">runtime 参考细节</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-03-25T11:11:07.000Z" itemprop="datePublished"> 发表于 2017-03-25</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>形势严峻，找工作期间还得给自己充电啊，把以前模棱两可的知识点再梳理一遍，知其然，知其所以然，加油。</p>
+<h2 id="什么是runtime"><a href="#什么是runtime" class="headerlink" title="什么是runtime"></a>什么是runtime</h2><p>运行时，是一套较底层的纯C语言API，平时我们写的OC代码，运行的时候都是以runtime进行的，只不过我们感觉不到而已。</p>
+<h2 id="runtime-有什么作用"><a href="#runtime-有什么作用" class="headerlink" title="runtime 有什么作用"></a>runtime 有什么作用</h2><ol>
+<li>获取一个类全部成员变量名（包括私有） Ivas *ivars = class_copyIvarList([class] ,&amp;count);</li>
+<li>获取一个类全部属性名 objc_propety_t *properties = class_copyPropertyList(class, &amp;count)</li>
+<li>获取一个类全部方法 Method method = class_copyMethodList(class,&amp;count)</li>
+<li>获取一个类遵循的所有协议 __unsafe_unretained Protocol *protocols = class_copyProtocolList([self class], &amp;count)</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">/// 描述类中的一个方法</div><div class="line">typedef struct objc_method *Method;</div><div class="line"></div><div class="line">/// 实例变量</div><div class="line">typedef struct objc_ivar *Ivar;</div><div class="line"></div><div class="line">/// 类别Category</div><div class="line">typedef struct objc_category *Category;</div><div class="line"></div><div class="line">/// 类中声明的属性</div><div class="line">typedef struct objc_property *objc_property_t;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">unsigned int count;</div><div class="line">    //获取属性列表</div><div class="line">    objc_property_t *propertyList = class_copyPropertyList([self class], &amp;count);</div><div class="line">    for (unsigned int i=0; i&lt;count; i++) &#123;</div><div class="line">        const char *propertyName = property_getName(propertyList[i]);</div><div class="line">        NSLog(@&quot;property----&gt;%@&quot;, [NSString stringWithUTF8String:propertyName]);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //获取方法列表</div><div class="line">    Method *methodList = class_copyMethodList([self class], &amp;count);</div><div class="line">    for (unsigned int i; i&lt;count; i++) &#123;</div><div class="line">        Method method = methodList[i];</div><div class="line">        NSLog(@&quot;method----&gt;%@&quot;, NSStringFromSelector(method_getName(method)));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //获取成员变量列表</div><div class="line">    Ivar *ivarList = class_copyIvarList([self class], &amp;count);</div><div class="line">    for (unsigned int i; i&lt;count; i++) &#123;</div><div class="line">        Ivar myIvar = ivarList[i];</div><div class="line">        const char *ivarName = ivar_getName(myIvar);</div><div class="line">        NSLog(@&quot;Ivar----&gt;%@&quot;, [NSString stringWithUTF8String:ivarName]);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //获取协议列表</div><div class="line">    __unsafe_unretained Protocol **protocolList = class_copyProtocolList([self class], &amp;count);</div><div class="line">    for (unsigned int i; i&lt;count; i++) &#123;</div><div class="line">        Protocol *myProtocal = protocolList[i];</div><div class="line">        const char *protocolName = protocol_getName(myProtocal);</div><div class="line">        NSLog(@&quot;protocol----&gt;%@&quot;, [NSString stringWithUTF8String:protocolName]);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h2 id="方法调用在运行时的过程"><a href="#方法调用在运行时的过程" class="headerlink" title="方法调用在运行时的过程"></a>方法调用在运行时的过程</h2><p>如果用示例对象调用示例方法，会到实例的Isa指针指向的对象（类对象）操作。<br>如果盗用的是类方法，就会到类对象的isa指针指向的对象（也就是元类对象）中对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">1. 首先，在相应操作的对象中的缓存方法列表中找调用的方法，如果找到，转向相应实现并执行。</div><div class="line">2. 如果没找到，在相应操作的对象中的方法列表中找调用的方法，如果找到，转向相应实现执行</div><div class="line">3. 如果没找到，去父类指针所指向的对象中执行1，2.</div><div class="line">4. 以此类推，如果一直到根类还没找到，转向拦截调用。</div><div class="line">5. 如果没有重写拦截调用的方法，程序报错。</div></pre></td></tr></table></figure>
+<blockquote>
+<p>重写父类方法后，并没有覆盖父类方法，只是在当前对象中找到了这个方法后就不会去父类中寻找<br>如果想调用已经重写过的方法的父类的实现，只需要使用 super这个编译器标识。他就会在运行时跳过当天类对象寻找方法的过程</p>
+</blockquote>
+<p>###拦截调用<br>如果没有找到这个方法就会转向拦截调用。拦截调用就是在找不到调用的方法程序崩溃之前，你有机会通过重写NSObject的四个方法处理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">+ (BOOL)resolveClassMethod:(SEL)sel; 第一个方法是当你调用一个不存在的类方法的时候，会调用这个方法，默认返回NO，你可以加上自己的处理然后返回YES。</div><div class="line">+ (BOOL)resolveInstanceMethod:(SEL)sel; 第二个方法和第一个方法相似，只不过处理的是实例方法</div><div class="line">//后两个方法需要转发到其他的类处理</div><div class="line">- (id)forwardingTargetForSelector:(SEL)aSelector; 第三个方法是将你调用的不存在的方法重定向到一个其他声明了这个方法的类，只需要你返回一个有这个方法的target。</div><div class="line">- (void)forwardInvocation:(NSInvocation *)anInvocation; 第四个方法是将你调用的不存在的方法打包成NSInvocation传给你。做完你自己的处理后，调用invokeWithTarget:方法让某个target触发这个方法</div></pre></td></tr></table></figure>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><ol>
+<li><p>动态添加方法<br>2.关联对象，分类添加新的新的属性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">//首先定义一个全局变量，用它的地址作为关联对象的key</div><div class="line">static char associatedObjectKey;</div><div class="line">//设置关联对象</div><div class="line">objc_setAssociatedObject(target, &amp;associatedObjectKey, @&quot;添加的字符串属性&quot;, OBJC_ASSOCIATION_RETAIN_NONATOMIC); //获取关联对象</div><div class="line">NSString *string = objc_getAssociatedObject(target, &amp;associatedObjectKey);</div><div class="line">NSLog(@&quot;AssociatedObject = %@&quot;, string);</div></pre></td></tr></table></figure>
+</li>
+<li><p>方法交换 方法交换，顾名思义，就是将两个方法的实现交换。例如，将A方法和B方法交换，调用A方法的时候，就会执行B方法中的代码，反之亦然。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">#import &quot;UIViewController+swizzling.h&quot;</div><div class="line">#import &lt;objc/runtime.h&gt;</div><div class="line"></div><div class="line">@implementation UIViewController (swizzling)</div><div class="line"></div><div class="line">//load方法会在类第一次加载的时候被调用</div><div class="line">//调用的时间比较靠前，适合在这个方法里做方法交换</div><div class="line">+ (void)load&#123;</div><div class="line">    //方法交换应该被保证，在程序中只会执行一次</div><div class="line">    static dispatch_once_t onceToken;</div><div class="line">    dispatch_once(&amp;onceToken, ^&#123;</div><div class="line"></div><div class="line">        //获得viewController的生命周期方法的selector</div><div class="line">        SEL systemSel = @selector(viewWillAppear:);</div><div class="line">        //自己实现的将要被交换的方法的selector</div><div class="line">        SEL swizzSel = @selector(swiz_viewWillAppear:);</div><div class="line">        //两个方法的Method</div><div class="line">        Method systemMethod = class_getInstanceMethod([self class], systemSel);</div><div class="line">        Method swizzMethod = class_getInstanceMethod([self class], swizzSel);</div><div class="line"></div><div class="line">        //首先动态添加方法，实现是被交换的方法，返回值表示添加成功还是失败</div><div class="line">        BOOL isAdd = class_addMethod(self, systemSel, method_getImplementation(swizzMethod), method_getTypeEncoding(swizzMethod));</div><div class="line">        if (isAdd) &#123;</div><div class="line">            //如果成功，说明类中不存在这个方法的实现</div><div class="line">            //将被交换方法的实现替换到这个并不存在的实现</div><div class="line">            class_replaceMethod(self, swizzSel, method_getImplementation(systemMethod), method_getTypeEncoding(systemMethod));</div><div class="line">        &#125;else&#123;</div><div class="line">            //否则，交换两个方法的实现</div><div class="line">            method_exchangeImplementations(systemMethod, swizzMethod);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)swiz_viewWillAppear:(BOOL)animated&#123;</div><div class="line">    //这时候调用自己，看起来像是死循环</div><div class="line">    //但是其实自己的实现已经被替换了</div><div class="line">    [self swiz_viewWillAppear:animated];</div><div class="line">    NSLog(@&quot;swizzle&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>4.给对象添加关联对象<br>比如alertView,一般传值，使用的是alertView的tag属性。我们想把更多的参数传给alertView代理：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">- (void)shopCartCell:(BSShopCartCell *)shopCartCell didDeleteClickedAtRecId:(NSString *)recId</div><div class="line">&#123;</div><div class="line">    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@&quot;&quot; message:@&quot;确认要删除这个宝贝&quot; delegate:self cancelButtonTitle:@&quot;取消&quot; otherButtonTitles:@&quot;确定&quot;, nil];</div><div class="line">    </div><div class="line">    // 传递多参数</div><div class="line">    objc_setAssociatedObject(alert, &quot;suppliers_id&quot;, @&quot;1&quot;, OBJC_ASSOCIATION_RETAIN_NONATOMIC);</div><div class="line">    objc_setAssociatedObject(alert, &quot;warehouse_id&quot;, @&quot;2&quot;, OBJC_ASSOCIATION_RETAIN_NONATOMIC);</div><div class="line">    </div><div class="line">    alert.tag = [recId intValue];</div><div class="line">    [alert show];</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line"> *  确定删除操作</div><div class="line"> */</div><div class="line">- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex &#123;</div><div class="line">    if (buttonIndex == 1) &#123;</div><div class="line">        </div><div class="line">        NSString *warehouse_id = objc_getAssociatedObject(alertView, &quot;warehouse_id&quot;);</div><div class="line">        NSString *suppliers_id = objc_getAssociatedObject(alertView, &quot;suppliers_id&quot;);</div><div class="line">        NSString *recId = [NSString stringWithFormat:@&quot;%ld&quot;,(long)alertView.tag];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">objc_setAssociatedObject方法的参数解释:</div><div class="line"></div><div class="line">第一个参数id object, 当前对象</div><div class="line">第二个参数const void *key, 关联的key，是c字符串 </div><div class="line">第三个参数id value, 被关联的对象的值 </div><div class="line">第四个参数objc_AssociationPolicy policy关联引用的规则</div></pre></td></tr></table></figure></p>
+<p>动态添加方法<br>开发使用场景：如果一个类方法非常多，加载类到内存的时候也比较耗费资源，需要给每个方法生成映射表，可以使用动态给某个类，添加方法解决。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"> Person *p = [[Person alloc] init];</div><div class="line"></div><div class="line">    // 默认person，没有实现eat方法，可以通过performSelector调用，但是会报错。</div><div class="line">    // 动态添加方法就不会报错</div><div class="line">    [p performSelector:@selector(eat)];</div><div class="line">    </div><div class="line">    // 默认方法都有两个隐式参数，</div><div class="line">void eat(id self,SEL sel)</div><div class="line">&#123;</div><div class="line">       NSLog(@&quot;%@ %@&quot;,self,NSStringFromSelector(sel));</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 当一个对象调用未实现的方法，会调用这个方法处理,并且会把对应的方法列表传过来.</div><div class="line">// 刚好可以用来判断，未实现的方法是不是我们想要动态添加的方法</div><div class="line">+ (BOOL)resolveInstanceMethod:(SEL)sel</div><div class="line">&#123;</div><div class="line">    if (sel == @selector(eat)) &#123;</div><div class="line">        // 动态添加eat方法</div><div class="line"></div><div class="line">        // 第一个参数：给哪个类添加方法</div><div class="line">        // 第二个参数：添加方法的方法编号</div><div class="line">        // 第三个参数：添加方法的函数实现（函数地址）</div><div class="line">        // 第四个参数：函数的类型，(返回值+参数类型) v:void @:对象-&gt;self :表示SEL-&gt;_cmd</div><div class="line">        class_addMethod(self, @selector(eat), eat, &quot;v@:&quot;);</div><div class="line">    &#125;</div><div class="line">    return [super resolveInstanceMethod:sel];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/03/21/绑定域名/" title="github pages 绑定一级二级域名" itemprop="url">github pages 绑定一级二级域名</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-03-21T11:11:07.000Z" itemprop="datePublished"> 发表于 2017-03-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>拿我自己的来说 devshicheng.com 算是一级域名<br>            www.devshicheng.com 算是🎧域名</p>
+<h4 id="一级域名"><a href="#一级域名" class="headerlink" title="一级域名"></a>一级域名</h4><ol>
+<li>如果你用hexo搭建的博客，需要在本地source文件夹下创建一个CNAME（去掉后缀），里边输入你的一级域名，然后同步到你的githubpages上，</li>
+<li>去你的域名 解析设置 添加解析 类型CNAME  记录值填写你的 mybigorange.github.io. (最后点不要省略)</li>
+</ol>
+<h4 id="二级域名"><a href="#二级域名" class="headerlink" title="二级域名"></a>二级域名</h4><ol>
+<li>同一级域名</li>
+<li>新建新的解析。类型为A  主机记录@ 记录值ip（ping你的仓库去找你的仓库服务器）</li>
+</ol>
+<blockquote>
+<p>以上方法亲测可用（设置好后需要等一会才可以访问）。</p>
+</blockquote>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" rel="prev" href="/page/4/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/6/">Next<span></span></a>
+  </nav>
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.jianshu.com" target="_blank" title="简书">简书</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://guthub.com" target="_blank" title="GitHub">GitHub</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://cocoachina.com" target="_blank" title="cocoachina">cocoachina</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://mybigorange.github.io" target="_blank" title="Ambrose&#39;s Blog">Ambrose&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="www.baidu.com" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Dean Ambrose Page in Github. <br/>
+			Welcome to my bog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5767005756" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="史成">史成</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+ </html>

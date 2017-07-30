@@ -1,0 +1,484 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>CPU 架构 | 史成</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="史成">
+    
+
+    
+    <meta name="description" content="##iPhone架构真机或模拟器调试的时候经常报出架构问题，有些第三方封装的库并不是全部支持，所以需要了解一下，一遍自己以后封装的时候支持条件。 ###简述ARM处理器，因其功耗低和尺寸小而闻名，几乎所有的手机处理器都基于ARM,苹果当然也不例外。 armv6、armv7、armv7s、arm64都是ARM处理器的指令集，所有指令集原则上都是向下兼容的。如 iPhone 4s的CPU默认指令集为a">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CPU 架构">
+<meta property="og:url" content="http://yoursite.com/2017/07/07/Undefined architecture i386/index.html">
+<meta property="og:site_name" content="史成">
+<meta property="og:description" content="##iPhone架构真机或模拟器调试的时候经常报出架构问题，有些第三方封装的库并不是全部支持，所以需要了解一下，一遍自己以后封装的时候支持条件。 ###简述ARM处理器，因其功耗低和尺寸小而闻名，几乎所有的手机处理器都基于ARM,苹果当然也不例外。 armv6、armv7、armv7s、arm64都是ARM处理器的指令集，所有指令集原则上都是向下兼容的。如 iPhone 4s的CPU默认指令集为a">
+<meta property="og:image" content="http://ooyerqo96.bkt.clouddn.com/20150930103014973.jpeg">
+<meta property="og:updated_time" content="2017-07-25T06:04:19.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CPU 架构">
+<meta name="twitter:description" content="##iPhone架构真机或模拟器调试的时候经常报出架构问题，有些第三方封装的库并不是全部支持，所以需要了解一下，一遍自己以后封装的时候支持条件。 ###简述ARM处理器，因其功耗低和尺寸小而闻名，几乎所有的手机处理器都基于ARM,苹果当然也不例外。 armv6、armv7、armv7s、arm64都是ARM处理器的指令集，所有指令集原则上都是向下兼容的。如 iPhone 4s的CPU默认指令集为a">
+<meta name="twitter:image" content="http://ooyerqo96.bkt.clouddn.com/20150930103014973.jpeg">
+
+    
+    <link rel="alternative" href="www.baidu.com" title="史成" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/shicheng.png">
+    
+    
+    <link rel="apple-touch-icon" href="/img/shicheng.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/shicheng.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/shicheng.png" alt="史成" title="史成"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="史成">史成</a></h1>
+				<h2 class="blog-motto">知其然，知其所以然。一天一篇博客，一个星期研究一个第三方Demo，三个月看一本书！ 2017.7.1</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/07/Undefined architecture i386/" title="CPU 架构" itemprop="url">CPU 架构</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-06T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-07</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			
+		
+		</div>
+		
+		<p>##iPhone架构<br>真机或模拟器调试的时候经常报出架构问题，有些第三方封装的库并不是全部支持，所以需要了解一下，一遍自己以后封装的时候支持条件。</p>
+<p>###简述<br>ARM处理器，因其功耗低和尺寸小而闻名，几乎所有的手机处理器都基于ARM,苹果当然也不例外。</p>
+<p>armv6、armv7、armv7s、arm64都是ARM处理器的指令集，所有指令集原则上都是向下兼容的。如 iPhone 4s的CPU默认指令集为armv7指令集，但它可以同时也兼容armv6的指令集，只是在使用armv6的时候无法充分发挥其性能(无法发挥armv7指令集中得新特性)。</p>
+<p>iOS模拟器没有运行ARM指令集，编译运行的是x86指令集(或i386)，所以只有在iOS设备上才会执行设备对应ARM指令集。</p>
+<p>###模拟器<br>4s-5: i386<br>5s-6s Plus: x86_64</p>
+<p>###真机<br>armv6: iPhone、iPhone 2、iPhone 3G、iPod Touch(第一代)、iPod Touch(第二代)<br>armv7: iPhone 3Gs、iPhone 4、iPhone 4s、iPad、iPad 2<br>armv7s: iPhone 5、iPhone 5c (静态库只要支持了armv7,就可以在armv7s的架构上运行)<br>arm64(注:无armv64): iPhone 5s、iPhone 6、iPhone 6 Plus、iPhone 6s、iPhone 6s Plus、iPad Air、iPad Air2、iPad mini2、iPad mini3</p>
+<p>###设置如下图<br><img src="http://ooyerqo96.bkt.clouddn.com/20150930103014973.jpeg" alt="setting"></p>
+<p>Architectures:<br>指明选定的Target要求被编译生成的二进制包所支持的指令集，支持指令集是通过编译生成对应的二进制数据包实现的。如果支持的指令集数目有多个，就会编译出包含多个指令集代码的数据包，从而造成最终编译生成的包很大。</p>
+<p>Valid Architectures:<br>指明可能支持的指令集并非Architectures列表中指明的指令集都会被支持，Valid Architectures限制可能被支持的指令集的范围，即Valid Architectures 和 Architectures 列表的交集，才是Xcode最终生成二进制包所支持的指令集。<br>比如:将Architectures支持arm指令集设置为: armv7, armv7s,对应的Valid Architectures的支持的指令集设置为:armv7s,arm64,那么此时Xcode生成二进制包所支持的指令集只有armv7s。</p>
+<p>Build Active Architecture Only：<br>指明是否只编译当前连接设备所支持的指令集。<br>该选项起作用的条件有两个，必须同时满足才会起作用：</p>
+<ol>
+<li>其值设置为YES</li>
+<li><p>Xcode成功连接调试设备<br>假定我们将Build Active Architecture Only值设置为YES，同时Xcode连接上手机 iPhone 5s（匹配指令集arm64）</p>
+</li>
+<li><p>第一种情况<br>Architectures:  armv7, armv7s, arm64<br>ValidArchitectures:  armv6, armv7s, arm64<br>生成二进制包支持的指令集： arm64 </p>
+</li>
+<li><p>第二种情况<br>Architectures: armv6, armv7, armv7s<br>Valid Architectures:  armv6, armv7s, arm64<br>生成二进制包支持的指令集： armv7s </p>
+</li>
+<li><p>第三种情况<br>Architectures:  armv6, armv7<br>Valid Architectures: armv6, armv7s, arm64<br>生成二进制包支持的指令集： armv7</p>
+</li>
+<li><p>第四种情况<br>Architectures: armv6<br>Valid Architectures: armv6, armv7s, arm64<br>生成二进制包支持的指令集： 虽然编译成功了，但是并没有任何目标生成， 因为从XCode4.5开始，就不再支持armv6指令集，所以列表中写了也是白写。</p>
+</li>
+<li><p>第五种情况<br>Architectures: armv7, armv7s, arm64<br>Valid Architectures: armv7，armv7s<br>生成二进制包支持的指令集： 编译出错信息</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[objc] view plain copy</div><div class="line">No architectures to compile for (ONLY_ACTIVE_ARCH=YES, active arch=arm64, VALID_ARCHS=armv7 armv7s) </div><div class="line">```  </div><div class="line">可以看出：当Build Active Architecture Only起作用时：</div><div class="line">连接的手机指令集匹配是由高到低（arm64 &gt; armv7s &gt; armv7）依次匹配的。</div><div class="line"> </div><div class="line">如连接手机为iPhone 5s，其默认指令集为arm64，若Architectures列表为armv7, armv7s,则会选取armv7s指令集为目标指令集，如果此时Valid Architectures列表中包含该指令集，则成功生成的二进制包只支持armv7s指令集，若alid Architectures列表不包含此指令集，则编译将会出错：</div></pre></td></tr></table></figure>
+<p>[objc] view plain copy<br>No architectures to compile for (ONLY_ACTIVE_ARCH=YES, active arch=armv7s, VALID_ARCHS=armv7 arm64)<br>```<br>同样的，若Architectures列表为armv7，则会选取armv7作为目标指令集，若Valid Architectures列表中包含了armv7指令集，则能够成功生成二进制包，其支持的指令集只有armv7，若Valid Architectures列表中不包含armv7，则编译失败。</p>
+<p>建议：通常Debug模式设置值为Yes，Release模式设置为No。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2017/07/07/Undefined architecture i386/" data-title="CPU 架构 | 史成" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/07/06/章鱼哥问答/" title="章鱼哥问答">
+  <strong>上一篇：</strong><br/>
+  <span>
+  章鱼哥问答</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/07/08/Undefined symbols for architecture i386/"  title="Undefined symbols for architecture">
+ <strong>下一篇：</strong><br/> 
+ <span>Undefined symbols for architecture
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ 
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.jianshu.com" target="_blank" title="简书">简书</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://guthub.com" target="_blank" title="GitHub">GitHub</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://cocoachina.com" target="_blank" title="cocoachina">cocoachina</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://mybigorange.github.io" target="_blank" title="Ambrose&#39;s Blog">Ambrose&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="www.baidu.com" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Dean Ambrose Page in Github. <br/>
+			Welcome to my bog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5767005756" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="史成">史成</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

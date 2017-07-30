@@ -81,573 +81,321 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/06/28/详细介绍通知代理/" title="通知、代理的各自优缺点" itemprop="url">通知、代理的各自优缺点</a>
+      <a href="/2017/07/29/podfile规范写法及理解/" title="多工程引用podfile规范写法" itemprop="url">多工程引用podfile规范写法</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
 		
   <p class="article-time">
-    <time datetime="2017-06-28T15:01:15.000Z" itemprop="datePublished"> 发表于 2017-06-28</time>
+    <time datetime="2017-07-28T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-29</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <pre><code>在开发IOS应用的时候，我们会经常遇到一个常见的问题：在不过分耦合的前提下，controllers[B]怎么进行通信。在IOS应用不断的出现三种模式来实现这种通信：
-</code></pre><p>1委托delegation<br>2通知中心Notification Center<br>3键值观察key value observing，KVO<br>因此，那为什么我们需要这些模式以及什么时候用它以及什么时候不用它。<br>    下面完全根据我的开发经验来讨论这三中模式。我将讨论为什么我觉得某种模式要好于另外一种模式以及为什么我觉得在一定的环境下某中模式比较好。我给出的这些原因并不是圣经，而仅仅是个人观点。如果你有什么不同的观点或者还可以进行补充的地方，可以联系我，一起讨论。<br>上面的三种模式是什么？<br>    三种模式都是一个对象传递事件给另外一个对象，并且不要他们有耦合。三种模式都是对象来通知某个事件发生了的方法，或者更准确的说，是允许其他的对象收到这种事件的方法。这对于一个对象来说，是非常普通而且必须做的任务，因为没有通信，controllers将不能整合到整个应用中。controller的另外一个目的是尽可能的自包含。<br>我们希望controllers以自己的方式存在，在controllers屡面上不能与其他的controllers进行耦合。Controllers能够创建其他的controllers而且他们之间可以自由通信，但是我们不希望controller又回接到创建自己的controller。如果我们耦合了他们，那么我们将不能复用他们，以及完全失去对应用中一个独立的组件的控制。</p>
-<pre><code>这三种模式给controllers(也可以是其他的对象)提供通信的方法。下面将描述如何在IOS应用中使用这些模式同样需要注意的他们在其他的地方也会用到，并且确实是存在。
-</code></pre><p>. delegation<br>当我们第一次编写IOS应用时，我们注意到不断的在使用“delegate”，并且贯穿于整个SDK。delegation模式不是IOS特有的模式，而是依赖与你过去拥有的编程背景。针对它的优势以及为什么经常使用到，这种模式可能不是很明显的。<br>delegation的基本特征是，一个controller定义了一个协议（即一系列的方法定义）。该协议描述了一个delegate对象为了能够响应一个controller的事件而必须做的事情。协议就是delegator说，“如果你想作为我的delegate，那么你就必须实现这些方法”。实现这些方法就是允许controller在它的delegate能够调用这些方法，而它的delegate知道什么时候调用哪种方法。delegate可以是任何一种对象类型，因此controller不会与某种对象进行耦合，但是当该对象尝试告诉委托事情时，该对象能确定delegate将响应。</p>
-<p>三者优缺点：</p>
-<p>delegate 的 优势 ：</p>
-<pre><code>1.非常严格的语法。所有将听到的事件必须是在delegate协议中有清晰的定义。
-
-2.如果delegate中的一个方法没有实现那么就会出现编译警告/错误
-
-3.协议必须在controller的作用域范围内定义
-
-4.在一个应用中的控制流程是可跟踪的并且是可识别的；
-
-5.在一个控制器中可以定义定义多个不同的协议，每个协议有不同的delegates
-
-6.没有第三方对象要求保持/监视通信过程。
-
-7.能够接收调用的协议方法的返回值。这意味着delegate能够提供反馈信息给controller
-</code></pre><p>　　8.经常被用在存在父子关系的对象之间通信，例如控制器和控制器的view（自己加的理解）</p>
-<pre><code>缺点 ：
-
-1.需要定义很多代码：1.协议定义；2.controller的delegate属性；3.在delegate本身中实现delegate方法定义
-
-2.在释放代理对象时，需要小心的将delegate改为nil。一旦设定失败，那么调用释放对象的方法将会出现内存crash
-
-3.在一个controller中有多个delegate对象，并且delegate是遵守同一个协议，但还是很难告诉多个对象同一个事件，不过有可能。
-</code></pre><p>　　4.经常用在一对一的通信。（不知道是缺点还是优点，只能算是特点）（自己加的理解）</p>
-<p>notification 的 优势 ：</p>
-<pre><code>1.不需要编写多少代码，实现比较简单
-
-2.对于一个发出的通知，多个对象能够做出反应，即一对多的方式实现简单
-
-3.controller能够传递context对象（dictionary），context对象携带了关于发送通知的自定义的信息
-
-缺点 ：
-
-1.在编译期不会检查通知是否能够被观察者正确的处理； 
-
-2.在释放注册的对象时，需要在通知中心取消注册；
-
-3.在调试的时候应用的工作以及控制过程难跟踪；
-
-4.需要第三方对象来管理controller与观察者对象之间的联系；
-
-5.controller和观察者需要提前知道通知名称、UserInfo dictionary keys。如果这些没有在工作区间定义，那么会出现不同步的情况；
-
-6.通知发出后，controller不能从观察者获得任何的反馈信息（相比较delegate）。
-</code></pre><p>KVO 的 优势 ：</p>
-<pre><code>1.能够提供一种简单的方法实现两个对象间的同步。例如：model和view之间同步；
-
-2.能够对非我们创建的对象，即内部对象的状态改变作出响应，而且不需要改变内部对象（SKD对象）的实现；
-
-3.能够提供观察的属性的最新值以及先前值；
-
-4.用key paths来观察属性，因此也可以观察嵌套对象；
-
-5.完成了对观察对象的抽象，因为不需要额外的代码来允许观察值能够被观察
-</code></pre><p>　　　6.可以一对多。</p>
-<pre><code>缺点 ：
-
- 1.我们观察的属性必须使用strings来定义。因此在编译器不会出现警告以及检查；
-
- 2.对属性重构将导致我们的观察代码不再可用；
-
- 3.复杂的“IF”语句要求对象正在观察多个值。这是因为所有的观察代码通过一个方法来指向；
-
- 4.当释放观察者时不需要移除观察者。
-</code></pre><ol>
-<li>效率 肯定是delegate比NSNotification高。</li>
-</ol>
-<p>delegate方法比notification更加直接，最典型的特征是，delegate方法往往需要关注返回值， 也就是delegate方法的结果。比如-windowShouldClose:，需要关心返回的是yes还是no。所以delegate方法往往包含 should这个很传神的词。也就是好比你做我的delegate，我会问你我想关闭窗口你愿意吗？你需要给我一个答案，我根据你的答案来决定如何做下一 步。相反的，notification最大的特色就是不关心接受者的态度， 我只管把通告放出来，你接受不接受就是你的事情，同时我也不关心结果。所以notification往往用did这个词汇，比如 NSWindowDidResizeNotification，那么NSWindow对象放出这个notification后就什么都不管了也不会等待接 受者的反应。</p>
-<p>2、KVO和NSNotification的区别 ：</p>
-<p>和delegate一样，KVO和NSNotification的作用也是类与类之间的通信，与delegate不同的是1）这两个都是负责发出通知，剩下的事情就不管了，所以没有返回值；2）delegate只是一对一，而这两个可以一对多。这两者也有各自的特点。</p>
-<p>总结：</p>
-<p>从上面的分析中可以看出3中设计模式都有各自的优点和缺点。其实任何一种事物都是这样，问题是如何在正确的时间正确的环境下选择正确的事物。下面就讲讲如何发挥他们各自的优势，在哪种情况下使用哪种模式。注意使用任何一种模式都没有对和错，只有更适合或者不适合。每一种模式都给对象提供一种方法来通知一个事件给其他对<br>象，而且前者不需要知道侦听者。在这三种模式中，我认为KVO有最清晰的使用案例，而且针对某个需求有清晰的实用性。而另外两种模式有比较相似的用处，并且经常用来给controller间进行通信。那么我们在什么情况使用其中之一呢？<br>根据我开发iOS应用的经历，我发现有些过分的使用通知模式。我个人不是很喜欢使用通知中心。我发现用通知中心很难把握应用的执行流程。Userlnfo dictionaries的keys到处传递导致失去了同步，而且在公共空间需要定义太多的常量。对于一个工作于现有的项目的开发者来说，如果过分的使用通知中心，那么很难理解应用的流程。<br>我觉得使用命名规则好的协议和协议方法定义对于清晰的理解controllers间的通信是很容易的。努力的定义这些协议方法将增强代码的可读性，以及更好的跟踪你的app。代理协议发生改变以及实现都可通过编译器检查出来，如果没有将会在开发的过程中至少会出现crash，而不仅仅是让一些事情异常工作。甚至在同一事件通知多控制器的场景中，只要你的应用在controller层次有着良好的结构，消息将在该层次上传递。该层次能够向后传递直至让所有需要知道事件的controllers都知道。当然会有delegation模式不适合的例外情况出现，而且notification可能更加有效。例如：应用中所有的controller需要知道一个事件。然而这些类型的场景很少出现。另外一个例子是当你建立了一个架构而且需要通知该事件给正在运行中应用。<br>根据经验，如果是属性层的时间，不管是在不需要编程的对象还是在紧紧绑定一个view对象的model对象，我只使用观察。对于其他的事件，我都会使用delegate模式。如果因为某种原因我不能使用delegate，首先我将估计我的app架构是否出现了严重的错误。如果没有错误，然后才使用notification。</p>
-<p>转自：<a href="http://blog.csdn.net/dqjyong/article/details/7685933" target="_blank" rel="external">http://blog.csdn.net/dqjyong/article/details/7685933</a></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/06/26/ionic常用命令行/" title="ionic常用命令" itemprop="url">ionic常用命令</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
-		
-  <p class="article-time">
-    <time datetime="2017-06-26T04:50:02.000Z" itemprop="datePublished"> 发表于 2017-06-26</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>(use –help or -h for more info)</p>
-<p> start ………. Starts a new Ionic project in the specified PATH</p>
-<p> serve ………. Start a local development server for app dev/testing<br> setup ………. Configure the project with a build tool (beta)<br> generate ……. Generate pages and components<br> platform ……. Add platform target for building an Ionic app<br> run ………… Run an Ionic project on a connected device<br> emulate …….. Emulate an Ionic project on a simulator or emulator<br> build ………. Build (prepare + compile) an Ionic project for a given platform.<br> plugin ……… Add a Cordova plugin<br> resources …… Automatically create icon and splash screen resources (beta)<br> Put your images in the ./resources directory, named splash or icon.<br> Accepted file types are .png, .ai, and .psd.<br> Icons should be 192x192 px without rounded corners.<br> Splashscreens should be 2208x2208 px, with the image centered in the middle.<br> upload ……… Upload an app to your Ionic account<br> share ………. Share an app with a client, co-worker, friend, or customer<br> lib ………… Gets Ionic library version or updates the Ionic library<br> io …………. Integrate your app with Ionic Cloud services<br> security ……. Store your app’s credentials for the Ionic Cloud<br> push ……….. Upload APNS and GCM credentials to Ionic Push<br> package …….. Use Ionic Package to build your app<br> config ……… Set configuration variables for your ionic app<br> service …….. Add an Ionic service package and install any required plugins<br> add ………… Add an Ion, bower component, or addon to the project<br> remove ……… Remove an Ion, bower component, or addon from the project<br> list ……….. List Ions, bower components, or addons in the project<br> info ……….. List information about the users runtime environment<br> help ……….. Provides help for a certain command<br> link ……….. Sets your Ionic App ID for your project<br> hooks ………. Manage your Ionic Cordova hooks<br> state ………. Saves or restores state of your Ionic Application using the package.json file<br> docs ……….. Opens up the documentation for Ionic</p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/06/24/git 常用终端命令记录/" title="Git常用命令记录" itemprop="url">Git常用命令记录</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
-		
-  <p class="article-time">
-    <time datetime="2017-06-24T14:50:02.000Z" itemprop="datePublished"> 发表于 2017-06-24</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>Sourcetree简单归简单，终端才是王道！</p>
-<p>原理：Git除了远程仓库以外,每一个开发者本机都有一个本地的仓库,当提交代码的时候需要先将代码提交到本地的仓库,然后再提交到远程仓库.</p>
-<p>常用git终端命令:<br>git config user.name “用户名”                 配置用户名<br>git config user.email “用户邮件地址”           配置用户邮件地址<br>git config –global user.name “用户名”        一次性配置用户名(只需要配置一次,以后在不需要配置)<br>git config –global user.email “用户邮件地址”  一次性配置用户邮件地址<br>git init                                       初始化本地仓库<br>git init –bare                             初始化服务器端仓库<br>git add 文件名                          将一个文件添加到暂存区<br>git add .                                    将所有文件添加到暂存区<br>git status                                   查看当前代码库状态<br>git commit -m “注释”                 将代码提交到本地仓库<br>git diff                                        显示代码库更改部分<br>git reset –hard HEAD               回退到当前版本<br>git reset –hard HEAD^             回退到上一个版本(一个^就是上一个版本,两个^就是上两个版本,以此类推)<br>git log                                       显示当前版本及之前的版本<br>git reflog                                   显示所有的版本<br>git checkout 文件名                  放弃当前的更改<br>git clone 服务器路径                 将服务器的版本拷贝到本地<br>git push                                     将本地代码推送到服务器</p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/06/21/利用N来管理Node.js版本问题/" title="利用N来管理Node.js版本问题" itemprop="url">利用N来管理Node.js版本问题</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
-		
-  <p class="article-time">
-    <time datetime="2017-06-21T12:40:02.000Z" itemprop="datePublished"> 发表于 2017-06-21</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>最近跟着做ionic2项目，用到node.js，但是官网上的有低版本的6.0,以及最新的8.0,都不太符合要求，升到8.0后才知道不行，搜了搜记录一下利用N来降低版本的问题。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">N是node的一个模块</div><div class="line"> </div><div class="line">1.  安装 sudo npm install -g n</div><div class="line">   （安装完成之后，直接输入n后输出当前已经安装的node版本以及正在使用的版本（前面有一个o），你可以通过移动上下方向键来选择要使用的版本，最后按回车生效）</div><div class="line">2.  想要安装你想要的额版本 直接 n 版本号 </div><div class="line">3.  安装最新的版本 n latest</div><div class="line">    安装稳定版本 n stable</div><div class="line">    删除某个版本 n rm 0.10.1 </div><div class="line">    以指定的版本来执行脚本 n use 0.10.21 some.js</div></pre></td></tr></table></figure>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/06/20/ionic跨平台项目/" title="ionic2 跨平台iOS 项目一" itemprop="url">ionic2 跨平台iOS 项目一</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
-		
-  <p class="article-time">
-    <time datetime="2017-06-20T14:44:02.000Z" itemprop="datePublished"> 发表于 2017-06-20</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>#ionic 跨平台创建应用</p>
-<p>##技术应用<br>为了开发HTML5，除了最新使用reactNative等之外，目前首选稳定的ionic + AngularJS 来开发iOS和Android。<br>Ionic是一款可以使用html5构建混合移动应用的用户界面框架，它自称是“本地与Html5的结合”。该框架提供了很多基本的移动用户界面范例，例如像列表（lists）、标签页栏（tabbars）和触发开关（toggleswitches）这样的简单条目。它还提供了更加复杂的可视化布局示例，例如在下面显示内容的滑出式菜单。<br>Cordova是一款开放源代码的App开发框架，旨在让开发者使用HTML、JavaScript、CSS等WebAPIs开发跨平台的移动平台应用程序，其原名称之为PhoneGap，Adobe收购Nitobi公司后，PhoneGap商标保留，代码贡献给了Apache基金会，而Apache将其命名为ApacheCallback，其后发布新版本时，定名为ApacheCordova。<br>Cordova是一个行动设备的API接口集，利用javascript存取这些接口可以调用诸如摄影机、罗盘等硬件系统资源。配合上一些基于HTML5、CSS3技术的UI框架，如jQueryMobile、DojoMobile或SenchaTouch，开发者得以快速地开发跨平台App而不需要编写任何的原生代码，因为Cordova本身仍是一个原生程式，为App打包时依然需要用到这些系统平台的SDK。</p>
-<p>##环境搭建</p>
-<ol>
-<li>安装npm/node.js（node.js自带npm，到nodejs官网<a href="https://nodejs.org/en/" target="_blank" rel="external">nodejs</a>自行下载）</li>
-<li>安装ionic/cordova (sudo npm install -g cordova ionic)</li>
-</ol>
-<p>##项目生成</p>
-<ol>
-<li>cd ./Desktop (进入桌面生成Demo文件项目)</li>
-<li><p>ionic start ionicDemo –v2 可以在项目名称后加上不同参数（blank、tabs、sidemenu）， 其中blank等参数是几种app样式，可根据需要选择不同参数，不写的话默认是tabs样式；–v2是指按照ionic2的版本来创建项目，如果不写–v2则会创建ionic1项目)</p>
-</li>
-<li><p>创建成功以后项目目录结构如图<br><img src="http://ooyerqo96.bkt.clouddn.com/2017062018.45.22.png" alt="ionic目录结构"></p>
-</li>
-<li><p>cd ionicDemo（cd到目录结构文件夹打开项目）<br> ionic serve<br>(执行完毕后Ionic会自动帮我们打开我们的默认浏览器并跳转到我们的应用页面，浏览器打开页面时Ionic已经给我们开启了livereload模式，开启之后我们编辑www下的文件后保存时Ionic会通过websocket通知浏览器刷新页面，我们就不用每次修改完毕手动刷新页面了。)</p>
-</li>
-<li><p>平台安装<br>ionic platform add android<br>ionic platform add ios<br>可以查看你已经添加的平台列表，终端输入：<br>ionic platform list<br>安装ios模拟器，终端输入：<br>npm install -g ios-sim<br>安装好后，cd到项目目录后，开始编译项目，终端输入：<br>ionic build ios<br>运行项目可以使用Xcode，也可以使用终端，终端输入：<br>ionic run ios</p>
-</li>
-</ol>
-<p>##目录结构详解</p>
-<p>这是一个典型的Cordova项目结构</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">src/index.html是 Ionic 2 应用的主入口文件，其目的是设置脚本和CSS引导，然后开始运行我们的应用程序。 我们不会在这个文件中花费大量的时间。</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">src/app/app.component.ts在该文件能找到我们的预编译代码。这是Ionic 2应用程序的大部分工作起始的地方。当我们运行 ionic serve 时， app 中的代码将被编译成当前浏览器能够执行的JavaScript版本（当前是ES5）。也就是说我们可以使用TypeScript或更高级别的 ES6+ 进行开发，而在编译时会自动降级为浏览器可识别的版本。</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">每个应用程序都有一个根组件，用于控制应用程序的其余部分。在这个组件中，我们设置了模版文件app.html</div></pre></td></tr></table></figure>
-<p>最简单的ionic系统项目结构就是这样的，慢慢往里边添加空间简单测试一下吧！</p>
-<p>ionic2项目学习路线</p>
-<ol>
-<li>熟悉一下TypeScript的基本语法和使用；</li>
-<li>掌握Angular2的基本原理和开发思路；</li>
-<li>熟悉Ionic 2的所有Components和API；</li>
-<li>了解Cordova的使用方法和插件。</li>
-</ol>
-<p>多学多练！</p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/06/14/代码规范/" title="代码规范及注意事项" itemprop="url">代码规范及注意事项</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
-		
-  <p class="article-time">
-    <time datetime="2017-06-14T15:54:02.000Z" itemprop="datePublished"> 发表于 2017-06-14</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h1 id="代码规范总结"><a href="#代码规范总结" class="headerlink" title="代码规范总结"></a>代码规范总结</h1><p>看完大神门写的代码再回头看自己的觉得怎么看别扭，还是很多细节的地方唯有写到位，这里全部记录一下需要注意的地方，敲一下记到脑子里的东西才是自己的。</p>
-<p>github上已经有大神给处理详细的规范 <a href="https://github.com/NYTimes/objective-c-style-guide" target="_blank" rel="external">NYTimes</a> ,留个地址方便查询吧，多看多敲重要的事情心里再念两遍。</p>
-<p>每个人在一些细节上都有自己的习惯，所以没有绝对的规范，适合自己的才是最好的！</p>
-<h3 id="iOS-规范"><a href="#iOS-规范" class="headerlink" title="iOS 规范"></a>iOS 规范</h3><p>1.变量</p>
-<blockquote>
-<p>无论是类、属性、文件等命名含义一定要清楚，让人不需要看注释就知道是啥意思，一目了然，如果相似的添加注释标明。</p>
-<p>驼峰式命名（类的名称需要大驼峰式命名）</p>
-<p>枚举内容的命名需要以改枚举类型名称开头</p>
-<p>方法名要按着方法的实际作用命名</p>
-<p>属性多的时候标注每个属性的具体作用和类型</p>
-<p>系统常用类作实例变量声明时只使用后缀减少长度（ VC、View、Lbl、Btn、Img、ImageView、Array、Dict、Str、Set等）</p>
-</blockquote>
-<p>2.常量 (这块儿在属性声明时候很重要！！！)</p>
-<blockquote>
-<p>常量以相关类名作为前缀</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">static const NSTimeInterval XTSignInViewControllerFadeOutAnimationDuration = 0.4;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>建议使用类型常量，不建议使用#define预处理指令，除非那些全局很多地方需要使用的。（预处理指令不具备类型信息，切可以被任意修改）<br>对外公开某个常量（如果我们需要发送某个通知，那么就需要在不同的地方拿到这个通知的字符串，显然这个通知字符串是固定的，不能被修改，可以在不同的地方获取，这个时候就需要定义一个外界课件的字符串常量）</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//头文件</div><div class="line">extern NSString *const XTCacheControllerDidClearCacheNotification;</div><div class="line">//实现文件</div><div class="line">static NSString * const XTCacheControllerDidClearCacheNotification = @&quot;XTCacheControllerDidClearCacheNotification&quot;;</div><div class="line">static const CGFloat XTCImageThumbnailHeight = 50.0f;</div></pre></td></tr></table></figure>
-<p>3.宏</p>
-<blockquote>
-<p> 宏、常量名都要使用大写字母，用下划线‘_’分割单词</p>
-<p>宏定义中如果包含表达式或变量，表达式和变量必须用小括号括起来。</p>
-</blockquote>
-<p>4.CGRect函数</p>
-<blockquote>
-<p>CGFloat x = CGRectGetMinX(frame); 取代 CGFloat x = frame.origin.x; </p>
-</blockquote>
-<p>5.范型<br>建议在定义NSArray和NSDictionary时使用泛型，可以保证程序的安全性：</p>
-<p>6.字面量语法<br>尽量使用字面量值来创建 NSString , NSDictionary , NSArray , NSNumber 这些不可变对象</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">NSArray *names = @[@&quot;Brian&quot;, @&quot;Matt&quot;, @&quot;Chris&quot;, @&quot;Alex&quot;, @&quot;Steve&quot;, @&quot;Paul&quot;];</div><div class="line">代替</div><div class="line">NSArray *names = [NSArray arrayWithObjects:@&quot;Brian&quot;, @&quot;Matt&quot;, @&quot;Chris&quot;, @&quot;Alex&quot;, @&quot;Steve&quot;, @&quot;Paul&quot;, nil];</div></pre></td></tr></table></figure>
-<p>7.属性</p>
-<blockquote>
-<p>小驼峰命名<br>属性的关键字按照 原子性，读写，内存管理的顺序 依次排列<br>Block 使用的是copy(栈Block需要复制到堆上再进行操作)<br>形容词性的BOOL属性的getter应该加上is前缀，@property (assign, getter=isEditable) BOOL editable;<br>实例化一个对象是需要耗费资源的，如果这个对象里的某个属性的实例化要调用很多配置和计算，就需要懒加载它，在使用它的前一刻对它进行实例化，但是也有对这种做法的争议：getter方法可能会产生某些副作用，例如如果它修改了全局变量，可能会产生难以排查的错误。<br>除了init和dealloc方法，建议都是用点语法访问属性。<br>不要滥用点语法，区分好方法调用和属性访问<br>尽量使用不可变对象（建议尽量把对外公布出来的属性设置为只读，在实现文件内部设为读写）</p>
-</blockquote>
-<p>8.方法</p>
-<blockquote>
-<p>方法名中不应使用and，而且签名要与对应的参数名保持高度一致<br>方法实现时，如果参数过长，则令每个参数占用一行，以冒号对齐。<br>私有方法应该在实现文件中申明<br>方法名用小写字母开头的单词组合而成<br>方法名加前缀区分作用</p>
-</blockquote>
-<p>9.面向协议编程<br>如果某些功能（方法）具备可复用性，我们就需要将它们抽取出来放入一个抽象接口文件中（在iOS中，抽象接口即协议），让不同类型的对象遵循这个协议，从而拥有相同的功能。<br>因为协议是不依赖于某个对象的，所以通过协议，我们可以解开两个对象之间的耦合</p>
-<p>10.iOS 中委托的设计</p>
-<blockquote>
-<p>在iOS开发中的委托模式包含了delegate（代理）和datasource（数据源）。虽然二者同属于委托模式，但是这两者是有区别的。这个区别就是二者的信息流方向是不同的：<br>delegate ：事件发生的时候，委托者需要通知代理。（信息流从委托者到代理）<br>datasource：委托者需要从数据源拉取数据。（信息流从数据源到委托者）<br>代理方法的第一个参数必须为委托者<br>遵循代理过多的时候，换行对齐显示<br>代理的方法需要明确必须执行和可不执行</p>
-</blockquote>
-<p>11.类</p>
-<blockquote>
-<p> 类的名称应该以公司字母缩写为前缀；创建子类的时候，应该把代表子类特点的部分放在前缀和父类名的中间<br>指定初始化方法(designated initializer)是提供所有的（最多的）参数的初始化方法，间接初始化方法(secondary initializer)有一个或部分参数的初始化方法。<br>所有返回类对象和实例对象的方法都应该使用instancetype<br> 在类的头文件中尽量少引用其他头文件（@class的使用 不在A的头文件中引入B的头文件，就不会一并引入B的全部内容，这样就减少了编译时间。可以避免循环引用：因为如果两个类在自己的头文件中都引入了对方的头文件，那么就会导致其中一个类无法被正确编译）</p>
-</blockquote>
-<p>12.类的布局<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">#pragma mark - Life Cycle Methods</div><div class="line">- (instancetype)init</div><div class="line">- (void)dealloc</div><div class="line"></div><div class="line">- (void)viewWillAppear:(BOOL)animated</div><div class="line">- (void)viewDidAppear:(BOOL)animated</div><div class="line">- (void)viewWillDisappear:(BOOL)animated</div><div class="line">- (void)viewDidDisappear:(BOOL)animated</div><div class="line"></div><div class="line">#pragma mark - Override Methods</div><div class="line"></div><div class="line">#pragma mark - Intial Methods</div><div class="line"></div><div class="line">#pragma mark - Network Methods</div><div class="line"></div><div class="line">#pragma mark - Target Methods</div><div class="line"></div><div class="line">#pragma mark - Public Methods</div><div class="line"></div><div class="line">#pragma mark - Private Methods</div><div class="line"></div><div class="line">#pragma mark - UITableViewDataSource  </div><div class="line">#pragma mark - UITableViewDelegate  </div><div class="line"></div><div class="line">#pragma mark - Lazy Loads</div><div class="line"></div><div class="line">#pragma mark - NSCopying  </div><div class="line"></div><div class="line">#pragma mark - NSObject  Methods</div></pre></td></tr></table></figure></p>
-<p>13.分类 </p>
-<blockquote>
-<p>分类添加的方法需要添加前缀和下划线<br>把类的实现代码分散到便于管理的多个分类中<br>通过分类机制，可以把类代码分成很多个易于管理的功能区，同时也便于调试。因为分类的方法名称会包含分类的名称，可以马上看到该方法属于哪个分类中。</p>
-</blockquote>
-<p>14.单例</p>
-<blockquote>
-<p>单例不能作为容器对象来使用<br>使用dispatch_once来生成单例</p>
-</blockquote>
-<p>15.方法注释<br>一个函数(方法)必须有一个字符串文档来解释，除非它：非公开，私有函数。很短。显而易见。<br>而其余的，包括公开接口，重要的方法，分类，以及协议，都应该伴随文档（注释）：以/开始<br>第二行识总结性的语第三行永远是空行在与第二行开头对齐的位置写剩下的注释。</p>
-<p>16.多用队列，少用同步锁来避免资源抢夺</p>
-<blockquote>
-<p>将写操作放入栅栏快中，让他们单独执行；将读取操作并发执行。<br>使用串行同步队列来将读写操作都安排到同一个队列里</p>
-</blockquote>
-<p>17.实现description方法打印自定义对象信息</p>
-<p>18.NSArray&amp; NSMutableArray</p>
-<blockquote>
-<p>非空判断<br>取下标的时候要判断是否越界<br>取第一个元素或最后一个元素的时候使用firtstObject和lastObject</p>
-</blockquote>
-<p>Xcode工程文件的物理路径要和逻辑路径保持一致。<br>手动标明警告和错误<br>忽略没有使用变量的编译警告</p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/06/13/基本理论复习/" title="基本理论知识复习" itemprop="url">基本理论知识复习</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
-		
-  <p class="article-time">
-    <time datetime="2017-06-13T15:30:12.000Z" itemprop="datePublished"> 发表于 2017-06-13</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>###</p>
-<ol>
-<li>为什么说OC是动态语言，体现在什么地方<br>这个问题涉及到两个概念，运行时和多态。运行时机制使我们直到运行时才去决定一个对象的类别，以及调用该类对象制定方法。多态：不同对象以自己的方式响应相同的消息的能力。<br>1.动态绑定，运行时再决定对象的类型。<br>2.动态绑定，某个示例对象被确定后其类型便被确定，该对象的属性和响应的消息也被圈圈确定。<br>3.动态加载，开发的时候icon图片，在retina屏设备上要多添加一个@2x的图片，当设备更换的时候图片会自动替换。</li>
-</ol>
-<p>2.MVC MVP MVVM<br>MVP与MVC有着一个重大的区别：在MVP中View并不直接使用Model，它们之间的通信是通过Presenter (MVC中的Controller)来进行的，所有的交互都发生在Presenter内部，而在MVC中View会直接从Model中读取数据而不是通过 Controller。<br>在MVC里，View是可以直接访问Model的！从而，View里会包含Model信息，不可避免的还要包括一些业务逻辑。 在MVC模型里，更关注的Model的不变，而同时有多个对Model的不同显示，即View。所以，在MVC模型里，Model不依赖于View，但是View是依赖于Model的。不仅如此，因为有一些业务逻辑在View里实现了，导致要更改View也是比较困难的，至少那些业务逻辑是无法重用的。MVP模型与视图完全分离，我们可以修改视图而不影响模型。</p>
-<ol>
-<li><p>为什么代理要用WEEk，<br>weak:指明该对象并不负责保持delegate这个对象，delegate这个对象的销毁由外部控制<br>Datasource是在告诉使用者之前的view中都有什么东西，有什么属性啊，属性的值都是多少，是只关于数据的东西。<br>Delegate是在告诉使用者之前的view有什么方法可以供我调用。<br>一个是数据，一个是操作。</p>
-</li>
-<li><p>Block和代理的区别<br>1，“一对一”，对同一个协议，一个对象只能设置一个代理delegate，所以单例对象就不能用代理；<br>2，代理更注重过程信息的传输：比如发起一个网络请求，可能想要知道此时请求是否已经开始、是否收到了数据、数据是否已经接受完成、数据接收失败<br>1，写法更简练，不需要写protocol、函数等等<br>2，block注重结果的传输：比如对于一个事件，只想知道成功或者失败，并不需要知道进行了多少或者额外 的一些信息<br>3，block需要注意防止循环引用</p>
-</li>
-<li><p>属性的本质是什么，包括哪几部分<br> @property = ivar + getter + setter   属性会自动生成自动变量并setter getter</p>
-</li>
-<li><p>如何令自己所写的对象具有拷贝功能<br>若想令自己所写的对象具有拷贝功能，则需实现 NSCopying 协议。如果自定义的对象分为可变版本与不可变版本，那么就要同时实现 NSCopying与 NSMutableCopying协议。</p>
-</li>
-</ol>
-<blockquote>
-<p>需声明该类遵从 NSCopying 协议<br>实现 NSCopying 协议。该协议只有一个方法:</p>
+        <p>###podfile多target正规写法</p>
+<p>####什么是Podfile</p>
+<p>Podfile是一个规范，描述了一个或多个一套工程目标的依赖项</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">target &apos;PodfileDemo&apos; do</div><div class="line">  pod &apos;AFNetworking&apos;, &apos;~&gt; 3.0&apos;</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>这是最简单最普遍的写法，针对MyApp这个target引入AFNetworking这个依赖库，也是大家平时用的最多的一种方式。</p>
+<p>下面是个更复杂的一个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"># 下面两行是指明依赖库的来源地址</div><div class="line">source &apos;https://github.com/CocoaPods/Specs.git&apos;</div><div class="line">source &apos;https://github.com/Artsy/Specs.git&apos;</div><div class="line"></div><div class="line"># 说明平台是ios，版本是9.0</div><div class="line">platform :ios, &apos;9.0&apos;</div><div class="line"></div><div class="line"># 忽略引入库的所有警告（强迫症者的福音啊）</div><div class="line">inhibit_all_warnings!</div><div class="line"></div><div class="line"># 针对MyApp target引入AFNetworking</div><div class="line"># 针对MyAppTests target引入OCMock，</div><div class="line">target &apos;PodfileDemo&apos; do </div><div class="line">    pod &apos;AFNetworking&apos;, &apos;~&gt; 3.0&apos; </div><div class="line">    target &apos;MyAppTests&apos; do</div><div class="line">       inherit! :search_paths </div><div class="line">       pod &apos;OCMock&apos;, &apos;~&gt; 2.0.1&apos; </div><div class="line">    end</div><div class="line">end</div><div class="line"># 这个是cocoapods的一些配置,官网并没有太详细的说明,一般采取默认就好了,也就是不写.</div><div class="line">post_install do |installer|       </div><div class="line">   installer.pods_project.targets.each do |target| </div><div class="line">     puts target.name </div><div class="line">   end</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>####主配置</p>
+<p>install! 这个命令是cocoapods声明的一个安装命令，用于安装引入Podfile里面的依赖库。<br>install! 这个命令还有一些个人设置选项，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">install! &apos;cocoapods&apos;, </div><div class="line">  :deterministic_uuids =&gt; false, </div><div class="line">  :integrate_targets =&gt; false</div></pre></td></tr></table></figure>
+<p>还支持其他的选项：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Supported Keys:</div><div class="line"></div><div class="line">:clean</div><div class="line"></div><div class="line">:deduplicate_targets</div><div class="line"></div><div class="line">:deterministic_uuids</div><div class="line"></div><div class="line">:integrate_targets</div><div class="line"></div><div class="line">:lock_pod_sources</div><div class="line"></div><div class="line">:share_schemes_for_development_pods</div></pre></td></tr></table></figure>
+<p>关于以上的配置，官网也没有一个确切的说明，以为我们只需用系统默认即可</p>
+<p>####Dependencies（依赖项）<br>Podfile指定每个target的依赖项</p>
 <ul>
-<li>(id)copyWithZone:(NSZone *)zone;</li>
+<li>pod指定特定的依赖库</li>
+<li>podspec可以提供一个API来创建podspecs</li>
+<li>target通过target指定依赖范围</li>
 </ul>
-</blockquote>
-<ol>
-<li><p>可变集合类 和 不可变集合类的 copy 和 mutablecopy有什么区别？<br>如果对一不可变对象复制，copy是指针复制（浅拷贝）和mutableCopy就是对象复制（深拷贝）。如果是对可变对象复制，都是深拷贝，但是copy返回的对象是不可变的。</p>
-</li>
-<li><p>atomic是绝对的线程安全么<br>atomic所说的线程安全只是保证了getter和setter存取方法的线程安全，并不能保证整个对象是线程安全的</p>
-</li>
-<li><p>UICollectionView自定义layout如何实现<br>实现一个自定义layout的常规做法是继承UICollectionViewLayout类，然后重载下列方法：<br>-(CGSize)collectionViewContentSize<br>返回collectionView的内容的尺寸<br>-(NSArray <em>)layoutAttributesForElementsInRect:(CGRect)rect<br>返回rect中的所有的元素的布局属性<br>返回的是包含UICollectionViewLayoutAttributes的NSArray<br>UICollectionViewLayoutAttributes可以是cell，追加视图或装饰视图的信息，通过不同的UICollectionViewLayoutAttributes初始化方法可以得到不同类型的UICollectionViewLayoutAttributes：<br>layoutAttributesForCellWithIndexPath:<br>layoutAttributesForSupplementaryViewOfKind:withIndexPath:<br>layoutAttributesForDecorationViewOfKind:withIndexPath:<br>-(UICollectionViewLayoutAttributes )layoutAttributesForItemAtIndexPath:(NSIndexPath )indexPath<br>返回对应于indexPath的位置的cell的布局属性<br>-(UICollectionViewLayoutAttributes )layoutAttributesForSupplementaryViewOfKind:(NSString )kind atIndexPath:(NSIndexPath </em>)indexPath<br>返回对应于indexPath的位置的追加视图的布局属性，如果没有追加视图可不重载<br>-(UICollectionViewLayoutAttributes * )layoutAttributesForDecorationViewOfKind:(NSString)decorationViewKind atIndexPath:(NSIndexPath )indexPath<br>返回对应于indexPath的位置的装饰视图的布局属性，如果没有装饰视图可不重载<br>-(BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds<br>当边界发生改变时，是否应该刷新布局。如果YES则在边界变化（一般是scroll到其他地方）时，将重新计算需要的布局信息。</p>
-</li>
-</ol>
-<p>另外需要了解的是，在初始化一个UICollectionViewLayout实例后，会有一系列准备方法被自动调用，以保证layout实例的正确。<br>首先，-(void)prepareLayout将被调用，默认下该方法什么没做，但是在自己的子类实现中，一般在该方法中设定一些必要的layout的结构和初始需要的参数等。<br>之后，-(CGSize) collectionViewContentSize将被调用，以确定collection应该占据的尺寸。注意这里的尺寸不是指可视部分的尺寸，而应该是所有内容所占的尺寸。collectionView的本质是一个scrollView，因此需要这个尺寸来配置滚动行为。<br>接下来-(NSArray *)layoutAttributesForElementsInRect:(CGRect)rect被调用，这个没什么值得多说的。初始的layout的外观将由该方法返回的UICollectionViewLayoutAttributes来决定。<br>另外，在需要更新layout时，需要给当前layout发送 -invalidateLayout，该消息会立即返回，并且预约在下一个loop的时候刷新当前layout，这一点和UIView的setNeedsLayout方法十分类似。在-invalidateLayout后的下一个collectionView的刷新loop中，又会从prepareLayout开始，依次再调用-collectionViewContentSize和-layoutAttributesForElementsInRect来生成更新后的布局。</p>
-<ol>
-<li><p>xib用StoryBoard开发界面有什么弊端<br>优点：<br>XIB：在编译前就提供了可视化界面，可以直接拖控件，也可以直接给控件添加约束，更直观一些，而且类文件中就少了创建控件的代码，确实简化不少，通常每个XIB对应一个类。<br>Storyboard：在编译前提供了可视化界面，可拖控件，可加约束，在开发时比较直观，而且一个storyboard可以有很多的界面，每个界面对应一个类文件，通过storybard，可以直观地看出整个App的结构。<br>缺点：<br>XIB：需求变动时，需要修改XIB很大，有时候甚至需要重新添加约束，导致开发周期变长。XIB载入相比纯代码自然要慢一些。对于比较复杂逻辑控制不同状态下显示不同内容时，使用XIB是比较困难的。当多人团队或者多团队开发时，如果XIB文件被发动，极易导致冲突，而且解决冲突相对要困难很多。<br>Storyboard：需求变动时，需要修改storyboard上对应的界面的约束，与XIB一样可能要重新添加约束，或者添加约束会造成大量的冲突，尤其是多团队开发。对于复杂逻辑控制不同显示内容时，比较困难。当多人团队或者多团队开发时，大家会同时修改一个storyboard，导致大量冲突，解决起来相当困难。</p>
-</li>
-<li><p>并行和并发的区别<br>并发性（Concurrence）：指两个或两个以上的事件或活动在同一时间间隔内发生。并发的实质是一个物理CPU(也可以多个物理CPU) 在若干道程序之间多路复用，并发性是<br>对有限物理资源强制行使多用户共享以提高效率。<br>并行性（parallelism）指两个或两个以上事件或活动在同一时刻发生。在多道程序环境下，并行性使多个程序同一时刻可在不同CPU上同时执行。<br>区别：一个处理器同时处理多个任务和多个处理器或者是多核的处理器同时处理多个不同的任务。</p>
-</li>
-<li><p>GCD的一些常用的函数<br>一次性函数/延迟执行/队列组/<br>栅栏函数:控制队列中任务的执行顺序,前面的所有任务执行完毕之后执行栅栏函数,自己执行完毕之后再之后后面的任务</p>
-</li>
-<li><p>NSCache优于NSDIctionary的几点</p>
+<p>pod - 指定项目的依赖项</p>
+<p>依赖项规范是由Pod的名称和一个可选的版本组合一起。<br>1&gt; 如果后面不写依赖库的具体版本号，那么cocoapods会默认选取最新版本。</p>
+<p>pod ‘SSZipArchive’<br>2&gt; 如果你想要特定的依赖库的版本，就需要在后面写上具体版本号，格式：</p>
+<p>pod ‘Objection’, ‘0.9’<br>3&gt; 也可以指定版本范围</p>
 <blockquote>
-<p>当系统资源将要耗尽时，NSCache具备自动删减缓冲的功能。并且还会先删减“最久未使用”的对象。<br>NSCache不拷贝键，而是保留键。因为并不是所有的键都遵从拷贝协议（字典的键是必须要支持拷贝协议的，有局限性）。<br>NSCache是线程安全的：不编写加锁代码的前提下，多个线程可以同时访问NSCache。</p>
+<p>0.1 高于0.1版本（不包含0.1版本）的任意一个版本<br>= 0.1 高于0.1版本（包含0.1版本）的任意一个版本<br>&lt; 0.1 低于0.1版本（不包含0.1版本）的任意一个<br>&lt;= 0.1低于0.1版本（包含0.1版本）的任意一个<br>~&gt; 0.1.2 版本 0.1.2的版本到0.2 ，不包括0.2。这个基于你指定的版本号的最后一个部分。这个例子等效于&gt;= 0.1.2并且 &lt;0.2.0，并且始终是你指定范围内的最新版本。</p>
 </blockquote>
-</li>
-<li><p>知不知道Designated Initializer？使用它的时候有什么需要注意的问题？(指定初始化函数)<br>指定初始化函数对一个类来说非常重要，通常参数也是最多的，试想每次我们需要创建一个自定义类都需要一堆参数，那岂不是很痛苦。便利初始化函数就是用来帮我们解决这个问题的，可以让我们比较的创建对象，同时又可以保证类的成员变量被设置为默认的值。<br>子类如果有指定初始化函数，那么指定初始化函数实现时必须调用它的直接父类的指定初始化函数<br>如果子类有指定初始化函数，那么便利初始化函数必须调用自己的其它初始化函数(包括指定初始化函数以及其他的便利初始化函数)，不能调用super的初始化函数。</p>
-</li>
-<li><p>实现description方法能取到什么效果<br>NSLog(@”%@”, objectA);这会自动调用objectA的description方法来输出ObjectA的描述信息.<br>2.description方法默认返回对象的描述信息(默认实现是返回类名和对象的内存地址)<br>3.description方法是基类NSObject 所带的方法,因为其默认实现是返回类名和对象的内存地址, 这样的话,使用NSLog输出OC对象,意义就不是很大,因为我们并不关心对象的内存地址,比较关心的是对象内部的一些成变量的值。因此,会经常重写description方法,覆盖description方法 的默认实现</p>
-</li>
-<li><p>objc使用什么机制管理对象内存<br>1).MRC(manual retain-release)手动内存管理2).ARC(automatic reference counting)自动引用计数3).Garbage collection (垃圾回收)但是iOS不支持垃圾回收, ARC作为LLVM(编译器的架构系统,用c++编写而成的) 3.0编译器的一项特性, 在iOS5.0 (Xcode4) 版本后推出的自动内存管理, 苹果推荐使用ARC技术来管理内存, 节约时间 , 提高效率 , 减少代码量 , 降低出错几率. 开发者不需要再手动写入retain,release,autorelease三个关键字,手动管理内存, 编译器将自动在代码合适的地方插入retain,release,autorelease进行内存管理.ARC的判断准则, 只要没有强指针指向对象, 对象就会被释放.</p>
-</li>
-<li><p>block的实质是什么？一共有几种block？都是什么情况下生成的？<br>block一共有3种类型的block_NSConcreteGlobalBlock 全局静态_NSConcreteStackBlock 保存在栈中，出函数作用域就销毁_NSConcreteMallocBlock 保存在堆中，retainCount == 0销毁<br>本质上是一个指向结构体的指针</p>
-</li>
-</ol>
-<p>默认情况下，在block中访问的外部变量是复制过去的，即：写操作不对原变量生效。但是你可以加上__block来让其写操作生效，</p>
-<ol>
-<li><p>类方法和实例方法有什么区别<br>类方法(Class Method) 有时被称为工厂方法(Factory Method)或者方便方法(Convenience method)。工厂方法的称谓明显和一般意义上的工厂方法不同，从本质上来说，类方法可以独立于对象而执行，所以在其他的语言里面类方法有的时候被称为静态方法。<br>注意点一：类方法<br>1，类方法可以调用类方法。<br>2，类方法不可以调用实例方法，但是类方法可以通过创建对象来访问实例方法。<br>3，类方法不可以使用实例变量。类方法可以使用self，因为self不是实例变量。<br>4，类方法作为消息，可以被发送到类或者对象里面去（实际上，就是可以通过类或者对象调用类方法的意思）。</p>
-</li>
-<li><p>分类，能用分类做什么？内部是如何实现的？它为什么会覆盖掉原来的方法<br>在runtime层，category用结构体category_t（在objc-runtime-new.h中可以找到此定义），它包含了<br>1)、类的名字（name）<br>2)、类（cls）<br>3)、category中所有给类添加的实例方法的列表（instanceMethods）<br>4)、category中所有添加的类方法的列表（classMethods）<br>5)、category实现的所有协议的列表（protocols）<br>6)、category中添加的所有属性（instanceProperties）</p>
-</li>
-</ol>
-<p>static char const * const ObjectTagKey;</p>
-<p>@implementation NSObject (ExampleCategoryWithProperty)<br>@dynamic objectTag;</p>
+<p>####Build configurations（编译配置）</p>
+<p>默认情况下， 依赖项会被安装在所有target的build configuration中。为了调试或者处于其他原因，依赖项只能在给定的build configuration中被启用。<br>下面写法指明只有在Debug和Beta模式下才有启用配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod &apos;PonyDebugger&apos;, :configurations =&gt; [&apos;Debug&apos;, &apos;Beta&apos;]</div></pre></td></tr></table></figure>
+<p>或者，可以弄白名单只指定一个build configurations。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod &apos;PonyDebugger&apos;, :configuration =&gt; &apos;Debug&apos;</div></pre></td></tr></table></figure>
+<p>注意：默认情况下如果不指定具体生成配置，那么会包含在所有的配置中，如果你想具体指定就必须手动指明。</p>
+<p>####Subspecs<br>一般情况我们会通过依赖库的名称来引入，cocoapods会默认安装依赖库的所有内容。<br>我们也可以指定安装具体依赖库的某个子模块，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># 仅安装QueryKit库下的Attribute模块</div><div class="line">pod &apos;QueryKit/Attribute&apos;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># 仅安装QueryKit下的Attribute和QuerySet模块</div><div class="line">pod &apos;QueryKit&apos;, :subspecs =&gt; [&apos;Attribute&apos;, &apos;QuerySet&apos;]</div></pre></td></tr></table></figure>
+<p>Using the files from a local path (使用本地文件)</p>
+<p>我们也可以指定依赖库的来源地址。如果我们想引入我们本地的一个库，可以这样写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod &apos;AFNetworking&apos;, :path =&gt; &apos;~/Documents/AFNetworking&apos;</div></pre></td></tr></table></figure>
+<p>使用这个选项后，Cocoapods会将给定的文件夹认为是Pod的源，并且在工程中直接引用这些文件。这就意味着你编辑的部分可以保留在CocoaPods安装中，如果我们更新本地AFNetworking里面的代码，cocoapods也会自动更新。</p>
+<p>被引用的文件夹可以来自你喜爱的SCM，甚至当前仓库的一个git子模块</p>
+<p>注意：Pod的podspec文件也应该被放在这个文件夹当中</p>
+<p>From a podspec in the root of a library repository (引用仓库根目录的podspec)</p>
+<p>有时我们需要引入依赖库指定的分支或节点，写法如下。</p>
+<p>引入master分支（默认）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod &apos;AFNetworking&apos;, :git =&gt; &apos;https://github.com/gowalla/AFNetworking.git&apos;</div></pre></td></tr></table></figure></p>
+<p>引入指定的分支</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod &apos;AFNetworking&apos;, :git =&gt; &apos;https://github.com/gowalla/AFNetworking.git&apos;, :branch =&gt; &apos;dev&apos;</div></pre></td></tr></table></figure>
+<p>引入某个节点的代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod &apos;AFNetworking&apos;, :git =&gt; &apos;https://github.com/gowalla/AFNetworking.git&apos;, :tag =&gt; &apos;0.7.0&apos;</div></pre></td></tr></table></figure>
+<p>引入某个特殊的提交节点<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod &apos;AFNetworking&apos;, :git =&gt; &apos;https://github.com/gowalla/AFNetworking.git&apos;, :commit =&gt; &apos;082f8319af&apos;</div></pre></td></tr></table></figure></p>
+<p>需要特别注意的是，虽然这样将会满足任何在Pod中的依赖项通过其他Pods 但是podspec必须存在于仓库的根目录中。</p>
+<p>从外部引入podspec引入</p>
+<p>podspec可以从另一个源库的地址引入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod &apos;JSONKit&apos;, :podspec =&gt; &apos;https://example.com/JSONKit.podspec&apos;</div></pre></td></tr></table></figure>
+<p>podspec</p>
+<p>使用给定podspec文件中定义的代码库的依赖关系。如果没有传入任何参数，podspec优先使用根目录，如果是其他情况必须在后面指明。(一般使用默认设置即可)例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"># 不指定表示使用根目录下的podspec，默认一般都会放在根目录下</div><div class="line">podspec</div><div class="line"># 如果podspec的名字与库名不一样，可以通过这样来指定</div><div class="line">podspec :name =&gt; &apos;QuickDialog&apos;</div><div class="line"># 如果podspec不是在根目录下，那么可以通过:path来指定路径</div><div class="line">podspec :path =&gt; &apos;/Documents/PrettyKit/PrettyKit.podspec&apos;</div><div class="line">target</div></pre></td></tr></table></figure>
+<p>在给定的块内定义pod的target（Xcode工程中的target）和指定依赖的范围。一个target应该与Xcode工程的target有关联。默认情况下，target会包含定义在块外的依赖，除非指定不使用inherit!来继承（说的是嵌套的块里的继承问题）</p>
+<p>定义一个简单target ZipApp引入SSZipArchive库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">target &apos;ZipApp&apos; do </div><div class="line">pod &apos;SSZipArchive&apos;</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>定义一个ZipApptarget仅引入SSZipArchive库，定义ZipAppTeststarget 引入Nimble的同时也会继承ZipApptarget里面的SSZipArchive库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">target &apos;ZipApp&apos; do </div><div class="line">pod &apos;SSZipArchive&apos; </div><div class="line">target &apos;ZipAppTests&apos; do</div><div class="line">  inherit! :search_paths </div><div class="line">  pod &apos;Nimble&apos; </div><div class="line">end</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>target块中嵌套多个子块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">target &apos;ShowsApp&apos; do</div><div class="line">  # ShowsApp 仅仅引入ShowsKit</div><div class="line">  pod &apos;ShowsKit&apos; </div><div class="line">  # 引入 ShowsKit 和 ShowTVAuth </div><div class="line">  target &apos;ShowsTV&apos; do </div><div class="line">      pod &apos;ShowTVAuth&apos; </div><div class="line">  end </div><div class="line">  # 引入了Specta和Expecta以及ShowsKit</div><div class="line">  target &apos;ShowsTests&apos; do </div><div class="line">      inherit! :search_paths </div><div class="line">      pod &apos;Specta&apos; </div><div class="line">      pod &apos;Expecta&apos; </div><div class="line">  end</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>抽象target</p>
+<p>定义一个新的抽象目标，它可以方便的用于目标依赖继承。<br>简单写法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">abstract_target &apos;Networking&apos; do</div><div class="line">  pod &apos;AlamoFire&apos; </div><div class="line">  target &apos;Networking App 1&apos; </div><div class="line">  target &apos;Networking App 2&apos;</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>定义一种abstract_target包含多个target</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"># 注意：这是个抽象的target也就是说在工程中并没有这个target引入ShowsKit</div><div class="line">abstract_target &apos;Shows&apos; do</div><div class="line">  pod &apos;ShowsKit&apos;</div><div class="line">  # ShowsiOS target会引入ShowWebAuth库以及继承自Shows的ShowsKit库</div><div class="line">  target &apos;ShowsiOS&apos; do</div><div class="line">      pod &apos;ShowWebAuth&apos;</div><div class="line">  end</div><div class="line">  # ShowsTV target会引入ShowTVAuth库以及继承自Shows的ShowsKit库</div><div class="line">  target &apos;ShowsTV&apos; do</div><div class="line">      pod &apos;ShowTVAuth&apos;</div><div class="line">  end</div><div class="line">  # ShowsTests target引入了Specta和Expecta库，并且指明继承Shows，所以也会引入ShowsKit</div><div class="line">  target &apos;ShowsTests&apos; do</div><div class="line">      inherit! :search_paths </div><div class="line">      pod &apos;Specta&apos; </div><div class="line">      pod &apos;Expecta&apos; </div><div class="line">  end</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>abstract! 和 inherit!</p>
+<p>abstract! 指示当前的target是抽象的，因此不会直接链接Xcode target。<br>inherit! 设置当前target的继承模式。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">target &apos;App&apos; do</div><div class="line"> target &apos;AppTests&apos; do</div><div class="line">    inherit! :search_paths </div><div class="line"> end</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>Target configuration (目标项配置)</p>
+<p>使用target 配置来控制的cocoapods生成project。<br>开始时详细说明您正在使用什么平台上。工程文件里允许您具体说明哪些项目的链接。</p>
+<p>platform</p>
+<p>platform用于指定应建立的静态库的平台。CocoaPods提供了默认的平台版本配置：</p>
+<p>iOS-&gt;4.3<br>OS X-&gt;10.6<br>tvOS-&gt;9.0<br>watchOS-&gt;2.0<br>如果部署目标需要iOS &lt; 4.3，armv6体系结构将被添加到ARCHS。<br>例如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">#指定具体平台和版本</div><div class="line">platform :ios, &apos;4.0&apos;</div><div class="line">platform :ios</div></pre></td></tr></table></figure>
+<p>project<br>如果没有显示的project被指定，那么会默认使用target的父target指定的project作为目标。如果如果没有任何一个target指定目标，那么就会使用和Podefile在同一目录下的project。同样也能够指定是否这些设置在release或者debug模式下生效。为了做到这一点，你必须指定一个名字和:release/:debuge关联起来</p>
+<p>Examples:<br>Specifying the user project</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"># MyGPSApp这个target引入的库只能在FastGPS工程中引用</div><div class="line">target &apos;MyGPSApp&apos; do </div><div class="line">    project &apos;FastGPS&apos; </div><div class="line">    ...</div><div class="line">end</div><div class="line"># 原理同上</div><div class="line">target &apos;MyNotesApp&apos; do </div><div class="line">    project &apos;FastNotes&apos; </div><div class="line">    ...</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>使用自定义的编译配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">project &apos;TestProject&apos;, &apos;Mac App Store&apos; =&gt; :release, &apos;Test&apos; =&gt; :debug</div></pre></td></tr></table></figure>
+<p>inhibit_all_warnings!（强迫症者的福音）</p>
+<p>inhibit_all_warnings! 屏蔽所有来自于cocoapods依赖库的警告。你可以全局定义，也能在子target里面定义，也可以指定某一个库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># 隐藏SSZipArchive的警告而不隐藏ShowTVAuth的警告</div><div class="line">pod &apos;SSZipArchive&apos;, :inhibit_warnings =&gt; true</div><div class="line">pod &apos;ShowTVAuth&apos;, :inhibit_warnings =&gt; false</div></pre></td></tr></table></figure>
+<p>use_frameworks!</p>
+<p>通过指定use_frameworks!要求生成的是framework而不是静态库。<br>如果使用use_frameworks!命令会在Pods工程下的Frameworks目录下生成依赖库的framework<br>如果不使用use_frameworks!命令会在Pods工程下的Products目录下生成.a的静态库</p>
+<p>Workspace</p>
+<p>默认情况下，我们不需要指定，直接使用与Podfile所在目录的工程名一样就可以了。如果要指定另外的名称，而不是使用工程的名称，可以这样指定：</p>
+<p>workspace ‘MyWorkspace’<br>Source</p>
+<p>source是指定pod的来源。如果不指定source，默认是使用CocoaPods官方的source。(建议使用默认设置)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">CocoaPods Master Repository</div><div class="line"># 使用其他来源地址</div><div class="line">source &apos;https://github.com/artsy/Specs.git&apos;</div><div class="line"># 使用官方默认地址（默认）</div><div class="line">source &apos;https://github.com/CocoaPods/Specs.git&apos;</div></pre></td></tr></table></figure>
+<p>Hooks<br>Podfile提供了hook机制，它将在安装过程中调用。hook是全局性的，不存储于每个target中。</p>
+<p>Plugin</p>
+<p>指定应在安装期间使用的插件。使用此方法指定应在安装期间使用的插件，以及当它被调用时，应传递给插件的选项。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># 指定在安装期间使用cocoapods-keys和slather这两个插件</div><div class="line">plugin &apos;cocoapods-keys&apos;, :keyring =&gt; &apos;Eidolon&apos;</div><div class="line">plugin &apos;slather&apos;</div></pre></td></tr></table></figure>
+<p>pre_install</p>
+<p>当我们下载完成，但是还没有安装之时，可以使用hook机制通过pre_install指定要做更改，更改完之后进入安装阶段。<br>格式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">pre_install do |installer| </div><div class="line">    # 做一些安装之前的更改</div><div class="line">end</div></pre></td></tr></table></figure></p>
+<p>post_install</p>
+<p>当我们安装完成，但是生成的工程还没有写入磁盘之时，我们可以指定要执行的操作。<br>比如，我们可以在写入磁盘之前，修改一些工程的配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">post_install do |installer| installer.pods_project.targets.each do |target| </div><div class="line">        target.build_configurations.each do |config| </div><div class="line">            config.build_settings[&apos;GCC_ENABLE_OBJC_GC&apos;] = &apos;supported&apos; </div><div class="line">        end </div><div class="line">    end</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>def</p>
+<p>我们还可以通过def命令来声明一个pod集：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">def &apos;CustomPods&apos;</div><div class="line">   pod &apos;IQKeyboardManagerSwift&apos;</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>然后，我们就可以在需要引入的target处引入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">target &apos;MyTarget&apos; do </div><div class="line">   CustomPods</div><div class="line">end</div></pre></td></tr></table></figure>
+<p>这么写的好处是：如果有多个target，而不同target之间并不全包含，那么可以通过这种方式来分开引入。</p>
+<p>原文网址： <a href="http://www.jianshu.com/p/8a0fd6150159" target="_blank" rel="external">http://www.jianshu.com/p/8a0fd6150159</a></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/29/swift与OC混合开发/" title="swift和OC混合开发" itemprop="url">swift和OC混合开发</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-28T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-29</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>###混合开发注意事项及问题</p>
 <ul>
-<li><p>(id)objectTag {<br>  return objc_getAssociatedObject(self, ObjectTagKey);<br>}</p>
+<li>混编也无非两种情况，</li>
+</ul>
+<blockquote>
+<p>在Objective - C工程或者文件使用Swift的文件；<br>在Swift工程或者文件使用Objective - C文件</p>
+</blockquote>
+<ul>
+<li><p>在混编的过程中最重要的两个文件：</p>
+<ol>
+<li><p>桥接文件：<br>桥接文件“ProjectName-Bridging-Header.h”，在首次创建其他文件的时候，会自动生成。如果不小心删除后，也可以手动添加，不过名字必须是“ProjectName-Bridging-Header.h”头文件（名称组成:工程名-Bridging-Header.h），如果名字记不清也可以自己新建Header file后，在Targets–&gt;Build Settings–&gt;Swift Compiler - General–&gt;Objective-C Bridging Header配置文件路径，这个文件主要是Swift使用OC类时使用。</p>
 </li>
-<li><p>(void)setObjectTag:(id)newObjectTag {<br>  objc_setAssociatedObject(self, ObjectTagKey, newObject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);<br>}</p>
+<li><p>Objective-C Generated Interface Header Name文件<br>这个文件是混编时，系统生成的Swift文件对应的Objective-C的头文件，具体可以在Targets–&gt;Build Settings–&gt;Swift Compiler - General–&gt;Objective-C Generated Interface Header Name进行配置，默认文件名是工程名-Swift.h，一般不做改动。</p>
+</li>
+</ol>
 </li>
 </ul>
+<p>1.在Objective - C工程或者文件使用Swift的文件<br>当在OC文件中调用Swift文件中的类的时候，首先在OC文件中要加上 #import “<br>ProjectName-swift.h”(名字组成:工程名-swift)<br>这个文件虽然在工程中看不到，但是她真实存在，编译后，你可以按住Command+单击该文件名，就会看到具体生成的代码。<br>引入后，具体类的使用，直接按照OC的方式使用即可。</p>
+<p>2.在Swift工程或者文件使用Objective - C文件<br>当在Swift中使用OC文件的时候，只需在桥接文件即projectName-Bridging-Header.h文件中引入需要的头文件。<br>具体使用，按照对应的Swift语法结构来即可。</p>
+<p>###混编注意事项<br>对于需要混编的Swift类添加@objc声明或继承NSObject或NSObject的子类<br>class TestClass<br>{<br>// 属性<br>// 实现<br>}<br>如果要在Objective-C类中使用TestClass类，应当使用@objc加以声明，或者将TestClass继承自NSObject或NSObject的子类，否则，引入ProductName-Swift.h之后，程序找不到对应类。</p>
+<p>使用第三方Framework</p>
+<ul>
+<li>设置： target–&gt;build setting –&gt;Packaging –&gt;Defines Module为 “Yes”；</li>
+<li>然后，配置文件Target -&gt; Build Phases  -&gt; Link Binary，添加要导入的Framework；</li>
+<li>最后，还是要配置桥接文件，比如要使用 abc-lib.framework库中的 abc.h 就要这样配置：#import”abc-lib/abc.h”;</li>
+</ul>
+<p>Subclass子类问题<br>对于自定义的类而言，Objective-C的类，不能继承自Swift的类，即要混编的OC类不能是Swift类的子类。反过来，需要混编的Swift类可以继承自OC的类。</p>
+<p>OC宏文件<br>如Swift文件要使用OC中定义的宏，只能使用常量简单宏文件。</p>
+<p>Swift独有特性<br>Swift中有许多OC没有的特性，比如，Swift有元组、为一等公民的函数、还有特有的枚举类型。所以，要使用的混编文件要注意Swift独有属性问题。</p>
+<p>案例之Swift中使用OC的block<br>Swift中使用Closure不能使用Block作为属性进行传值，必须是初始化方法或函数。</p>
+<p>OC文件中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">#import typedef void (^Myblock)(NSString *arg); </div><div class="line"></div><div class="line">@interface FirViewController : UIViewController </div><div class="line">//@property (copy, nonatomic) Myblock myBlock; </div><div class="line">//这种作为公共参数的形式，如果在Swift类中去回调的话，是有问题的。提示没有初始化方法，所以使用下面的以Block为参数的方法 </div><div class="line"></div><div class="line">- (void)transValue:(Myblock) block;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">#import &quot;FirViewController.h&quot; </div><div class="line">@implementation FirViewController </div><div class="line"></div><div class="line">- (void)viewDidLoad </div><div class="line">&#123; </div><div class="line">    [super viewDidLoad]; </div><div class="line">    self.view.backgroundColor = [UIColor whiteColor]; </div><div class="line">&#125; </div><div class="line"></div><div class="line">- (void)transValue:(Myblock)block</div><div class="line">&#123; </div><div class="line">    if (block) </div><div class="line">    &#123; </div><div class="line">        block(@&quot;firBack&quot;); </div><div class="line">    &#125; </div><div class="line">&#125; </div><div class="line">@end</div></pre></td></tr></table></figure>
+<p>在Swift文件回调：</p>
+<p>在Swift使用OC的类时，首先在桥接文件中声明oc的头文件<br>工程名-Bridging-Header.h这是创建Swift工程的情况下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">import UIKit </div><div class="line">class ViewController: UIViewController </div><div class="line">&#123; </div><div class="line">   override func viewDidLoad() </div><div class="line">    &#123; </div><div class="line">        super.viewDidLoad() </div><div class="line">        self.view.backgroundColor = UIColor.whiteColor() </div><div class="line">    &#125; </div><div class="line">    @IBOutlet weak var goFirst: UIButton! </div><div class="line">    @IBAction func goFirstAction(sender: AnyObject) </div><div class="line">    &#123; </div><div class="line">        let firVC:FirViewController = FirViewController() </div><div class="line">        firVC. transValue &#123; ( arg:String !) -&gt; Void in </div><div class="line">            self.aBtn?.setTitle(arg, forState: UIControlState.Normal)</div><div class="line">        &#125; </div><div class="line">        self.navigationController?.pushViewController(firVC, animated: true) </div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>参考网址<br><a href="http://www.cocoachina.com/ios/20161019/17791.html" target="_blank" rel="external">http://www.cocoachina.com/ios/20161019/17791.html</a></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/28/swift数据存储/" title="swift数据存储" itemprop="url">swift数据存储</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-27T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-28</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>之前用惯了OC的各种存储，换到swift以后，大相径庭，这里记录一下供以后查阅</p>
+<p>###1.使用NSUserDefaults存储数据</p>
+<p>NSUserDefaults：一般我们拿它用来保存应用程序设置和属性、用户保存的数据,用户的手机不管是关机or开机时候都会保存在本地(除非你把他删除了),它一般可以存储类型包括:字符,数组,字典,NSData,NSNumber以及基本数据类型都可.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">/*  使用NSUserDefaults对普通数据对象储存   */</div><div class="line"></div><div class="line">    /**</div><div class="line">     储存</div><div class="line"></div><div class="line">     - parameter key:   key</div><div class="line">     - parameter value: value</div><div class="line">     */</div><div class="line">    class func setNormalDefault(key:String, value:AnyObject?)&#123;</div><div class="line">        if value == nil &#123;</div><div class="line">            NSUserDefaults.standardUserDefaults().removeObjectForKey(key)</div><div class="line">        &#125;</div><div class="line">        else&#123;</div><div class="line">            NSUserDefaults.standardUserDefaults().setObject(value, forKey: key)</div><div class="line">            // 同步</div><div class="line">            NSUserDefaults.standardUserDefaults().synchronize()</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     通过对应的key移除储存</div><div class="line"></div><div class="line">     - parameter key: 对应key</div><div class="line">     */</div><div class="line">    class func removeNormalUserDefault(key:String?)&#123;</div><div class="line">        if key != nil &#123;</div><div class="line">            NSUserDefaults.standardUserDefaults().removeObjectForKey(key!)</div><div class="line">            NSUserDefaults.standardUserDefaults().synchronize()</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     通过key找到储存的value</div><div class="line"></div><div class="line">     - parameter key: key</div><div class="line"></div><div class="line">     - returns: AnyObject</div><div class="line">     */</div><div class="line">    class func getNormalDefult(key:String)-&gt;AnyObject?&#123;</div><div class="line">        return NSUserDefaults.standardUserDefaults().valueForKey(key)</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>简单使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">private func userDefaultStoreData()&#123;</div><div class="line">        Tool.setNormalDefault(&quot;name&quot;, value: &quot;Rookie&quot;)</div><div class="line">        let value = Tool.getNormalDefult(&quot;name&quot;)</div><div class="line">        print(&quot;测试NSUserDefaults 简单对象储存\\(value)&quot;)</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>###2.通过write写入方式存储为plist属性列表<br>write写入方式也是一种把数据永久保存在磁盘中储存方式,一般步骤:1)获取路径(一般有两种方式:使用NSSearchPathForDirectoriesInDomains或URLsForDirectory;使用NSHomeDirectory➕相应的路径);2)向文件中写入数据;3)从文件中读取数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">     创建文件</div><div class="line"></div><div class="line">     - parameter name:        文件名</div><div class="line">     - parameter fileBaseUrl: url</div><div class="line"></div><div class="line">     - returns: 文件路径</div><div class="line">     */</div><div class="line">   class func creatNewFiles(name:String, fileBaseUrl:NSURL) -&gt; String&#123;</div><div class="line">        let manager = NSFileManager.defaultManager()</div><div class="line">        let file = fileBaseUrl.URLByAppendingPathComponent(name)</div><div class="line"></div><div class="line">        let exist = manager.fileExistsAtPath(file.path!)</div><div class="line">        if !exist &#123;</div><div class="line">            let createFilesSuccess = manager.createFileAtPath(file.path!, contents: nil, attributes: nil)</div><div class="line">            print(&quot;文件创建结果: \\(createFilesSuccess)&quot;)</div><div class="line">        &#125;</div><div class="line">        return String(file)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     读取文件</div><div class="line"></div><div class="line">     - parameter name:        文件名</div><div class="line">     - parameter fileBaseUrl: url</div><div class="line"></div><div class="line">     - returns: 读取数据</div><div class="line">     */</div><div class="line">    class func readTheFlies(name:String , fileBaseUrl:NSURL) -&gt;NSString&#123;</div><div class="line">        let file = fileBaseUrl.URLByAppendingPathComponent(name)</div><div class="line">       //  print(file)</div><div class="line">        let readHandler = try! NSFileHandle(forReadingFromURL:file)</div><div class="line">        let data = readHandler.readDataToEndOfFile()</div><div class="line">        let readString = NSString(data: data, encoding: NSUTF8StringEncoding)</div><div class="line">        return readString!</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">// MARK:-  存储plist属性列表</div><div class="line">    private func savePlistFiles()&#123;</div><div class="line">        // 储存的沙盒路径</div><div class="line">        let manager = NSFileManager.defaultManager()</div><div class="line">        let urlForCatch = manager.URLsForDirectory(NSSearchPathDirectory.CachesDirectory, inDomains: NSSearchPathDomainMask.UserDomainMask)</div><div class="line">        let url = urlForCatch.first! as NSURL</div><div class="line">        let fileName = &quot;RookieSon.plist&quot;</div><div class="line">        // 创建文件</div><div class="line">        let filesPath = Tool.creatNewFiles(fileName, fileBaseUrl: url)</div><div class="line">        // 储存数据</div><div class="line">        let saveDataInfo = NSMutableArray()</div><div class="line">        saveDataInfo.addObject(&quot;我不是代码的创造者&quot;)</div><div class="line">        saveDataInfo.addObject(&quot;我只是代码的搬运工&quot;)</div><div class="line">        saveDataInfo.addObject(&quot;以后争取做代码的创造者&quot;)</div><div class="line">        //        print(saveDataInfo)</div><div class="line">        // 写入文件</div><div class="line">        saveDataInfo.writeToURL(NSURL(string: filesPath)!, atomically: true)</div><div class="line"></div><div class="line">        // 读取文件</div><div class="line">        let readDataInfo = Tool.readTheFlies(fileName, fileBaseUrl: url)</div><div class="line">        print(readDataInfo)</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>###3.NSKeyedArchiver采用归档的形式来保存数据<br>NSKeyedArchiver保存数据对象需要遵守NSCoding协议，并且该对象对应的类必须提供encodeWithCoder:和initWithCoder:方法,简单的说就是告诉系统怎么对对象进行编码，怎么对对象进行解码.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">class Person: NSObject &#123;</div><div class="line"></div><div class="line">    var name:String?</div><div class="line">    var phone:String?</div><div class="line"></div><div class="line">    // 构造方法</div><div class="line">    init(name:String!,phone:String!) &#123;</div><div class="line">        self.name = name</div><div class="line">        self.phone = phone</div><div class="line"></div><div class="line">        super.init()</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // 从NSObject解析回来</div><div class="line"></div><div class="line">    init(coder aDecoder:NSCoder!)&#123;</div><div class="line">        self.name=aDecoder.decodeObjectForKey(&quot;name&quot;) as? String</div><div class="line">        self.phone=aDecoder.decodeObjectForKey(&quot;phone&quot;) as? String</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //编码成object,哪些属性需要归档，怎么归档</div><div class="line">    func encodeWithCoder(aCoder:NSCoder!)&#123;</div><div class="line">        aCoder.encodeObject(name,forKey:&quot;name&quot;)</div><div class="line">        aCoder.encodeObject(phone,forKey:&quot;phone&quot;)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">private func  archiveSaveDataInfo()&#123;</div><div class="line">    // 储存自定义对象</div><div class="line">    let userDefault = NSUserDefaults.standardUserDefaults()</div><div class="line">    let mo = Person(name: &quot;RookieYX&quot;, phone: &quot;123456&quot;)</div><div class="line">    // 实例对象转化成NSData</div><div class="line">    let moData:NSData = NSKeyedArchiver.archivedDataWithRootObject(mo)</div><div class="line">    // 储存NSData对象</div><div class="line">    userDefault.setObject(moData, forKey: &quot;myMo&quot;)</div><div class="line">    // 自定义对象读取</div><div class="line">    let myMoData = userDefault.objectForKey(&quot;myMo&quot;) as! NSData</div><div class="line">    // 解档</div><div class="line">    let myM= NSKeyedUnarchiver.unarchiveObjectWithData(myMoData) as! Person</div><div class="line">    print(myM)</div><div class="line"></div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>使用以上技术实现一个简单的网络图片的本地缓存</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">     传递一个uiimageView，和图片路径，设置图片，异步操作</div><div class="line"></div><div class="line">     - parameter newsImageView: UIImageView</div><div class="line">     - parameter imageString:   网络图片地址</div><div class="line">     */</div><div class="line">   class func setImagesViewData(newsImageView:UIImageView,imageString:String)&#123;</div><div class="line">        // 获取文件路径</div><div class="line">        var catePath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory,NSSearchPathDomainMask.AllDomainsMask, true)</div><div class="line">        print(catePath)</div><div class="line">        let cateImagesUrl:NSURL = NSURL(fileURLWithPath: &quot;\\(catePath.first)/\\(imageString.Rookie_MD5())&quot;)//获取缓存加密后的路径</div><div class="line"></div><div class="line">        //缓存存在直接加载</div><div class="line">        if let cateReadData:NSData  = NSData(contentsOfURL: cateImagesUrl)&#123;</div><div class="line">            newsImageView.image = UIImage(data: cateReadData);</div><div class="line">        &#125;</div><div class="line">        else&#123;</div><div class="line">            newsImageView.image = UIImage(named: &quot;load.jpg&quot;);//默认图片</div><div class="line">            //这里我们做个异步处理,用来加载图片</div><div class="line">            let session = NSURLSession.sharedSession();</div><div class="line">            let task = session.dataTaskWithURL(NSURL(string: imageString)!, completionHandler: &#123; (imageData:NSData?, resp:NSURLResponse?, error:NSError?) in</div><div class="line">                if let error = error &#123;</div><div class="line">                    print(&quot;连接网络失败1:\\(error)&quot;);</div><div class="line">                &#125;else&#123;</div><div class="line">                    // 当我们加载完数据了回主线程修改图片</div><div class="line">                    if let endImageData = imageData&#123;</div><div class="line">                        dispatch_sync(dispatch_get_main_queue(), &#123;</div><div class="line">                            newsImageView.image = UIImage(data: endImageData)</div><div class="line">                        &#125;)</div><div class="line">                        // 写入本地</div><div class="line">                        endImageData.writeToURL(cateImagesUrl, atomically: true)</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;)</div><div class="line"></div><div class="line">            // 启动任务</div><div class="line">            task.resume()</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>###4.fmdb本地存储</p>
+<p>####核心类<br>FMDB有三个主要的类</p>
+<ul>
+<li><p>FMDatabase<br>一个FMDatabase对象就代表一个单独的SQLite数据库用来执行SQL语句</p>
+</li>
+<li><p>FMResultSet<br>使用FMDatabase执行查询后的结果集</p>
+</li>
+<li><p>FMDatabaseQueue<br>用于在多线程中执行多个查询或更新，它是线程安全的</p>
+</li>
+</ul>
+<p>####通过指定SQLite数据库文件路径来创建FMDatabase对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">FMDatabase *db = [FMDatabase databaseWithPath:path];</div><div class="line"></div><div class="line">if(![db open])</div><div class="line">&#123;</div><div class="line">    NSLog(@&quot;数据库打开失败！&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p> 文件路径有三种情况:</p>
+<blockquote>
+<p>具体文件路径</p>
+<ul>
+<li>如果不存在会自动创建<br>空字符串@””</li>
+<li>会在临时目录创建一个空的数据库</li>
+<li>当FMDatabase连接关闭时，数据库文件也被删除<br>nil</li>
+<li>会创建一个内存中临时数据库，当FMDatabase连接关闭时，数据库会被销毁</li>
+</ul>
+</blockquote>
+<p>####执行更新查询</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">################## 更新方法  ################</div><div class="line">在FMDB中，除查询以外的所有操作，都称为“更新”,create、drop、insert、update、delete等使用executeUpdate:方法执行更新</div><div class="line"></div><div class="line">- (BOOL)executeUpdate:(NSString*)sql,...</div><div class="line"></div><div class="line">- (BOOL)executeUpdateWithFormat:(NSString*)format,...</div><div class="line"></div><div class="line">- (BOOL)executeUpdate:(NSString*)sql withArgumentsInArray:(NSArray *)arguments</div><div class="line"></div><div class="line">n示例</div><div class="line">[db executeUpdate:@&quot;UPDATE t_student SET age = ?WHERE name = ?;&quot;, @20, @&quot;Jack&quot;]</div><div class="line"></div><div class="line">-------------------------------------------------------------</div><div class="line">################################## 查询方法 ##################################</div><div class="line">(FMResultSet *)executeQuery:(NSString*)sql,... </div><div class="line"></div><div class="line">(FMResultSet *)executeQueryWithFormat:(NSString *)format,...</div><div class="line"></div><div class="line">(FMResultSet *)executeQuery:(NSString *)sql withArgumentsInArray:(NSArray *)arguments</div><div class="line"></div><div class="line">示例</div><div class="line">//查询数据</div><div class="line">FMResultSet *rs = [db executeQuery:@&quot;SELECT * FROM t_student&quot;];</div><div class="line"></div><div class="line">//遍历结果集</div><div class="line">while([rs next])</div><div class="line">&#123;</div><div class="line">    NSString *name = [rs stringForColumn:@&quot;name&quot;];</div><div class="line"></div><div class="line">    int age = [rs intForColumn:@&quot;age&quot;];</div><div class="line"></div><div class="line">    double score = [rs doubleForColumn:@&quot;score&quot;];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>####FMDatabaseQueue</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">FMDatabase这个类是线程不安全的，如果在多个线程中同时使用一个FMDatabase实例，会造成数据混乱等问题为了保证线程安全，FMDB提供方便快捷的FMDatabaseQueue类</div><div class="line">FMDatabaseQueue的创建:</div><div class="line"></div><div class="line"> FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:path];</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">使用事务</div><div class="line">[queue inTransaction:^(FMDatabase *db, BOOL *rollback) &#123;</div><div class="line">    [db executeUpdate:@&quot;INSERT INTO t_student(name) VALUES (?)&quot;, @&quot;Jack&quot;];</div><div class="line"></div><div class="line">    [db executeUpdate:@&quot;INSERT INTO t_student(name) VALUES (?)&quot;, @&quot;Rose&quot;];</div><div class="line"></div><div class="line">    [db executeUpdate:@&quot;INSERT INTO t_student(name) VALUES (?)&quot;, @&quot;Jim&quot;];</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">    FMResultSet *rs = [db executeQuery:@&quot;select * from t_student&quot;];</div><div class="line"></div><div class="line">    while ([rs next])</div><div class="line"> &#123;</div><div class="line">        //执行操作</div><div class="line"> &#125;</div><div class="line">&#125;];</div><div class="line"></div><div class="line">事务回滚</div><div class="line">*rollback = YES;</div></pre></td></tr></table></figure>
+<p>####使用</p>
 <ol>
-<li><p>objc中向一个nil对象发送消息将会发生什么？<br>在 Objective-C 中向 nil 发送消息是完全有效的——只是在运行时不会有任何作用:<br>objc是动态语言，每个方法在运行时会被动态转为消息发送，即：objc_msgSend(receiver, selector)。<br>objc是动态语言，每个方法在运行时会被动态转为消息发送，即：objc_msgSend(receiver, selector)。</p>
-</li>
-<li><p>有没有用过运行时，用它都能做什么<br>1、互换方法的实现 动态添加方法 动态添加属性 获取类中所有的成员变量和属性</p>
-</li>
+<li>创建桥接文件，引入头文件</li>
 </ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#import &quot;FMDB.h&quot;</div></pre></td></tr></table></figure>
+<ol>
+<li>FmdbManager</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line">import UIKit</div><div class="line"></div><div class="line">class FmdbManager: NSObject &#123;</div><div class="line"></div><div class="line">    /// 单例</div><div class="line">    static let shareInstance: FmdbManager = FmdbManager()</div><div class="line"></div><div class="line">    override init() &#123;</div><div class="line">        super.init()</div><div class="line">        openDB(&quot;demo.sqlite&quot;)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    var db: FMDatabase?</div><div class="line">    func openDB(name: String)</div><div class="line">    &#123;</div><div class="line">        // 1.拼接路径</div><div class="line">        let path = name.documentDir()</div><div class="line"></div><div class="line">        // 2.创建数据库对象</div><div class="line">        db = FMDatabase(path: path)</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">        // 3.打开数据库</div><div class="line">        // open()特点: 如果数据库文件不存在就创建一个新的, 如果存在就直接打开</div><div class="line">        if !db!.open()</div><div class="line">        &#123;</div><div class="line">            print(&quot;打开数据库失败&quot;)</div><div class="line">            return</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        // 4.创建表</div><div class="line">        if !createTable()</div><div class="line">        &#123;</div><div class="line">            print(&quot;创建数据库失败&quot;)</div><div class="line">            return</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">    创建表</div><div class="line">    */</div><div class="line">    func createTable() -&gt;Bool</div><div class="line">    &#123;</div><div class="line">        // 1.编写SQL语句</div><div class="line">        let sql = &quot;CREATE TABLE IF NOT EXISTS T_Person( \n&quot; +</div><div class="line">            &quot;id INTEGER PRIMARY KEY AUTOINCREMENT, \n&quot; +</div><div class="line">            &quot;name TEXT, \n&quot; +</div><div class="line">            &quot;age INTEGER \n&quot; +</div><div class="line">        &quot;);&quot;</div><div class="line"></div><div class="line">        // 2.执行SQL语句</div><div class="line">        // 注意: 在FMDB中, 除了查询以外的操作都称之为更新</div><div class="line">        return db!.executeUpdate(sql, withArgumentsInArray: nil)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>ViewController</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">import UIKit</div><div class="line"></div><div class="line">class ViewController: UIViewController &#123;</div><div class="line"></div><div class="line">    override func touchesBegan(touches: Set&lt;UITouch&gt;, withEvent event: UIEvent?) &#123;</div><div class="line">        print(&quot;abc&quot;.documentDir())</div><div class="line">//        SQLiteManager.shareInstance.openDB(&quot;demo.sqlite&quot;)</div><div class="line"></div><div class="line"></div><div class="line">        /// DML</div><div class="line">        let sql = &quot;INSERT INTO T_Person \n&quot; +</div><div class="line">            &quot;(name, age) \n&quot; +</div><div class="line">            &quot;VALUES \n&quot; +</div><div class="line">        &quot;(?, ?);&quot;</div><div class="line">//        SQLiteManager.shareInstance.db?.executeUpdate(sql, withArgumentsInArray: nil)</div><div class="line">        SQLiteManager.shareInstance.db?.executeUpdate(sql, withArgumentsInArray: [&quot;ls&quot;, 88])</div><div class="line"></div><div class="line"></div><div class="line">        /// 查询语句</div><div class="line">        let sql2 = &quot;SELECT id, name, age FROM T_Person;&quot;</div><div class="line">        // 1.查询数据库</div><div class="line">        let result = SQLiteManager.shareInstance.db!.executeQuery(sql2, withArgumentsInArray: nil)</div><div class="line"></div><div class="line">        // 2.从结果集中取出数据</div><div class="line">        while result.next()</div><div class="line">        &#123;</div><div class="line">            let id = result.intForColumn(&quot;id&quot;)</div><div class="line">            let name = result.stringForColumn(&quot;name&quot;)</div><div class="line">            let age = result.intForColumn(&quot;age&quot;)</div><div class="line">            print(&quot;\(id), \(name), \(age)&quot;)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>FMDBQueue基本使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">import UIKit</div><div class="line"></div><div class="line">class ViewController: UIViewController &#123;</div><div class="line"></div><div class="line">    override func touchesBegan(touches: Set&lt;UITouch&gt;, withEvent event: UIEvent?) &#123;</div><div class="line">        print(&quot;abc&quot;.documentDir())</div><div class="line">//        SQLiteManager.shareInstance.openDB(&quot;demo.sqlite&quot;)</div><div class="line"></div><div class="line"></div><div class="line">        /// DML</div><div class="line">        let sql = &quot;INSERT INTO T_Person \n&quot; +</div><div class="line">            &quot;(name, age) \n&quot; +</div><div class="line">            &quot;VALUES \n&quot; +</div><div class="line">        &quot;(?, ?);&quot;</div><div class="line">//        SQLiteManager.shareInstance.db?.executeUpdate(sql, withArgumentsInArray: nil)</div><div class="line">        SQLiteManager.shareInstance.db?.executeUpdate(sql, withArgumentsInArray: [&quot;ls&quot;, 88])</div><div class="line"></div><div class="line"></div><div class="line">        /// 查询语句</div><div class="line">        let sql2 = &quot;SELECT id, name, age FROM T_Person;&quot;</div><div class="line">        // 1.查询数据库</div><div class="line">        let result = SQLiteManager.shareInstance.db!.executeQuery(sql2, withArgumentsInArray: nil)</div><div class="line"></div><div class="line">        // 2.从结果集中取出数据</div><div class="line">        while result.next()</div><div class="line">        &#123;</div><div class="line">            let id = result.intForColumn(&quot;id&quot;)</div><div class="line">            let name = result.stringForColumn(&quot;name&quot;)</div><div class="line">            let age = result.intForColumn(&quot;age&quot;)</div><div class="line">            print(&quot;\(id), \(name), \(age)&quot;)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">import UIKit</div><div class="line"></div><div class="line">class SQLiteManager: NSObject &#123;</div><div class="line"></div><div class="line">    /// 单例</div><div class="line">    static let shareInstance: SQLiteManager = SQLiteManager()</div><div class="line"></div><div class="line">    override init()  &#123;</div><div class="line">        super.init()</div><div class="line">        openDB(&quot;demo.sqlite&quot;)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    var dbQueue: FMDatabaseQueue?</div><div class="line"></div><div class="line">    func openDB(name: String) &#123;</div><div class="line">        // 1.拼接路径</div><div class="line">        let path = name.documentDir()</div><div class="line"></div><div class="line">        // 2.创建数据库对象</div><div class="line">        dbQueue = FMDatabaseQueue(path: path)</div><div class="line"></div><div class="line">        // 3.创建表</div><div class="line">        createTable()</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">    创建表</div><div class="line">    */</div><div class="line">    func createTable()  &#123;</div><div class="line">        // 1.编写SQL语句</div><div class="line">        let sql = &quot;CREATE TABLE IF NOT EXISTS T_Person( &quot; +</div><div class="line">            &quot;id INTEGER PRIMARY KEY AUTOINCREMENT, &quot; +</div><div class="line">            &quot;name TEXT,&quot; +</div><div class="line">            &quot;age INTEGER &quot; +</div><div class="line">        &quot;);&quot;</div><div class="line"></div><div class="line">        // 2.执行SQL语句</div><div class="line">        dbQueue?.inDatabase(&#123; (db) -&gt; Void in</div><div class="line">            db.executeUpdate(sql, withArgumentsInArray: nil)</div><div class="line">        &#125;)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">import UIKit</div><div class="line"></div><div class="line">class ViewController: UIViewController &#123;</div><div class="line"></div><div class="line">    override func touchesBegan(touches: Set&lt;UITouch&gt;, withEvent event: UIEvent?) &#123;</div><div class="line">        print(&quot;abc&quot;.documentDir())</div><div class="line">//        SQLiteManager.shareInstance.openDB(&quot;demo.sqlite&quot;)</div><div class="line"></div><div class="line">        /// DML</div><div class="line">        let sql = &quot;INSERT INTO T_Person &quot; +</div><div class="line">            &quot;(name, age) &quot; +</div><div class="line">            &quot;VALUES &quot; +</div><div class="line">        &quot;(?, ?);&quot;</div><div class="line">        // 只要使用inTransaction, 那么在inTransaction闭包中的所有代码都是在事务中执行的</div><div class="line">        SQLiteManager.shareInstance.dbQueue!.inTransaction &#123; (db, rollback) -&gt; Void in</div><div class="line"></div><div class="line">            for i in 0..&lt;10</div><div class="line">            &#123;</div><div class="line">                db.executeUpdate(sql, withArgumentsInArray: [&quot;zs&quot;, 30])</div><div class="line">//                if i ==  5</div><div class="line">//                &#123;</div><div class="line">//                    // OC中的写法: *rollback = YES;</div><div class="line">//                    // Swift2.x中的写法: rollback.memory = true</div><div class="line">//                    // Swift3.0中的写法: rollback?.pointee = true</div><div class="line">//                    rollback.memory = true</div><div class="line">//                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>原文：<a href="http://www.jianshu.com/p/6f52e26f947b" target="_blank" rel="external">http://www.jianshu.com/p/6f52e26f947b</a><br><a href="http://www.jianshu.com/p/efd358d53ffd" target="_blank" rel="external">http://www.jianshu.com/p/efd358d53ffd</a></p>
 
         
         
@@ -684,30 +432,169 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/06/01/SDWebimage缓存机制/" title="SDWebImage 缓存机制" itemprop="url">SDWebImage 缓存机制</a>
+      <a href="/2017/07/27/swift代码规范/" title="swift代码规范大全" itemprop="url">swift代码规范大全</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
 		
   <p class="article-time">
-    <time datetime="2017-06-01T11:23:54.000Z" itemprop="datePublished"> 发表于 2017-06-01</time>
+    <time datetime="2017-07-26T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-27</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <p>保存时先将下载的图片存入内存缓存,然后存入磁盘缓存,<br>读取时先从内存缓存中读取,如果不存在,再去磁盘中读取缓存,<br>节省流量,图片加载时间,提升用户体验</p>
-<p>###内存缓存<br>内存缓存使用的是NSCache，使用方法类似于NSDIctionary，只需设置NSCache能占用的最大内存totalCostLimit或者最多缓存数量countlimit，然后将需要缓存的图片对象等setValue：forKey：cost 即可，当缓存大小或数量超过限定值时，内部的缓存机制就会自动为我们执行清理操作。而且NSCache是线程安全的。</p>
-<p>但是 SDWebImage 并不是这样使用的, 并没有设置缓存可以占用的最大内存量,也没有设置最大可缓存的对象数量<br>SDWebImage 自定义了一个自动清理的缓存,监听 UIApplicationDidReceiveMemoryWarningNotification 通知,来清理缓存<br>我们仍可以主动设置 SDWebImageCache的<br>NSUInteger maxMemoryCost //缓存最多能占用多少内存,默认是0,无限大<br>NSUInteger maxMemoryCountLimit //最多能缓存多少张图片<br>来限制 SDWebImage 的内存占用</p>
-<h3 id="磁盘缓存"><a href="#磁盘缓存" class="headerlink" title="磁盘缓存"></a>磁盘缓存</h3><p>磁盘缓存使用的NSFileManager<br>在沙盒的Dictionary中,建立 com.hackemist.SDWebImageCache.default 目录,将每一个下载完成的图片存储为一个单独文件,文件名为根据图片对应的 Url用 MD5加密生成的字符串,类似 1d067b6f4457574b8165aef42643752e,这个字符串在 App 内唯一<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">_ioQueue = dispatch_queue_create(&quot;com.hackemist.SDWebImageCache&quot;, DISPATCH_QUEUE_SERIAL);//串行队列,队列里的一个任务执行完毕才执行下一个  </div><div class="line">磁盘缓存操作都在这个队列里异步执行,因为它是串行队列,任务一个执行完毕才执行下一个,所以不会出现一个文件同时被读取和写入的情况, 所以用 dispatch_async 而不必使用 disathc_barrier_async</div></pre></td></tr></table></figure></p>
-<p>###缓存图片策略<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">- (void)storeImage:(UIImage *)image recalculateFromImage:(BOOL)recalculate imageData:(NSData *)imageData forKey:(NSString *)key toDisk:(BOOL)toDisk &#123;</div><div class="line">    if (!image || !key) &#123;</div><div class="line">        return;</div><div class="line">    &#125;</div><div class="line">    1.先存入内存缓存</div><div class="line">    if (self.shouldCacheImagesInMemory) &#123;</div><div class="line">        NSUInteger cost = SDCacheCostForImage(image);</div><div class="line">        [self.memCache setObject:image forKey:key cost:cost];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    if (toDisk) &#123;</div><div class="line">    2.在 ioQueue 中串行处理所有磁盘缓存,</div><div class="line">        dispatch_async(self.ioQueue, ^&#123;</div><div class="line">            NSData *data = imageData;</div><div class="line"></div><div class="line">            if (data) &#123;</div><div class="line">            3.创建放缓存文件的文件夹</div><div class="line">                if (![_fileManager fileExistsAtPath:_diskCachePath]) &#123;</div><div class="line">                    [_fileManager createDirectoryAtPath:_diskCachePath withIntermediateDirectories:YES attributes:nil error:NULL];</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                4.根据 image 的 远程url 生成本地缓存图片对应的 url </div><div class="line">                先将远程的 url 进行 md5加密,作为文件名,然后拼接到默认的缓存路径下,作为缓存文件的 url</div><div class="line">                com.hackemist.SDWebImageCache.default/1d067b6f4457574b8165aef42643752e</div><div class="line">                // get cache Path for image key</div><div class="line">                NSString *cachePathForKey = [self defaultCachePathForKey:key];</div><div class="line">                // transform to NSUrl</div><div class="line">                NSURL *fileURL = [NSURL fileURLWithPath:cachePathForKey];</div><div class="line"></div><div class="line">                5.将图片在磁盘中以文件的形式缓存起来,创建一个文件,写入 image 的 data</div><div class="line">                [_fileManager createFileAtPath:cachePathForKey contents:data attributes:nil];</div><div class="line"></div><div class="line">                6. 防止 icloud 备份缓存</div><div class="line">                if (self.shouldDisableiCloud) &#123;</div><div class="line">                    [fileURL setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:nil];</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h3 id="取出缓存图片的策略"><a href="#取出缓存图片的策略" class="headerlink" title="取出缓存图片的策略"></a>取出缓存图片的策略</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">- (UIImage *)imageFromDiskCacheForKey:(NSString *)key &#123;</div><div class="line"></div><div class="line">    1. 先搜索内存缓存</div><div class="line">    UIImage *image = [self imageFromMemoryCacheForKey:key];</div><div class="line">    if (image) &#123;</div><div class="line">        return image;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    2.再搜索磁盘缓存</div><div class="line">    UIImage *diskImage = [self diskImageForKey:key];</div><div class="line">    if (diskImage &amp;&amp; self.shouldCacheImagesInMemory) &#123;</div><div class="line"></div><div class="line">    3.如果磁盘缓存中存在,将缓存图片放入内存缓存,并返回它</div><div class="line">        NSUInteger cost = SDCacheCostForImage(diskImage);</div><div class="line">        [self.memCache setObject:diskImage forKey:key cost:cost];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return diskImage;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">//像 NSDictionary 一样,传入键,获取内存缓存的 image</div><div class="line">- (UIImage *)imageFromMemoryCacheForKey:(NSString *)key &#123;</div><div class="line">    return [self.memCache objectForKey:key];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">- (NSData *)diskImageDataBySearchingAllPathsForKey:(NSString *)key &#123;</div><div class="line"></div><div class="line">    1.根据图片的远程 url 生成本地缓存文件的 url, 根据 url 获取图片的 data</div><div class="line">    NSString *defaultPath = [self defaultCachePathForKey:key];</div><div class="line">    NSData *data = [NSData dataWithContentsOfFile:defaultPath];</div><div class="line">    if (data) &#123;</div><div class="line">        return data;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    2.我们可以自定义缓存文件的存放路径,在自定义路径中搜索图片缓存</div><div class="line">    NSArray *customPaths = [self.customPaths copy];</div><div class="line">    for (NSString *path in customPaths) &#123;</div><div class="line">        NSString *filePath = [self cachePathForKey:key inPath:path];</div><div class="line">        NSData *imageData = [NSData dataWithContentsOfFile:filePath];</div><div class="line">        if (imageData) &#123;</div><div class="line">            return imageData;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    return nil;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">- (void)calculateSizeWithCompletionBlock:(SDWebImageCalculateSizeBlock)completionBlock &#123;</div><div class="line">    NSURL *diskCacheURL = [NSURL fileURLWithPath:self.diskCachePath isDirectory:YES];</div><div class="line"></div><div class="line">    dispatch_async(self.ioQueue, ^&#123;</div><div class="line">        NSUInteger fileCount = 0;</div><div class="line">        NSUInteger totalSize = 0;</div><div class="line">        1.遍历缓存目录下的所有文件</div><div class="line">        NSDirectoryEnumerator *fileEnumerator = [_fileManager enumeratorAtURL:diskCacheURL</div><div class="line">                                                   includingPropertiesForKeys:@[NSFileSize]</div><div class="line">                                                                      options:NSDirectoryEnumerationSkipsHiddenFiles</div><div class="line">                                                                 errorHandler:NULL];</div><div class="line">        2.累加所有缓存文件的大小</div><div class="line">        for (NSURL *fileURL in fileEnumerator) &#123;</div><div class="line">            NSNumber *fileSize;</div><div class="line">            [fileURL getResourceValue:&amp;fileSize forKey:NSURLFileSizeKey error:NULL];</div><div class="line">            totalSize += [fileSize unsignedIntegerValue];</div><div class="line">            fileCount += 1;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        3.主线程中回调</div><div class="line">        if (completionBlock) &#123;</div><div class="line">            dispatch_async(dispatch_get_main_queue(), ^&#123;</div><div class="line">                completionBlock(fileCount, totalSize);</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>###清除缓存<br>清除缓存的方式非常简单,删掉缓存目录,再重新创建一个即可,这会删掉 App 的所有缓存<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">- (void)clearDiskOnCompletion:(SDWebImageNoParamsBlock)completion</div><div class="line">&#123;</div><div class="line">    dispatch_async(self.ioQueue, ^&#123;</div><div class="line">        [_fileManager removeItemAtPath:self.diskCachePath error:nil];</div><div class="line">        [_fileManager createDirectoryAtPath:self.diskCachePath</div><div class="line">                withIntermediateDirectories:YES</div><div class="line">                                 attributes:nil</div><div class="line">                                      error:NULL];</div><div class="line"></div><div class="line">        if (completion) &#123;</div><div class="line">            dispatch_async(dispatch_get_main_queue(), ^&#123;</div><div class="line">                completion();</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p>默认情况下, SDWebImage已经监听广播来自动为我们执行清理操作<br>当收到内存警告时,清空内存缓存<br>当 App 进入关闭或进入后台时,清理磁盘缓存<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clearMemory) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];</div><div class="line">[[NSNotificationCenter defaultCenter] addObserver:self</div><div class="line">selector:@selector(cleanDisk) name:UIApplicationWillTerminateNotification object:nil];</div><div class="line">[[NSNotificationCenter defaultCenter] addObserver:self</div><div class="line">selector:@selector(backgroundCleanDisk) name:UIApplicationDidEnterBackgroundNotification object:nil];</div></pre></td></tr></table></figure></p>
+        <p>##swift 代码规范大全</p>
+<p>###1. 代码格式</p>
+<ul>
+<li><p>使用四个空格进行缩进。</p>
+</li>
+<li><p>每行最多160个字符，这样可以避免一行过长。 (Xcode-&gt;Preferences-&gt;Text Editing-&gt;Page guide at column: 设置成160即可)</p>
+</li>
+<li><p>确保每个文件结尾都有空白行。</p>
+</li>
+<li><p>确保每行都不以空白字符作为结尾 （Xcode-&gt;Preferences-&gt;Text Editing-&gt;Automatically trim trailing whitespace + Including whitespace-only lines).</p>
+</li>
+<li><p>左大括号不用另起一行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">    class SomeClass &#123;</div><div class="line">    func someMethod() &#123;</div><div class="line">        if x == y &#123;</div><div class="line">            /* ... */</div><div class="line">        &#125; else if x == z &#123;</div><div class="line">            /* ... */</div><div class="line">        &#125; else &#123;</div><div class="line">            /* ... */</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    /* ... */</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>当在写一个变量类型，一个字典里的主键，一个函数的参数，遵从一个协议，或一个父类，不用在分号前添加空格   </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">    // 指定类型</div><div class="line">let pirateViewController: PirateViewController</div><div class="line">// 字典语法(注意这里是向左对齐而不是分号对齐)</div><div class="line">let ninjaDictionary: [String: AnyObject] = [</div><div class="line">    &quot;fightLikeDairyFarmer&quot;: false,</div><div class="line">    &quot;disgusting&quot;: true</div><div class="line">]</div><div class="line">// 声明函数</div><div class="line">func myFunction&lt;t, u: someprotocol where t.relatedtype == u&gt;(firstArgument: U, secondArgument: T) &#123;</div><div class="line">    /* ... */</div><div class="line">&#125;</div><div class="line">// 调用函数</div><div class="line">someFunction(someArgument: &quot;Kitten&quot;)</div><div class="line">// 父类</div><div class="line">class PirateViewController: UIViewController &#123;</div><div class="line">    /* ... */</div><div class="line">&#125;</div><div class="line">// 协议</div><div class="line">extension PirateViewController: UITableViewDataSource &#123;</div><div class="line">    /* ... */</div><div class="line">&#125;&lt;/t, u: someprotocol where t.relatedtype == u&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>基本来说，要在逗号后面加空格</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">let myArray = [1, 2, 3, 4, 5]</div></pre></td></tr></table></figure>
+</li>
+<li><p>二元运算符(+, ==, 或-&gt;)的前后都需要添加空格，左小括号后面和右小括号前面不需要空格。</p>
+</li>
+<li></li>
+<li><p>遵守Xcode内置的缩进格式( 如果已经遵守，按下CTRL-i 组合键文件格式没有变化)。当声明的一个函数需要跨多行时，推荐使用Xcode默认的格式，目前Xcode 版本是 7.3。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">// Xcode针对跨多行函数声明缩进</div><div class="line">func myFunctionWithManyParameters(parameterOne: String,</div><div class="line">                              parameterTwo: String,</div><div class="line">                              parameterThree: String) &#123;</div><div class="line">// Xcode会自动缩进</div><div class="line">print(&quot;\(parameterOne) \(parameterTwo) \(parameterThree)&quot;)</div><div class="line">&#125;</div><div class="line">// Xcode针对多行 if 语句的缩进</div><div class="line">    if myFirstVariable &gt; (mySecondVariable + myThirdVariable)</div><div class="line">&amp;&amp; myFourthVariable == .SomeEnumValue &#123;</div><div class="line">// Xcode会自动缩进</div><div class="line">print(&quot;Hello, World!&quot;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<pre><code>* 当调用的函数有多个参数时，每一个参数另起一行，并比函数名多一个缩进。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">someFunctionWithManyArguments(</div><div class="line">    firstArgument: &quot;Hello, I am a string&quot;,</div><div class="line">    secondArgument: resultFromSomeFunction()</div><div class="line">    thirdArgument: someOtherLocalVariable)</div></pre></td></tr></table></figure>
+
+* 当遇到需要处理的数组或字典内容较多需要多行显示时，需把 [ 和 ] 类似于方法体里的括号， 方法体里的闭包也要做类似处理。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">someFunctionWithABunchOfArguments(</div><div class="line">someStringArgument: &quot;hello I am a string&quot;,</div><div class="line">someArrayArgument: [</div><div class="line">    &quot;dadada daaaa daaaa dadada daaaa daaaa dadada daaaa daaaa&quot;,</div><div class="line">    &quot;string one is crazy - what is it thinking?&quot;</div><div class="line">],</div><div class="line">someDictionaryArgument: [</div><div class="line">    &quot;dictionary key 1&quot;: &quot;some value 1, but also some more text here&quot;,</div><div class="line">    &quot;dictionary key 2&quot;: &quot;some value 2&quot;</div><div class="line">],</div><div class="line">someClosure: &#123; parameter1 in</div><div class="line">    print(parameter1)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+
+
+*  应尽量避免出现多行断言，可使用本地变量或其他策略。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">// 推荐</div><div class="line">let firstCondition = x == firstReallyReallyLongPredicateFunction()</div><div class="line">let secondCondition = y == secondReallyReallyLongPredicateFunction()</div><div class="line">let thirdCondition = z == thirdReallyReallyLongPredicateFunction()</div><div class="line">if firstCondition &amp;&amp; secondCondition &amp;&amp; thirdCondition &#123;</div><div class="line">    // 你要干什么</div><div class="line">&#125;</div><div class="line">// 不推荐</div><div class="line">if x == firstReallyReallyLongPredicateFunction()</div><div class="line">    &amp;&amp; y == secondReallyReallyLongPredicateFunction()</div><div class="line">    &amp;&amp; z == thirdReallyReallyLongPredicateFunction() &#123;</div><div class="line">    // 你要干什么</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</code></pre><p>###2. 命名</p>
+<pre><code>2.1 在Swift中不用如Objective-C式 一样添加前缀 (如使用  GuybrushThreepwoode 而不是 LIGuybrushThreepwood)。
+
+2.2 使用帕斯卡拼写法（又名大骆驼拼写法，首字母大写）为类型命名 (如 struct, enum, class, typedef, associatedtype 等)。
+
+2.3 使用小骆驼拼写法 (首字母小写) 为函数，方法，变量，常量，参数等命名。
+
+2.4 首字母缩略词在命名中一般来说都是全部大写，例外的情形是如果首字母缩略词是一个命名的开始部分，而这个命名需要小写字母作为开头，这种情形下首字母缩略词全部小写。
+
+2.5 使用前缀 k + 大骆驼命名法 为所有非单例的静态常量命名
+2.6 对于泛型和关联类型，可以使用单个大写字母，也可是遵从大骆驼命名方式并能描述泛型的单词。如果这个单词和要实现的协议或继承的父类有冲突，可以为相关类型或泛型名字添加 Type 作为后缀。
+2.7 命名应该具有描述性 和 清晰的。
+2.8 不要缩写，简写命名，或用单个字母命名。
+2.9 如果原有命名不能明显表明类型，则属性命名内要包括类型信息。
+2.10 当给函数参数命名时，要确保函数能理解每个参数的目的。
+2.11 根据苹果接口设计指导文档, 如果协议描述的是协议做的事应该命名为名词(如Collection) ，如果描述的是行为，需添加后缀 able 或 ing (如Equatable 和 ProgressReporting)。 如果上述两者都不能满足需求，可以添加Protocol作为后缀
+</code></pre><p>###3. 代码风格<br>3.1 综合<br>    3.1.1 尽可能的多使用let，少使用var。<br>    3.1.2 当需要遍历一个集合并变形成另一个集合时，推荐使用函数 map, filter 和 reduce。</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">    // 推荐</div><div class="line">    let stringOfInts = [1, 2, 3].flatMap &#123; String($0) &#125;</div><div class="line">        // [&quot;1&quot;, &quot;2&quot;, &quot;3&quot;]// 不推荐</div><div class="line">    var stringOfInts: [String] = []</div><div class="line">    for integer in [1, 2, 3] &#123;</div><div class="line">    stringOfInts.append(String(integer))</div><div class="line">        &#125;</div><div class="line">// 推荐</div><div class="line">let evenNumbers = [4, 8, 15, 16, 23, 42].filter &#123; $0 % 2 == 0 &#125;</div><div class="line">// [4, 8, 16, 42]</div><div class="line">// 不推荐</div><div class="line">var evenNumbers: [Int] = []</div><div class="line">for integer in [4, 8, 15, 16, 23, 42] &#123;</div><div class="line">    if integer % 2 == 0 &#123;</div><div class="line">        evenNumbers(integer)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</code></pre><p>3.1.3 如果变量类型可以依靠推断得出，不建议声明变量时指明类型。</p>
+<p>3.1.4 如果一个函数有多个返回值，推荐使用 元组 而不是 inout 参数， 如果你见到一个元组多次，建议使用typealias ，而如果返回的元组有三个或多于三个以上的元素，建议使用结构体或类。<br>3.1.5 当使用委托和协议时，请注意避免出现循环引用，基本上是在定义属性的时候使用 weak 修饰。<br>3.1.6 在闭包里使用 self 的时候要注意出现循环引用，使用捕获列表可以避免这一点。<br>3.1.7 Switch 模块中不用显式使用break。<br>3.1.8 断言流程控制的时候不要使用小括号。<br>3.1.9 在写枚举类型的时候，尽量简写。<br>3.1.10 在使用类方法的时候不用简写，因为类方法不如 枚举 类型一样，可以根据轻易地推导出上下文。<br>3.1.11 不建议使用用self.修饰除非需要<br>3.1.12 在新写一个方法的时候，需要衡量这个方法是否将来会被重写，如果不是，请用 final 关键词修饰，这样阻止方法被重写。一般来说，final 方法可以优化编译速度，在合适的时候可以大胆使用它。但需要注意的是，在一个公开发布的代码库中使用 final 和本地项目中使用 final 的影响差别很大的。<br>3.1.13 在使用一些语句如 else，catch等紧随代码块的关键词的时候，确保代码块和关键词在同一行。下面 if/else 和 do/catch 的例子.</p>
+<p>3.2 访问控制修饰符<br>3.2.1 如果需要把访问修饰符放到第一个位置。<br>// 推荐<br>private static let kMyPrivateNumber: Int<br>// 不推荐<br>static private let kMyPrivateNumber: Int<br>3.2.2 访问修饰符不应单独另起一行，应和访问修饰符描述的对象保持在同一行。<br>// 推荐<br>public class Pirate {<br>    /<em> … </em>/<br>}<br>// 不推荐<br>public<br>class Pirate {<br>    /<em> … </em>/<br>}<br>3.2.3  默认的访问控制修饰符是 internal, 如果需要使用internal 可以省略不写。</p>
+<p>3.2.4 当一个变量需要被单元测试 访问时，需要声明为 internal 类型来使用@testable import {ModuleName}。 如果一个变量实际上是private 类型，而因为单元测试需要被声明为 internal 类型，确定添加合适的注释文档来解释为什么这么做。这里添加注释推荐使用 - warning: 标记语法。</p>
+<p>/**<br> 这个变量是private 名字</p>
+<ul>
+<li>warning: 定义为 internal 而不是 private 为了 <code>@testable</code>.<br>*/<br>let pirateName = “LeChuck”</li>
+</ul>
+<p>3.3 自定义操作符</p>
+<p>不推荐使用自定义操作符，如果需要创建函数来替代。</p>
+<p>在重写操作符之前，请慎重考虑是否有充分的理由一定要在全局范围内创建新的操作符，而不是使用其他策略。</p>
+<p>你可以重载现有的操作符来支持新的类型(特别是 ==)，但是新定义的必须保留操作符的原来含义，比如 == 必须用来测试是否相等并返回布尔值</p>
+<p>3.4 Switch 语句 和 枚举</p>
+<p>3.4.1 在使用 Switch 语句时，如果选项是有限集合时，不要使用default，相反地，把一些不用的选项放到底部，并用 break 关键词 阻止其执行。</p>
+<p>3.4.2 因为Swift 中的 switch 选项默认是包含break的， 如果不需要不用使用 break 关键词。</p>
+<p>3.4.3 case 语句 应和 switch 语句左对齐，并在 标准的 default 上面。</p>
+<p>3.4.4 当定义的选项有关联值时，确保关联值有恰当的名称，而不只是类型。(如. 使用 case Hunger(hungerLevel: Int) 而不是 case Hunger(Int)).</p>
+<p>3.4.5 推荐尽可能使用fall through。</p>
+<p>3.4.6 如果default 的选项不应该触发，可以抛出错误 或 断言类似的做法。</p>
+<p>3.5 可选类型</p>
+<p>3.5.1 唯一使用隐式拆包可选型（implicitly unwrapped optionals）的场景是结合@IBOutlets，在其他场景使用 非可选类型 和 常规可选类型，即使有的场景你确定有的变量使用的时候永远不会为 nil， 但这样做可以保持一致性和程序更加健壮。</p>
+<p>3.5.2 不要使用 as! 或 try!。</p>
+<p>3.5.3 如果对于一个变量你不打算声明为可选类型，但当需要检查变量值是否为 nil，推荐用当前值和 nil 直接比较，而不推荐使用 if let 语法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">// 推荐</div><div class="line">if someOptional != nil &#123;</div><div class="line">    // 你要做什么</div><div class="line">&#125;</div><div class="line">// 不推荐</div><div class="line">if let _ = someOptional &#123;</div><div class="line">    // 你要做什么</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>3.5.4 不要使用 unowned，unowned 和 weak 变量基本上等价，并且都是隐式拆包( unowned 在引用计数上有少许性能优化)，由于不推荐使用隐式拆包，也不推荐使用unowned 变量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// 推荐</div><div class="line">weak var parentViewController: UIViewController?</div><div class="line">// 不推荐</div><div class="line">weak var parentViewController: UIViewController!</div><div class="line">unowned var parentViewController: UIViewController</div><div class="line">3.5.5 当拆包取值时，使用和被拆包取值变量相同的名称。</div><div class="line">guard let myVariable = myVariable else &#123;</div><div class="line">    return</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>3.6 协议</p>
+<p>在实现协议的时候，有两种方式来组织你的代码:</p>
+<p>使用 // MARK: 注释来分割协议实现和其他代码。</p>
+<p>使用 extension 在 类/结构体已有代码外，但在同一个文件内。</p>
+<p>请注意 extension 内的代码不能被子类重写，这也意味着测试很难进行。 如果这是经常发生的情况，为了代码一致性最好统一使用第一种办法。否则使用第二种办法，其可以代码分割更清晰。</p>
+<p>使用而第二种方法的时候，使用  // MARK:  依然可以让代码在 Xcode 可读性更强。</p>
+<p>3.7 属性</p>
+<p>3.7.1 对于只读属性，计算后(Computed)属性, 提供 getter 而不是 get {}。</p>
+<p>var computedProperty: String {<br>    if someBool {<br>        return “I’m a mighty pirate!”<br>    }<br>    return “I’m selling these fine leather jackets.”<br>}<br>3.7.2 对于属性相关方法 get {}, set {}, willSet, 和 didSet, 确保缩进相关代码块。</p>
+<p>3.7.3 对于willSet/didSet 和 set 中的旧值和新值虽然可以自定义名称，但推荐使用默认标准名称 newValue/oldValue。</p>
+<p>var computedProperty: String {<br>    get {<br>        if someBool {<br>            return “I’m a mighty pirate!”<br>        }<br>        return “I’m selling these fine leather jackets.”<br>    }<br>    set {<br>        computedProperty = newValue<br>    }<br>    willSet {<br>        print(“will set to (newValue)”)<br>    }<br>    didSet {<br>        print(“did set from (oldValue) to (newValue)”)<br>    }<br>}<br>3.7.4 在创建类常量的时候，使用 static 关键词修饰。</p>
+<p>class MyTableViewCell: UITableViewCell {<br>    static let kReuseIdentifier = String(MyTableViewCell)<br>    static let kCellHeight: CGFloat = 80.0<br>}<br>3.7.5 声明单例属性可以通过下面方式进行：</p>
+<p>class PirateManager {<br>    static let sharedInstance = PirateManager()<br>    /<em> … </em>/<br>}<br>3.8 闭包</p>
+<p>3.8.1 如果参数的类型很明显，可以在函数名里可以省略参数类型, 但明确声明类型也是允许的。 代码的可读性有时候是添加详细的信息，而有时候部分重复，根据你的判断力做出选择吧，但前后要保持一致性。</p>
+<p>// 省略类型<br>doSomethingWithClosure() { response in<br>    print(response)<br>}<br>// 明确指出类型<br>doSomethingWithClosure() { response: NSURLResponse in<br>    print(response)<br>}<br>// map 语句使用简写<br>[1, 2, 3].flatMap { String($0) }<br>3.8.2 如果使用捕捉列表 或 有具体的非 Void返回类型，参数列表应该在小括号内， 否则小括号可以省略。</p>
+<p>// 因为使用捕捉列表，小括号不能省略。<br>doSomethingWithClosure() { [weak self] (response: NSURLResponse) in<br>    self?.handleResponse(response)<br>}<br>// 因为返回类型，小括号不能省略。<br>doSomethingWithClosure() { (response: NSURLResponse) -&gt; String in<br>    return String(response)<br>}<br>3.8.3 如果闭包是变量类型，不需把变量值放在括号中，除非需要，如变量类型是可选类型(Optional?)， 或当前闭包在另一个闭包内。确保闭包里的所以参数放在小括号中，这样()表示没有参数，Void 表示不需要返回值。</p>
+<p>let completionBlock: (success: Bool) -&gt; Void = {<br>    print(“Success? (success)”)<br>}<br>let completionBlock: () -&gt; Void = {<br>    print(“Completed!”)<br>}<br>let completionBlock: (() -&gt; Void)? = nil</p>
+<p>3.9 数组</p>
+<p>3.9.1 基本上不要通过下标直接访问数组内容，如果可能使用如 .first 或 .last, 因为这些方法是非强制类型并不会崩溃。 推荐尽可能使用 for item in items 而不是 for i in 0..</p>
+<p>3.9.2 不要使用 += 或 + 操作符给数组添加新元素，使用性能较好的.append() 或.appendContentsOf()  ，如果需要声明数组基于其他的数组并保持不可变类型， 使用 let myNewArray = [arr1, arr2].flatten()，而不是let myNewArray = arr1 + arr2 。</p>
+<p>3.10 错误处理</p>
+<p>假设一个函数 myFunction 返回类型声明为 String，但是总有可能函数会遇到error，有一种解决方案是返回类型声明为 String?, 当遇到错误的时候返回 nil。</p>
+<p>例子:</p>
+<p>func readFile(withFilename filename: String) -&gt; String? {<br>    guard let file = openFile(filename) else {<br>        return nil<br>    }<br>    let fileContents = file.read()<br>    file.close()<br>    return fileContents<br>}<br>func printSomeFile() {<br>    let filename = “somefile.txt”<br>    guard let fileContents = readFile(filename) else {<br>        print(“不能打开 (filename).”)<br>        return<br>    }<br>    print(fileContents)<br>}<br>实际上如果预知失败的原因，我们应该使用Swift 中的 try/catch 。</p>
+<p>定义 错误对象 结构体如下:</p>
+<p>struct Error: ErrorType {<br>    public let file: StaticString<br>    public let function: StaticString<br>    public let line: UInt<br>    public let message: String<br>    public init(message: String, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {<br>        self.file = file<br>        self.function = function<br>        self.line = line<br>        self.message = message<br>    }<br>}<br>使用案例:</p>
+<p>func readFile(withFilename filename: String) throws -&gt; String {<br>    guard let file = openFile(filename) else {<br>        throw Error(message: “打不开的文件名称 (filename).”)<br>    }<br>    let fileContents = file.read()<br>    file.close()<br>    return fileContents<br>}<br>func printSomeFile() {<br>    do {<br>        let fileContents = try readFile(filename)<br>        print(fileContents)<br>    } catch {<br>        print(error)<br>    }<br>}<br>其实项目中还是有一些场景更适合声明为可选类型，而不是错误捕捉和处理，比如在获取远端数据过程中遇到错误，nil作为返回结果是合理的，也就是声明返回可选类型比错误处理更合理。</p>
+<p>整体上说，如果一个方法有可能失败，并且使用可选类型作为返回类型会导致错误原因湮没，不妨考虑抛出错误而不是吃掉它。</p>
+<p>3.11 使用 guard 语句</p>
+<p>3.11.1 总体上，我们推荐使用提前返回的策略，而不是 if 语句的嵌套。使用 guard 语句可以改善代码的可读性。</p>
+<p>// 推荐<br>func eatDoughnut(atIndex index: Int) {<br>    guard index &gt;= 0 &amp;&amp; index &lt; doughnuts else {<br>        // 如果 index 超出允许范围，提前返回。<br>        return<br>    }<br>    let doughnut = doughnuts[index]<br>    eat(doughnut)<br>}<br>// 不推荐<br>func eatDoughnuts(atIndex index: Int) {<br>    if index &gt;= 0 &amp;&amp; index &lt; donuts.count {<br>        let doughnut = doughnuts[index]<br>        eat(doughnut)<br>    }<br>}<br>3.11.2 在解析可选类型时，推荐使用 guard 语句，而不是 if 语句，因为 guard 语句可以减少不必要的嵌套缩进。</p>
+<p>// 推荐<br>guard let monkeyIsland = monkeyIsland else {<br>    return<br>}<br>bookVacation(onIsland: monkeyIsland)<br>bragAboutVacation(onIsland: monkeyIsland)<br>// 不推荐<br>if let monkeyIsland = monkeyIsland {<br>    bookVacation(onIsland: monkeyIsland)<br>    bragAboutVacation(onIsland: monkeyIsland)<br>}<br>// 禁止<br>if monkeyIsland == nil {<br>    return<br>}<br>bookVacation(onIsland: monkeyIsland!)<br>bragAboutVacation(onIsland: monkeyIsland!)<br>3.11.3 当解析可选类型需要决定在 if 语句 和 guard 语句之间做选择时，最重要的判断标准是是否让代码可读性更强，实际项目中会面临更多的情景，如依赖 2 个不同的布尔值，复杂的逻辑语句会涉及多次比较等，大体上说，根据你的判断力让代码保持一致性和更强可读性， 如果你不确定 if 语句 和 guard 语句哪一个可读性更强，建议使用 guard 。</p>
+<p>// if 语句更有可读性<br>if operationFailed {<br>    return<br>}<br>// guard 语句这里有更好的可读性<br>guard isSuccessful else {<br>    return<br>}<br>// 双重否定不易被理解 - 不要这么做<br>guard !operationFailed else {<br>    return<br>}<br>3.11.4  如果需要在2个状态间做出选择，建议使用if 语句，而不是使用 guard 语句。</p>
+<p>// 推荐<br>if isFriendly {<br>    print(“你好, 远路来的朋友！”)<br>} else {<br>    print(“穷小子，哪儿来的？”)<br>}<br>// 不推荐<br>guard isFriendly else {<br>    print(“穷小子，哪儿来的？”)<br>    return<br>}<br>print(“你好, 远路来的朋友！”)<br>3.11.5  你只应该在在失败情形下退出当前上下文的场景下使用 guard 语句，下面的例子可以解释 if 语句有时候比 guard 语句更合适 – 我们有两个不相关的条件，不应该相互阻塞。</p>
+<p>if let monkeyIsland = monkeyIsland {<br>    bookVacation(onIsland: monkeyIsland)<br>}<br>if let woodchuck = woodchuck where canChuckWood(woodchuck) {<br>    woodchuck.chuckWood()<br>}<br>3.11.6 我们会经常遇到使用 guard 语句拆包多个可选值，如果所有拆包失败的错误处理都一致可以把拆包组合到一起 (如 return, break, continue,throw 等).</p>
+<p>// 组合在一起因为可能立即返回<br>guard let thingOne = thingOne,<br>    let thingTwo = thingTwo,<br>    let thingThree = thingThree else {<br>    return<br>}<br>// 使用独立的语句 因为每个场景返回不同的错误<br>guard let thingOne = thingOne else {<br>    throw Error(message: “Unwrapping thingOne failed.”)<br>}<br>guard let thingTwo = thingTwo else {<br>    throw Error(message: “Unwrapping thingTwo failed.”)<br>}<br>guard let thingThree = thingThree else {<br>    throw Error(message: “Unwrapping thingThree failed.”)<br>}</p>
+<p>###4. 文档/注释</p>
+<p>4.1 文档</p>
+<p>如果一个函数比 O(1) 复杂度高，你需要考虑为函数添加注释，因为函数签名(方法名和参数列表) 并不是那么的一目了然，这里推荐比较流行的插件 VVDocumenter. 不论出于何种原因，如果有任何奇淫巧计不易理解的代码，都需要添加注释，对于复杂的 类/结构体/枚举/协议/属性 都需要添加注释。所有公开的 函数/类/变量/枚举/协议/属性/常数 也都需要添加文档，特别是 函数声明(包括名称和参数列表) 不是那么清晰的时候。</p>
+<p>写文档时，确保参照苹果文档中提及的标记语法合集。</p>
+<p>在注释文档完成后，你应检查格式是否正确。</p>
+<p>规则:</p>
+<p>4.1.1 一行不要超过160个字符 (和代码长度限制雷同).</p>
+<p>4.1.2 即使文档注释只有一行，也要使用模块化格式 (/<em>* </em>/).</p>
+<p>4.1.3 注释模块中的空行不要使用 * 来占位。</p>
+<p>4.1.4 确定使用新的 – parameter 格式，而不是就得 Use the new -:param: 格式，另外注意 parameter 是小写的。</p>
+<p>4.1.5 如果需要给一个方法的 参数/返回值/抛出异常 添加注释，务必给所有的添加注释，即使会看起来有部分重复，否则注释会看起来不完整，有时候如果只有一个参数值得添加注释，可以在方法注释里重点描述。</p>
+<p>4.1.6 对于负责的类，在描述类的使用方法时可以添加一些合适的例子，请注意Swift注释是支持 MarkDown 语法的。</p>
+<p>/**</p>
+<h2 id="功能列表"><a href="#功能列表" class="headerlink" title="功能列表"></a>功能列表</h2><p> 这个类提供下一下很赞的功能，如下:</p>
+<ul>
+<li>功能 1</li>
+<li>功能 2</li>
+<li>功能 3<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2>这是一个代码块使用四个空格作为缩进的例子。<br>  let myAwesomeThing = MyAwesomeClass()<br>  myAwesomeThing.makeMoney()<h2 id="警告"><a href="#警告" class="headerlink" title="警告"></a>警告</h2>使用的时候总注意以下几点</li>
+</ul>
+<ol>
+<li>第一点</li>
+<li>第二点</li>
+<li>第三点<br><em>/<br>class MyAwesomeClass {<br>/</em> … */<br>}<br>4.1.8 在写文档注释时，尽量保持简洁。</li>
+</ol>
+<p>4.2 其他注释原则</p>
+<p>4.2.1  // 后面要保留空格。</p>
+<p>4.2.2 注释必须要另起一行。</p>
+<p>4.2.3 使用注释 // MARK: - xoxo 时, 下面一行保留为空行。</p>
+<p>class Pirate {<br>    // MARK: - 实例属性<br>    private let pirateName: String<br>    // MARK: - 初始化<br>    init() {<br>        /<em> … </em>/<br>    }<br>}</p>
 
         
         
@@ -744,27 +631,28 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/06/01/self.var/" title="self.var 和_var区别" itemprop="url">self.var 和_var区别</a>
+      <a href="/2017/07/26/swift开发中的pch文件/" title="swift项目中相当于pch放入公共宏定义的文件" itemprop="url">swift项目中相当于pch放入公共宏定义的文件</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
 		
   <p class="article-time">
-    <time datetime="2017-06-01T11:23:54.000Z" itemprop="datePublished"> 发表于 2017-06-01</time>
+    <time datetime="2017-07-25T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-26</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <p>在平时搬砖的过程中经常为了省事直接使用_var来访问，有时候使用self.var，但是两者是有本质区别的，之前是知道什么情况下用什么情况下不用，好记性还不如烂笔头呢，简单记录一下方便以后查阅吧。</p>
-<p>注意区分一下属性和实例变量</p>
-<p>self.var是对属性的访问；而_var是对实例变量的访问</p>
-<p>实例变量具有私有性，一般情况下仅在类内部使用，为了方便给外读写这个实力变量，就有了属性，属性用@property管家in自声明，属性包含对实力变量读写的get/set方法。在iOS5以后，当我们使用@property来声明属性变量，编译器会自动为我们生成对应的一个以下划线加属性名的实例变量，还有其对应的getter.setter方法。下划线是包括在变量名字里的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">@property (nonatomic, copy) NSString *var;</div><div class="line"></div><div class="line">等价于</div><div class="line"></div><div class="line">NSString *_var;</div><div class="line">- (NSString*)var&#123;</div><div class="line">    return _var;</div><div class="line">&#125;</div><div class="line">- (void)setVar:(NSString*)var&#123;</div><div class="line">    _var = var;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>编译器为我们生成了对私有实例变量操作的get、set方法，当然getter，setter里面还可能有其他额外操作。这样一来我们就可以看出通过self.var和_var访问实例变量的区别，在.m文件中可以通过_var来访问实例变量，但是getter、setter不会被调用，而来自外部的访问，需要通过getter、setter。</p>
-<p>重写get/set方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">//getter：</div><div class="line">- (NSString *)name &#123;</div><div class="line">    NSLog(&quot;%@&quot;, _name);</div><div class="line">    return _name; //必须使用——var访问，否则又会出发属性的getter，进入死循环</div><div class="line">&#125;</div><div class="line">//setter:</div><div class="line">- (void)setName:(NSString *)newValue &#123;</div><div class="line">    _name = newValue;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>如果编译器发现你同时重写了getter、setter，@property机制将不会生效，也就是说，需要我们自己声明_var，当然我们也可以关联到另外一个实例变量上去而并非_var。</p>
+        <p>swift创建的工程项目文件里,按照上述方案是行不通的.swift项目中只有 .swift 为后缀的项目文件,pch文件是后缀为 .h 的项目文件,自然是不可行的!但有人也说了,swift引用OC可以通过桥接完成呀?!对,没错,很正确,十拿九稳~~可惜,经过试验,对于.pch文件来说,这却是行不通的!</p>
+<p>①在对应位置创建所你所需要的pch文件!按步骤进行,并店家 Next 完成创建<br><img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/27910508.jpg" alt=""></p>
+<p>②在所创建的pch文件中,在 #define 和 #endif之间可以定义宏,也可导入需要全局使用的文件的头文件(.h文件)</p>
+<p><img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/82475430.jpg" alt=""></p>
+<p>③在上一步完成后,还不能实现效果.还需要对pch文件进行文件配置:找到对应的Build settings位置,在All中搜索prefix关键字,找到对应的Prefix Header列表项,在对应内容栏里双击,将pch文件路径输入,完成配置!</p>
+<p><img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/90916782.jpg" alt=""></p>
+<p>④任务完成,这样你有什么想要在全局都可以获得参数,方法,文件等都可以写在其中!</p>
+<p>但是,在swift创建的工程项目文件里,按照上述方案是行不通的.swift项目中只有 .swift 为后缀的项目文件,pch文件是后缀为 .h 的项目文件,自然是不可行的!但有人也说了,swift引用OC可以通过桥接完成呀?!对,没错,很正确,十拿九稳~~可惜,经过试验,对于.pch文件来说,这却是行不通的!</p>
+<p>其实 Swift File 文件,说白了,他就是swift环境下个pch文件</p>
 
         
         
@@ -801,28 +689,320 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/05/15/iOS 整体大观/" title="iOS 核心知识点" itemprop="url">iOS 核心知识点</a>
+      <a href="/2017/07/25/AdSupport广告/" title="Adsupport.framework广告框架植入" itemprop="url">Adsupport.framework广告框架植入</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-15T13:55:03.000Z" itemprop="datePublished"> 发表于 2017-05-15</time>
+    <time datetime="2017-07-24T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-25</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <p>iOS必须知道并深究的一些知识点，一点一点积累扩展。</p>
-<p>##iOS 核心框架<br>CoreAnimation<br>CoreGraphics<br>CoreLocation<br>AVFoundation<br>Foundation</p>
-<p>##iOS核心机制</p>
-<p>UITableView 重用<br>ObjC内存管理；自动释放池，ARC如何实现<br>runloop<br>runtime<br>Block的定义、特性、内存区域、如何实现<br>Responder Chain<br>NSOperation<br>GCD</p>
-<p>##数据结构</p>
-<p>8大排序算法<br>二叉树实现<br>二分查找实现<br>面向对象编程<br>封装、继承、多态<br>设计模式6个原则<br>设计一个类的功能，如何划分粒度（单一职责）<br>接口隔离。<br>如果有一个鸟类，有飞的动作，一个鸵鸟继承它是合适的吗（里氏替换）<br>类之间的依赖如何依赖偶合度最小（依赖倒转）<br>高层依赖低层，低层不能依赖高层。依赖接口，不能依赖具体的类。<br>如果A要调用C函数，但C是B的成员类，应该如何设计？（迪米特）<br>如何设计类，能做到只增加代码，而不修改代码，有哪些经验（开放封闭）<br>通过设计模式解决。</p>
-<p>##计算机技术</p>
-<p>计算机网络： TCP/IP、HTTPCDN、SPDY<br>计算机安全： RSA、AES、DES<br>操作系统：线程、进程、堆栈、死锁、调度算法</p>
-<p>##iOS新特性、新技术<br>iOS7 UIDynamic、SpritKit、新布局、扁平化<br>iOS8 应用程序扩展、HealthKit、SceneKit、CoreLocation、TouchID、PhotoKit<br>iOS9<br>iOS10<br>iOS11<br>Apple Watch<br>第三方库：SDWebImage、AFNetwork、JSONKit、wax<br>swift</p>
+        <p>###使用AdSupport.framework生成IDFA唯一标识符</p>
+<p>需要引入框架 AdSupport.framework</p>
+<p>在开发的时候引入.h文件</p>
+<p>#import <adsupport asidentifiermanager.h=""><br>NSString* uuidStr = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];</adsupport></p>
+<p>获得的uuid格式如 CA304507-BDE1-495F-9AD8-1E4C6C275A47</p>
+<p>新的微博SDK需要添加ADSupport.framework。但是应用内没有使用IDFA，没有广告。iTunesConnect提交应用的时候必须选择包含IDFA才能提交，但是应用内无广告，审核被拒绝。如何处理？微博sdk内本来就包含广告的哦，这个您只能是选择删除新浪微博的原声sdk，删除了只是不能客户端分享，不能关注而已，其他的功能是不影响的，想客户端授权，分享都不影响的</p>
+<p>微博sdk内本来就包含广告的哦，这个您只能是选择删除新浪微博的原声sdk，删除了只是不能客户端分享，不能关 …</p>
+<p>我们的idfa设置里怎么什么都没有？<br>我需要把广告开关打开！<br>我们应用里没有自己的广告</p>
+<p><img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/98888217.jpg" alt=""></p>
+<p>原文网址： <a href="http://www.voidcn.com/blog/lcg910978041/article/p-6065067.html" target="_blank" rel="external">http://www.voidcn.com/blog/lcg910978041/article/p-6065067.html</a></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/24/swift数据转模型/" title="swift json解析分析" itemprop="url">swift json解析分析</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-23T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-24</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>很多时候，我们从服务端请求下的数据都是Json格式，我们需要拿这些数据显示到我们的UI界面。</p>
+<p>因此，我们的做法基本都会先将json转为方便使用的数据模型，或者也可以直接转字典解决。</p>
+<p>在OC中，我们有很多优秀的第三方库帮助我们实现，比如MJExtension、JSONModel等，这些库基本都是利用runtime实现读取属性名并利用kvc重新赋值属性。</p>
+<p>在Swift中，由于runtime的局限，比较出名的有SwiftyJSON、ObjectMapper等。</p>
+<p>1、SwiftyJSON本质上仍然是根据JSON结构去取值，使用起来顺手、清晰；</p>
+<p>但这种做法没能妥善解决上述的几个问题，因为它不是机遇model的，我们使用的时候，依然必须制定key去获取value，这在一定程度上不是很友好。</p>
+<p>2、ObjectMapper实现了JSON直接转Model的功能，不过使用起来，代码量会多一点，因为我们必须遵循Mappable协议，制定json内的每一个key和model属性的对应关系。</p>
+<p>比如：构造的class必须满足这三个红框的内容，这对于使用习惯了直接定义Model属性的同学来说，可能会有点不习惯。</p>
+<p><img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/1120271.jpg" alt=""></p>
+<p>今天的主角 HandyJSON就出现了，这个库是阿里一位大神推出的，能够做到JSON转Model一步到位，而且使用起来，非常简洁方便。</p>
+<p>关于HandyJSON原理：</p>
+<p>摘自网上一段说明如下：</p>
+<p>HandyJSON另辟蹊径，采用Swift反射+内存赋值的方式来构造Model实例，保持原汁原味的Swift类定义。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">// 假设这是服务端返回的统一定义的response格式</div><div class="line">class BaseResponse&lt;T: HandyJSON&gt;: HandyJSON &#123;</div><div class="line">    var code: Int? // 服务端返回码</div><div class="line">    var data: T? // 具体的data的格式和业务相关，故用泛型定义</div><div class="line"></div><div class="line">    public required init() &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 假设这是某一个业务具体的数据格式定义</div><div class="line">struct SampleData: HandyJSON &#123;</div><div class="line">    var id: Int?</div><div class="line">&#125;</div><div class="line"></div><div class="line">let sample = SampleData(id: 2)</div><div class="line">let resp = BaseResponse&lt;SampleData&gt;()</div><div class="line">resp.code = 200</div><div class="line">resp.data = sample</div><div class="line"></div><div class="line">let jsonString = resp.toJSONString()! // 从对象实例转换到JSON字符串</div><div class="line">print(jsonString) // print: &#123;&quot;code&quot;:200,&quot;data&quot;:&#123;&quot;id&quot;:2&#125;&#125;</div><div class="line"></div><div class="line">if let mappedObject = JSONDeserializer&lt;BaseResponse&lt;SampleData&gt;&gt;.deserializeFrom(json: jsonString) &#123; // 从字符串转换为对象实例</div><div class="line">    print(mappedObject.data?.id)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>1、HandyJSON支持 JSON直接转Model，定义class时，有两点注意：</p>
+<ul>
+<li><p>必须遵循HandyJSON协议        </p>
+</li>
+<li><p>需要实现空的initializer  (当然Struct结构体 可以不需要init()，下文有说明)</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">class BasicTypes: HandyJSON &#123;</div><div class="line">    var int: Int = 2</div><div class="line">    var doubleOptional: Double?</div><div class="line">    var stringImplicitlyUnwrapped: String!</div><div class="line"></div><div class="line">    required init() &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">let jsonString = &quot;&#123;\&quot;doubleOptional\&quot;:1.1,\&quot;stringImplicitlyUnwrapped\&quot;:\&quot;hello\&quot;,\&quot;int\&quot;:1&#125;&quot;</div><div class="line">if let object = BasicTypes.deserialize(from: jsonString) &#123;</div><div class="line">    // …</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>2、HandyJSON还支持Struct，使用方式与Class基本一致</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">struct BasicTypes: HandyJSON &#123;</div><div class="line">    var int: Int = 2</div><div class="line">    var doubleOptional: Double?</div><div class="line">    var stringImplicitlyUnwrapped: String!</div><div class="line">&#125;</div><div class="line"></div><div class="line">let jsonString = &quot;&#123;\&quot;doubleOptional\&quot;:1.1,\&quot;stringImplicitlyUnwrapped\&quot;:\&quot;hello\&quot;,\&quot;int\&quot;:1&#125;&quot;</div><div class="line">if let object = BasicTypes.deserialize(from: jsonString) &#123;</div><div class="line">    // …</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p> 这里注意一下，虽然Struct自己已经帮助构造了init初始化，但如果我们需要重载init，构造我们自己的初始化，还是需要写一下的。</p>
+<p>3、HandyJSON支持枚举，只需要enum构造时服从HandyJSONEnum协议即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">enum AnimalType: String, HandyJSONEnum &#123;</div><div class="line">    case Cat = &quot;cat&quot;</div><div class="line">    case Dog = &quot;dog&quot;</div><div class="line">    case Bird = &quot;bird&quot;</div><div class="line">&#125;</div><div class="line"></div><div class="line">struct Animal: HandyJSON &#123;</div><div class="line">    var name: String?</div><div class="line">    var type: AnimalType?</div><div class="line">&#125;</div><div class="line"></div><div class="line">let jsonString = &quot;&#123;\&quot;type\&quot;:\&quot;cat\&quot;,\&quot;name\&quot;:\&quot;Tom\&quot;&#125;&quot;</div><div class="line">if let animal = Animal.deserialize(from: jsonString) &#123;</div><div class="line">    print(animal.type?.rawValue)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>4、此外，HandyJSON还支持一些非基础类型、复杂类型，包括嵌套结构，如可选、隐式解包可选、集合等</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">class BasicTypes: HandyJSON &#123;</div><div class="line">    var bool: Bool = true</div><div class="line">    var intOptional: Int?</div><div class="line">    var doubleImplicitlyUnwrapped: Double!</div><div class="line">    var anyObjectOptional: Any?</div><div class="line"></div><div class="line">    var arrayInt: Array&lt;Int&gt; = []</div><div class="line">    var arrayStringOptional: Array&lt;String&gt;?</div><div class="line">    var setInt: Set&lt;Int&gt;?</div><div class="line">    var dictAnyObject: Dictionary&lt;String, Any&gt; = [:]</div><div class="line"></div><div class="line">    var nsNumber = 2</div><div class="line">    var nsString: NSString?</div><div class="line"></div><div class="line">    required init() &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">let object = BasicTypes()</div><div class="line">object.intOptional = 1</div><div class="line">object.doubleImplicitlyUnwrapped = 1.1</div><div class="line">object.anyObjectOptional = &quot;StringValue&quot;</div><div class="line">object.arrayInt = [1, 2]</div><div class="line">object.arrayStringOptional = [&quot;a&quot;, &quot;b&quot;]</div><div class="line">object.setInt = [1, 2]</div><div class="line">object.dictAnyObject = [&quot;key1&quot;: 1, &quot;key2&quot;: &quot;stringValue&quot;]</div><div class="line">object.nsNumber = 2</div><div class="line">object.nsString = &quot;nsStringValue&quot;</div><div class="line"></div><div class="line">let jsonString = object.toJSONString()!</div><div class="line"></div><div class="line">if let object = JSONDeserializer&lt;BasicTypes&gt;.deserializeFrom(json: jsonString) &#123;</div><div class="line">    // ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>5、HandyJSON支持指定从哪个具体路径开始解析，反序列化到Model。</p>
+<p>这个比较常用，因为正常情况下，接口一般都会返回包括错误码，错误消息，正式请求数据等，但我们一般只需要把正式数据转换成Model即可。</p>
+<p>我们可以这样实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">class Cat: HandyJSON &#123;</div><div class="line">    var id: Int64!</div><div class="line">    var name: String!</div><div class="line"></div><div class="line">    required init() &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">let jsonString = &quot;&#123;\&quot;code\&quot;:200,\&quot;msg\&quot;:\&quot;success\&quot;,\&quot;data\&quot;:&#123;\&quot;cat\&quot;:&#123;\&quot;id\&quot;:12345,\&quot;name\&quot;:\&quot;Kitty\&quot;&#125;&#125;&#125;&quot;</div><div class="line"></div><div class="line">if let cat = JSONDeserializer&lt;Cat&gt;.deserializeFrom(json: jsonString, designatedPath: &quot;data.cat&quot;) &#123;</div><div class="line">    print(cat.name)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其中，直接通过 designatedPath 定位到我们需要的节点处。</p>
+<p>6、handyJSON支持有继承关系的Model类，就是说及时某个类没有实现HandyJSON协议，只要父类有实现，依然可以转化model。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">class Animal: HandyJSON &#123;</div><div class="line">    var id: Int?</div><div class="line">    var color: String?</div><div class="line"></div><div class="line">    required init() &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">class Cat: Animal &#123;</div><div class="line">    var name: String?</div><div class="line"></div><div class="line">    required init() &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">let jsonString = &quot;&#123;\&quot;id\&quot;:12345,\&quot;color\&quot;:\&quot;black\&quot;,\&quot;name\&quot;:\&quot;cat\&quot;&#125;&quot;</div><div class="line"></div><div class="line">if let cat = JSONDeserializer&lt;Cat&gt;.deserializeFrom(json: jsonString) &#123;</div><div class="line">    print(cat)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>7、上面都是基本在说JSON转模型，那么反过来实现呢？</p>
+<p>HandyJSON还支持对象转字典、对象转模型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">class BasicTypes: HandyJSON &#123;</div><div class="line">    var int: Int = 2</div><div class="line">    var doubleOptional: Double?</div><div class="line">    var stringImplicitlyUnwrapped: String!</div><div class="line"></div><div class="line">    required init() &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">let object = BasicTypes()</div><div class="line">object.int = 1</div><div class="line">object.doubleOptional = 1.1</div><div class="line">object.stringImplicitlyUnwrapped = “hello&quot;</div><div class="line"></div><div class="line">print(object.toJSON()!) // 序列化到字典</div><div class="line">print(object.toJSONString()!) // 序列化到JSON字符串</div><div class="line">print(object.toJSONString(prettyPrint: true)!) // 序列化为格式化后的JSON字符串</div></pre></td></tr></table></figure>
+<p>附：原文网址 ： <a href="http://www.cnblogs.com/yajunLi/p/7121950.html" target="_blank" rel="external">http://www.cnblogs.com/yajunLi/p/7121950.html</a></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/23/两大主要框架/" title="Cocoa两大框架" itemprop="url">Cocoa两大框架</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-22T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-23</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>Cocoa框架是iOS应用程序的基础<br>1、Cocoa是什么？<br>Cocoa是OS X和 iOS操作系统的程序的运行环境。<br>是什么因素使一个程序成为Cocoa程序呢？不是编程语言，因为在Cocoa开发中你可以使用各种语言；也不是开发工具，你可以在命令行上就可以创建Cocoa程序。Cocoa程序可以这么说，它是由一些对象组成，而这些对象的类最后都是继承于它们的根类 ：NSObject。而且它们都是基于Objective-C运行环境的。<br>1.1、Cocoa框架<br>iOS中，Cocoa众多框架中最重要最基本的两个框架是：Foundation 和 UIKit。<br>Foundation 和界面无关，也可以说和界面无关的类基本是Foundation框架的，和界面相关的是UIKit框架。<br>这两个框架在系统中处于的位置如图：<br><img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/96283257.jpg" alt=""></p>
+<p>1.2、Foundation框架<br>好吧，那我们看看两个框架的类组织架构图，第一个先看Foundation的，三个图，包括了Foundation所以的类，图中灰色的是iOS不支持的，灰色部分是OS X系统的。<br><img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/87468014.jpg" alt=""><br><img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/91348440.jpg" alt=""><br><img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/10722105.jpg" alt=""></p>
+<p>将上图Foundation框架中的类进行逻辑分类如下：</p>
+<blockquote>
+<p>值对象<br>集合<br>操作系统服务 包括下面三个：文件系统和URL   进程间通讯。 这个范畴中的大部分类代表不同的系统端口、套接字、和名字服务器，对实现底层的IPC很有用。NSPipe代表一个BSD管道，即一种进程间的单向通讯通道。   线程和子任务。 NSThread类使您可以创建多线程的程序，而各种锁（lock）类则为彼此竞争的线程在访问进程资源时提供各种控制机制。通过NSTask，您的程序可以分出      一个子进程来执行其它工作或进行进度监控。<br>通知<br>归档和序列化<br>表达式和条件判断<br>Objective-C语言服务</p>
+</blockquote>
+<p>1.3 UIKit框架<br>应用程序可以通过三种方式使用UIKit创建界面<br>  在用户界面工具（interface Buidler）从对象库里 拖拽窗口，视图或者其他的对象使用。<br>  用代码创建<br>  通过继承UIView类或间接继承UIView类实现自定义用户界面</p>
+<p>  <img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/9105186.jpg" alt=""></p>
+<p>  在图中可以看出，responder 类是图中最大分支的根类，UIResponder为处理响应事件和响应链 定义了界面和默认行为。当用户用手指滚动列表或者在虚拟键盘上输入时，UIKit就生成时间传送给UIResponder响应链，直到链中有对象处理这个事件。相应的核心对象，比如：UIApplication  ，UIWindow，UIView都直接或间接的从UIResponder继承。</p>
+<p>   2、Cocoa对象<br>2.1 Objective-C是面向对象的语言<br>objective-c和Java C++一样，有封装，继承，多态，重用。但是它不像C++那样有重载操作法、模版和多继承，也没有Java的垃圾回收机制。<br>2.2 Objective-C的优点<br>Objective-C语言有C++ Java等面向对象的特点，那是远远不能体现它的优点的。Objective-C的优点是它是动态的。动态能力有三种：<br>动态类-运行时确定类的对象<br>动态绑定-运行时确定要调用的方法<br>动态加载–运行时为程序加载新的模块<br>2.3 动态能力相关的isa指针<br>每个Objective-C对象都有一个隐藏的数据结构，这个数据结构是Objective-C对象的第一个成员变量，它就是isa指针。这个指针指向哪呢？它指向一个类对象(class object  记住它是个对象，是占用内存空间的一个变量，这个对象在编译的时候编译器就生成了，专门来描述某个类的定义)，这个类对象包含了Objective-C对象的一些信息（为了区分两个对象，我把前面提到的对象叫Objective-C对象），包括Objective-C对象的方法调度表，实现了什么协议等等。这个包含信息就是Objective-C动态能力的根源了。<br>这里会看到，在这个结构体里还有一个isa指针，又是一重指向，是不是有种到了盗梦空间的感觉。不用紧张，take easy，不会有那么多层次的，这里的isa指针指向的是元类对象(metaclass object)，带有元字，证明快到头了。那元对象有啥用呢？它用来存储的关于类的版本，名字，类方法等信息。所有的元类对象(metaclass object)都指向 NSObject的元类对象，到头还是NSObject。一共三次：类对象-&gt;元类对象-&gt;NSObject元类对象。</p>
+<p>2.4 根类 NSObject<br>NSObject是大部分Objective-C类的根类，它没有父类。其它类继承NSObject，访问Objective-C运行时系统的基本接口，这样其他类的实例可以获得运行时的能力。</p>
+<p>2.4.1 根类和根类协议<br>NSObject不但是个类名，NSObject也是个协议的名称，参考NSObject协议 ， NSObject协议指定了根类必须实现的接口。<br>2.4.2 根类的主要方法：<br>    分配、初始化、和复制：<br>alloc和allocWithZone:方法用于从某内存区域中分配一个对象内存，并使对象指向其运行时的类定义。<br>init方法是对象初始化。<br>new是一个将简单的内存分配和初始化结合起来的方法。<br>copy和copyWithZone:<br>对象的保持和清理：<br>retain方法增加对象的保持次数。<br>release方法减少对象的保持次数。<br>autorelease方法也是减少对象的保持次数，但是以推迟的方式。<br>retainCount方法返回对当前的保持次数。<br>dealloc方法由需要释放对象的实例变量以及释放动态分配的内存的类实现。<br>内省和比较<br>NSObjec有很多方法可以查询对象的运行时信息。这些内省方法有助于找出对象在类层次中的位置，确定对象是否实现特定的方法，以及测试对象是否遵循某种协议。下面是部分方法<br>superclass和class方法（实现为类和实例方法）分别以Class对象的形式返回接收者的父类和类。<br>您可以通过isKindOfClass:和isMemberOfClass:方法来确定对象属于哪个类。后者用于测试接收者是否为指定类的实例。isSubclassOfClass:类方法则用于测试类的继承性。<br>respondsToSelector:方法用于测试接收者是否实现由选择器参数标识的方法。instancesRespondToSelector:类方法则用于测试给定类的实例是否实现指定的方法。<br>conformsToProtocol:方法用于测试接收者（对象或类）是否遵循给定的协议。<br>isEqual:和hash方法用于对象的比较。<br>description方法允许对象返回一个内容描述字符串；这个方法的输出经常用于调试（“print object”命令），以及在格式化字符串中和“%@”指示符一起表示对象。<br>对象的编码和解码<br>下面的方法和对象的编解码（作为归档过程的一部分）有关：<br>encodeWithCoder:和initWithCoder:是NSCoding协议仅有的方法。前者使对象可以对其实例变量进行编码，后者则使对象可以根据解码过的实例变量对自身进行初始化。<br>NSObject类中声明了一些于对象编码有关的方法：classForCoder:、replacementObjectForCoder:、和awakeAfterUsingCoder:。<br>消息的转发<br> forwardInvocation:允许一个对象将消息转发给另一个对象。<br>消息的派发<br>在performSelector开头的一些方法允许你延迟后派发指定消息，而且可以将消息（同步或异步的消息）从辅助线程派</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/22/代理设计模式/" title="事件传递链与响应链的整理" itemprop="url">事件传递链与响应链的整理</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-21T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-22</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>事件链 和 响应链 简单理解</p>
+<p>1、事件链<br>当我们用手指轻触屏幕，首先是app的UIApplication对象接收到了这次点击事件，紧接着，UIApplication对象把这次点击传递给了UIWindow对象，UIWindow对象继续向他的子View对象传递，直到传递到最上层</p>
+<p><img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/38516992.jpg" alt=""></p>
+<p>app会把点击事件传给他上面的每一个子View，至于谁来响应，那就是响应链了。就像上图那样，点击了红色的View，传递过程是这样的：</p>
+<p>UIApplication对象——&gt;UIWindow对象——&gt;rootVC.view对象——&gt;redview对象,blueView对象。</p>
+<p>2、响应链<br>当每一个view都收到点击事件之后，谁来做出响应呢？首先，能够响应这个点击的是谁呢？能够响应事件的View，userInteractionEnabled属性一定要是yes。</p>
+<p>响应过程是和时间传递过程相反的。</p>
+<p><img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/16539506.jpg" alt=""></p>
+<p>最上面的红色view发现点击事件是在自己的范围内，且自己可以响应这个事件，那么他就不再向下传递了，这就可以理解两个按钮，如果都可以响应点击事件，那么正常情况下应该是上面的按钮响应点击事件。如果红色的View发现自己不具备响应这个事件的能力，那么他会把事件继续向下传递，传递到他的上一层也就是rootVC.view，就这样依次向下传递，直到UIwindow层，发现依然没有可以响应的View，那么这个点击事件就没有响应者，点击无效。</p>
+<p><img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/89068866.jpg" alt=""></p>
+<p>触摸事件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">//开始点击</div><div class="line">-(void)touchesBegin:(NSSet&lt;UITouch *&gt; *)touches withEvent(nullable UIEvent *)event;</div><div class="line">//开始拖拽</div><div class="line">-(void)touchedMoved:(NSSet&lt;UITouch *&gt;)touches withEvent:(nullable UIEvent *)evnet;</div><div class="line">//点击结束</div><div class="line">-(void)touchedEnded:(NSSet&lt;UITouch *&gt;)touched withEvent:(nullable UIEvent *)event;</div><div class="line">//点击取消</div><div class="line">-(void)touchedCanceled:(NSSet&lt;UITouch *&gt;)touched withEvent:(nullable UIEvent *)event;</div></pre></td></tr></table></figure>
+<p>加速事件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">//开始加速</div><div class="line">-(void)motionBegin:(NSSet&lt;UITouch *&gt; *)touches withEvent(nullable UIEvent *)event;</div><div class="line">//点击加速</div><div class="line">-(void)motionEnded:(NSSet&lt;UITouch *&gt;)touched withEvent:(nullable UIEvent *)event;</div><div class="line">//加速取消</div><div class="line">-(void)motionCanceled:(NSSet&lt;UITouch *&gt;)touched withEvent:(nullable UIEvent *)event;</div></pre></td></tr></table></figure>
+<p>远程控制事件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-(void)remoteControlReceviedWithEvent:(UIEvent *)evnet;</div></pre></td></tr></table></figure>
+<p>3、视图不响应检查要点<br>Tips:有时候发现一个视图无法响应点击事件，可以检查下面几项<br>1、hidden = YES 视图被隐藏<br>2、userInteractionEnabled = NO 不接受响应事件<br>3、alpha &lt;= 0.01,透明视图不接收响应事件<br>4、子视图超出父视图范围<br>5、需响应视图被其他视图盖住<br>6、是否重写了其父视图以及自身的hitTest方法<br>7、是否重写了其父视图以及自身的pointInside方法</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/21/swift模块化/" title="swift项目 模块化发展方向" itemprop="url">swift项目 模块化发展方向</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-20T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>###开篇<br>写了这么多年的代码，目前觉得最好的构造项目结构的方式就是 模块化。</p>
+<p>模块化在 Objective-C 的项目中可能比较难搞起来，但是在 Swift 项目中就游润有余了，因为 Swift 有着天生 Module 的概念，和它的访问控制修饰符。</p>
+<p>小型项目搞模块化意义可能不大，对于中型和大型的项目，模块化以后，纵向分层横向分模块，模块间解耦，访问控制，依赖注入，依赖倒转，在开发过程中就能自然而然的写出来，省去以后重构的苦恼。</p>
+<p>大家都知道，Xcode 主要是用 Workspace 和 Project 来组织项目结构的，一个工程只能有一个 Workspace，一个 Workspace 中可以有任意多个 Project。</p>
+<p>而模块化的方式就是把各个业务功能拆分成模块（Framework），然后主工程负责把这些业务模块串联起来构成一个完成的 App。</p>
+<p>###工程结构<br>在一个项目里，有一个 Workspace，其中有很多个 Project，主工程是一个 Project，每个业务模块也都是一个 Project。</p>
+<p>如下图一样：</p>
+<p><img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/6739231.jpg" alt=""><br><img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/58826050.jpg" alt=""></p>
+<p>在工程中，每添加一个新模块的时候，通过点击左下角的 + 来创建，选择 Framework 类型：</p>
+<p><img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/96013257.jpg" alt=""></p>
+<p>路径选择到 Modules 目录下。</p>
+<p>如果你觉得需要的话，可以对 Modules 目录下的这些 Project 再分目录。</p>
+<p>如何创建 Workspace？<br>如果是从一个新工程开始创建，可以在 Xcode 中选择：File -&gt; New -&gt; Workspace… 创建，然后再在创建好的 Workspace 中添加主工程。</p>
+<p>如果你是用了 CocoaPods，在第一次 pod install 时，CocoaPods 会帮你创建好 Workspace。</p>
+<p>###依赖配置<br>对于每一个模块 xcodeproj，都需要在这里严格配置好它的依赖。</p>
+<p><img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/10499864.jpg" alt=""></p>
+<p>同属于一个 Workspace 的 Project 们，可以方便的互相配置依赖，Xcode 可以很好的处理好这个依赖。</p>
+<p>配置了依赖以后的 Framework，在编译时 Xcode 会先编译它依赖的那些 Framework, 确保这个 Framework 可以顺利配置成功。</p>
+<p>用这种项目结构时，依赖必须严格配置正确，否则即使在模拟器或真机运行时没有问题，打包的时候一定会出现问题。这样当想知道一个模块依赖了哪些模块时，可以直观的从这里查看到。<br>为每一个模块添加 Demo 和单元测试<br>由于一个模块是一个单独的 Project，可以在里面方便的添加 Demo 和单元测试的 Target。</p>
+<p>###CocoaPods<br>如果你的某一个模块需要依赖 CocoaPods 中的库，CocoaPods 本身也很好的支持了这个需求。</p>
+<p>在 Podfile 文件中添加一个 target 的配置即可。</p>
+<p>###Carthage<br>使用 Swift 语言的项目也会经常用到 Carthage。一般都是直接依赖 Carthage/Build 中编译好的 .framework 文件，然后类型为 App 的 Project，要配置 copy-framework 脚本，类型为 Framework 的 Project，要在 Build Phases 中添加一个 Copy Files Phases，这是官方文档中的说法。</p>
+<p>但是在我们这种项目结构中，如果为每个模块都配置 Copy Files Phases，会导致打出来的包中，每个模块的 Framework 都包含了它依赖的那些 Framework，导致包大小非常大，因为里面包含了非常多的重复 Framework。</p>
+<p>于是我们再 Workspace 中又建立的一个目录叫 CarthageFrameworks，然后把 Carthage/Checkout 目录中的那些 .xcodeproj 文件拖到这个 CarthageFrameworks 目录中</p>
+<p>列举一下好处<br>模块化，各模块之间独立，职责清晰<br>开发过程中会自然强制你考虑模块间解耦，访问控制，依赖注入，依赖倒转等问题<br>依赖必须严格配置，方便查看和梳理依赖<br>每个 Project 都有一个 xxx.xcodeproj文件，这个文件是最常出现冲突的文件了，而且这个文件的冲突还往往很难解决，模块化分开后，各个模块都有单独的 xxx.xcodeproj 文件，大大降低发生冲突的概率。<br>模块拥有自己的 Targets 空间，方便创建 Demo 和单元测试<br>如果想把模块做成单独的 git 仓库，也非常的方便<br>方便进行 Carthage 引入的库的调试</p>
+<p>原文网址 <a href="https://liuduo.me/2017/05/22/moduleproject/" target="_blank" rel="external">https://liuduo.me/2017/05/22/moduleproject/</a></p>
 
         
         
@@ -855,7 +1035,7 @@
 
 
   <nav id="page-nav" class="clearfix">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
   </nav>
 
 </div>

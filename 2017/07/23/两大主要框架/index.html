@@ -1,0 +1,472 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Cocoa两大框架 | 史成</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="史成">
+    
+
+    
+    <meta name="description" content="Cocoa框架是iOS应用程序的基础1、Cocoa是什么？Cocoa是OS X和 iOS操作系统的程序的运行环境。是什么因素使一个程序成为Cocoa程序呢？不是编程语言，因为在Cocoa开发中你可以使用各种语言；也不是开发工具，你可以在命令行上就可以创建Cocoa程序。Cocoa程序可以这么说，它是由一些对象组成，而这些对象的类最后都是继承于它们的根类 ：NSObject。而且它们都是基于Obje">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cocoa两大框架">
+<meta property="og:url" content="http://yoursite.com/2017/07/23/两大主要框架/index.html">
+<meta property="og:site_name" content="史成">
+<meta property="og:description" content="Cocoa框架是iOS应用程序的基础1、Cocoa是什么？Cocoa是OS X和 iOS操作系统的程序的运行环境。是什么因素使一个程序成为Cocoa程序呢？不是编程语言，因为在Cocoa开发中你可以使用各种语言；也不是开发工具，你可以在命令行上就可以创建Cocoa程序。Cocoa程序可以这么说，它是由一些对象组成，而这些对象的类最后都是继承于它们的根类 ：NSObject。而且它们都是基于Obje">
+<meta property="og:image" content="http://ooyerqo96.bkt.clouddn.com/17-7-27/96283257.jpg">
+<meta property="og:image" content="http://ooyerqo96.bkt.clouddn.com/17-7-27/87468014.jpg">
+<meta property="og:image" content="http://ooyerqo96.bkt.clouddn.com/17-7-27/91348440.jpg">
+<meta property="og:image" content="http://ooyerqo96.bkt.clouddn.com/17-7-27/10722105.jpg">
+<meta property="og:image" content="http://ooyerqo96.bkt.clouddn.com/17-7-27/9105186.jpg">
+<meta property="og:updated_time" content="2017-07-30T08:17:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cocoa两大框架">
+<meta name="twitter:description" content="Cocoa框架是iOS应用程序的基础1、Cocoa是什么？Cocoa是OS X和 iOS操作系统的程序的运行环境。是什么因素使一个程序成为Cocoa程序呢？不是编程语言，因为在Cocoa开发中你可以使用各种语言；也不是开发工具，你可以在命令行上就可以创建Cocoa程序。Cocoa程序可以这么说，它是由一些对象组成，而这些对象的类最后都是继承于它们的根类 ：NSObject。而且它们都是基于Obje">
+<meta name="twitter:image" content="http://ooyerqo96.bkt.clouddn.com/17-7-27/96283257.jpg">
+
+    
+    <link rel="alternative" href="www.baidu.com" title="史成" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/shicheng.png">
+    
+    
+    <link rel="apple-touch-icon" href="/img/shicheng.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/shicheng.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/shicheng.png" alt="史成" title="史成"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="史成">史成</a></h1>
+				<h2 class="blog-motto">知其然，知其所以然。一天一篇博客，一个星期研究一个第三方Demo，三个月看一本书！ 2017.7.1</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/23/两大主要框架/" title="Cocoa两大框架" itemprop="url">Cocoa两大框架</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-22T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-23</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			
+		
+		</div>
+		
+		<p>Cocoa框架是iOS应用程序的基础<br>1、Cocoa是什么？<br>Cocoa是OS X和 iOS操作系统的程序的运行环境。<br>是什么因素使一个程序成为Cocoa程序呢？不是编程语言，因为在Cocoa开发中你可以使用各种语言；也不是开发工具，你可以在命令行上就可以创建Cocoa程序。Cocoa程序可以这么说，它是由一些对象组成，而这些对象的类最后都是继承于它们的根类 ：NSObject。而且它们都是基于Objective-C运行环境的。<br>1.1、Cocoa框架<br>iOS中，Cocoa众多框架中最重要最基本的两个框架是：Foundation 和 UIKit。<br>Foundation 和界面无关，也可以说和界面无关的类基本是Foundation框架的，和界面相关的是UIKit框架。<br>这两个框架在系统中处于的位置如图：<br><img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/96283257.jpg" alt=""></p>
+<p>1.2、Foundation框架<br>好吧，那我们看看两个框架的类组织架构图，第一个先看Foundation的，三个图，包括了Foundation所以的类，图中灰色的是iOS不支持的，灰色部分是OS X系统的。<br><img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/87468014.jpg" alt=""><br><img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/91348440.jpg" alt=""><br><img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/10722105.jpg" alt=""></p>
+<p>将上图Foundation框架中的类进行逻辑分类如下：</p>
+<blockquote>
+<p>值对象<br>集合<br>操作系统服务 包括下面三个：文件系统和URL   进程间通讯。 这个范畴中的大部分类代表不同的系统端口、套接字、和名字服务器，对实现底层的IPC很有用。NSPipe代表一个BSD管道，即一种进程间的单向通讯通道。   线程和子任务。 NSThread类使您可以创建多线程的程序，而各种锁（lock）类则为彼此竞争的线程在访问进程资源时提供各种控制机制。通过NSTask，您的程序可以分出      一个子进程来执行其它工作或进行进度监控。<br>通知<br>归档和序列化<br>表达式和条件判断<br>Objective-C语言服务</p>
+</blockquote>
+<p>1.3 UIKit框架<br>应用程序可以通过三种方式使用UIKit创建界面<br>  在用户界面工具（interface Buidler）从对象库里 拖拽窗口，视图或者其他的对象使用。<br>  用代码创建<br>  通过继承UIView类或间接继承UIView类实现自定义用户界面</p>
+<p>  <img src="http://ooyerqo96.bkt.clouddn.com/17-7-27/9105186.jpg" alt=""></p>
+<p>  在图中可以看出，responder 类是图中最大分支的根类，UIResponder为处理响应事件和响应链 定义了界面和默认行为。当用户用手指滚动列表或者在虚拟键盘上输入时，UIKit就生成时间传送给UIResponder响应链，直到链中有对象处理这个事件。相应的核心对象，比如：UIApplication  ，UIWindow，UIView都直接或间接的从UIResponder继承。</p>
+<p>   2、Cocoa对象<br>2.1 Objective-C是面向对象的语言<br>objective-c和Java C++一样，有封装，继承，多态，重用。但是它不像C++那样有重载操作法、模版和多继承，也没有Java的垃圾回收机制。<br>2.2 Objective-C的优点<br>Objective-C语言有C++ Java等面向对象的特点，那是远远不能体现它的优点的。Objective-C的优点是它是动态的。动态能力有三种：<br>动态类-运行时确定类的对象<br>动态绑定-运行时确定要调用的方法<br>动态加载–运行时为程序加载新的模块<br>2.3 动态能力相关的isa指针<br>每个Objective-C对象都有一个隐藏的数据结构，这个数据结构是Objective-C对象的第一个成员变量，它就是isa指针。这个指针指向哪呢？它指向一个类对象(class object  记住它是个对象，是占用内存空间的一个变量，这个对象在编译的时候编译器就生成了，专门来描述某个类的定义)，这个类对象包含了Objective-C对象的一些信息（为了区分两个对象，我把前面提到的对象叫Objective-C对象），包括Objective-C对象的方法调度表，实现了什么协议等等。这个包含信息就是Objective-C动态能力的根源了。<br>这里会看到，在这个结构体里还有一个isa指针，又是一重指向，是不是有种到了盗梦空间的感觉。不用紧张，take easy，不会有那么多层次的，这里的isa指针指向的是元类对象(metaclass object)，带有元字，证明快到头了。那元对象有啥用呢？它用来存储的关于类的版本，名字，类方法等信息。所有的元类对象(metaclass object)都指向 NSObject的元类对象，到头还是NSObject。一共三次：类对象-&gt;元类对象-&gt;NSObject元类对象。</p>
+<p>2.4 根类 NSObject<br>NSObject是大部分Objective-C类的根类，它没有父类。其它类继承NSObject，访问Objective-C运行时系统的基本接口，这样其他类的实例可以获得运行时的能力。</p>
+<p>2.4.1 根类和根类协议<br>NSObject不但是个类名，NSObject也是个协议的名称，参考NSObject协议 ， NSObject协议指定了根类必须实现的接口。<br>2.4.2 根类的主要方法：<br>    分配、初始化、和复制：<br>alloc和allocWithZone:方法用于从某内存区域中分配一个对象内存，并使对象指向其运行时的类定义。<br>init方法是对象初始化。<br>new是一个将简单的内存分配和初始化结合起来的方法。<br>copy和copyWithZone:<br>对象的保持和清理：<br>retain方法增加对象的保持次数。<br>release方法减少对象的保持次数。<br>autorelease方法也是减少对象的保持次数，但是以推迟的方式。<br>retainCount方法返回对当前的保持次数。<br>dealloc方法由需要释放对象的实例变量以及释放动态分配的内存的类实现。<br>内省和比较<br>NSObjec有很多方法可以查询对象的运行时信息。这些内省方法有助于找出对象在类层次中的位置，确定对象是否实现特定的方法，以及测试对象是否遵循某种协议。下面是部分方法<br>superclass和class方法（实现为类和实例方法）分别以Class对象的形式返回接收者的父类和类。<br>您可以通过isKindOfClass:和isMemberOfClass:方法来确定对象属于哪个类。后者用于测试接收者是否为指定类的实例。isSubclassOfClass:类方法则用于测试类的继承性。<br>respondsToSelector:方法用于测试接收者是否实现由选择器参数标识的方法。instancesRespondToSelector:类方法则用于测试给定类的实例是否实现指定的方法。<br>conformsToProtocol:方法用于测试接收者（对象或类）是否遵循给定的协议。<br>isEqual:和hash方法用于对象的比较。<br>description方法允许对象返回一个内容描述字符串；这个方法的输出经常用于调试（“print object”命令），以及在格式化字符串中和“%@”指示符一起表示对象。<br>对象的编码和解码<br>下面的方法和对象的编解码（作为归档过程的一部分）有关：<br>encodeWithCoder:和initWithCoder:是NSCoding协议仅有的方法。前者使对象可以对其实例变量进行编码，后者则使对象可以根据解码过的实例变量对自身进行初始化。<br>NSObject类中声明了一些于对象编码有关的方法：classForCoder:、replacementObjectForCoder:、和awakeAfterUsingCoder:。<br>消息的转发<br> forwardInvocation:允许一个对象将消息转发给另一个对象。<br>消息的派发<br>在performSelector开头的一些方法允许你延迟后派发指定消息，而且可以将消息（同步或异步的消息）从辅助线程派</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2017/07/23/两大主要框架/" data-title="Cocoa两大框架 | 史成" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/07/22/代理设计模式/" title="事件传递链与响应链的整理">
+  <strong>上一篇：</strong><br/>
+  <span>
+  事件传递链与响应链的整理</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/07/24/swift数据转模型/"  title="swift json解析分析">
+ <strong>下一篇：</strong><br/> 
+ <span>swift json解析分析
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ 
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.jianshu.com" target="_blank" title="简书">简书</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://guthub.com" target="_blank" title="GitHub">GitHub</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://cocoachina.com" target="_blank" title="cocoachina">cocoachina</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://mybigorange.github.io" target="_blank" title="Ambrose&#39;s Blog">Ambrose&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="www.baidu.com" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Dean Ambrose Page in Github. <br/>
+			Welcome to my bog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5767005756" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="史成">史成</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -1,0 +1,456 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>章鱼哥问答 | 史成</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="史成">
+    
+
+    
+    <meta name="description" content="1、64位操作系统，64位编译器  sizeof(int) sizeof(char)  sizeof(int ) sizeof(char ) 分别是多少答： 4 1 4 12、64位操作系统，一个结构 struct aStruct{int a; char b; int c; char d}; 此时 sizeof(struct aStruct) 是多少？ 如果是 struct aStruct{int">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="章鱼哥问答">
+<meta property="og:url" content="http://yoursite.com/2017/07/06/章鱼哥问答/index.html">
+<meta property="og:site_name" content="史成">
+<meta property="og:description" content="1、64位操作系统，64位编译器  sizeof(int) sizeof(char)  sizeof(int ) sizeof(char ) 分别是多少答： 4 1 4 12、64位操作系统，一个结构 struct aStruct{int a; char b; int c; char d}; 此时 sizeof(struct aStruct) 是多少？ 如果是 struct aStruct{int">
+<meta property="og:updated_time" content="2017-07-25T05:51:31.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="章鱼哥问答">
+<meta name="twitter:description" content="1、64位操作系统，64位编译器  sizeof(int) sizeof(char)  sizeof(int ) sizeof(char ) 分别是多少答： 4 1 4 12、64位操作系统，一个结构 struct aStruct{int a; char b; int c; char d}; 此时 sizeof(struct aStruct) 是多少？ 如果是 struct aStruct{int">
+
+    
+    <link rel="alternative" href="www.baidu.com" title="史成" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/shicheng.png">
+    
+    
+    <link rel="apple-touch-icon" href="/img/shicheng.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/shicheng.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/shicheng.png" alt="史成" title="史成"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="史成">史成</a></h1>
+				<h2 class="blog-motto">知其然，知其所以然。一天一篇博客，一个星期研究一个第三方Demo，三个月看一本书！ 2017.7.1</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/06/章鱼哥问答/" title="章鱼哥问答" itemprop="url">章鱼哥问答</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-05T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-06</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			
+		
+		</div>
+		
+		<p>1、64位操作系统，64位编译器  sizeof(int) sizeof(char)  sizeof(int <em>) sizeof(char </em>) 分别是多少<br>答： 4 1 4 1<br>2、64位操作系统，一个结构 struct aStruct{int a; char b; int c; char d}; 此时 sizeof(struct aStruct) 是多少？ 如果是 struct aStruct{int a; char b; char d; int c}；此时 sizeof(struct aStruct) 是多少？为啥？<br>答： A：4  1对齐为4   4  1对齐为4<br>               B：4   1对齐为4        1前面的这个4还可以放三个，所以这个就放在前面的4里了      4<br>3、全局并发队列和自定义并发队列的区别，如果现在有两种任务需要并发处理，其中一种是：任务单位小，数量多  另一种是：任务单位大，数量少 分别应该使用哪种队列处理？为什么？<br>答： 96楼那个说的很明白了，不是这么分的，   全局省去了多次创建销毁的操作。  自定义便于自己管理。   和任务大小没关系，一般都是自定义的线程处理专门的任务，全局的做一些简单的常规操作。<br>4、为了防止循环引用，我们都知道使用weak(self); 但是程序中偶尔会见到strong(self); 这种用法，请问：strong(self)的应用场景是什么？<br>答： 关于weak的strong的所有问题，眼光还是要放在销毁，讲道理的说提前释放的情况并不多见，常见的还是应为强引用，最后引用计数没变成0，最后对象没销毁。详情看我这篇博文，<a href="http://www.jianshu.com/p/5d1b7568418b。" target="_blank" rel="external">http://www.jianshu.com/p/5d1b7568418b。</a><br>5、为了防止循环引用，我们都知道使用weak(self)，是不是所有的block 如果内部需要使用对象本身，都需要使用weakself？举例说明<br>答： 看这篇博文 <a href="http://www.jianshu.com/p/5d1b7568418b。" target="_blank" rel="external">http://www.jianshu.com/p/5d1b7568418b。</a><br>6、现有一个对象a，对象a 强持有了自定义对象b、c、d, 是不是可以说，当a的dealloc 只要执行了 我就可以认为内存没有泄漏了？如果不是的话，请举出例子让a对象完全释放。<br>答： 当一个对象的引用第一次成为1的时候，这个对象就初始化成功了，等到它再一次变成0的时候，会给runloop发送一条消息，然后runloop在合适的时候会执行dealloc方法，所以dealloc方法调用了，那么这个对象必然被销毁了。但是a b c d是四个不同的对象，全部销毁，必然是abcd都执行了dealloc方法，这里能保证a没有内存泄露。<br>7、类方法和对象方法的区别何在？类方法的生存周期？ 相对与对象方法，哪类处理适合使用类方法？<br>答：这是NSObject的头文件，自己观察一下，总结出自己的看法，才有用。</p>
+<p>8、kvo监听是否一定是在主线程完成的？如果不是，请举例说明<br>答：不是，KVO的本质就是监听对象的属性进行赋值的时候有没有调用setter方法. 如果有调用setter方法, 就会接收到属性变更的通知, 反之则没有.  所以，眼光放在setter的现成。<br>9、某同事开启了一个NSTimer,但是无论如何这个timer都跑不起来，作为他的老大，代码看起来没什么问题，以你10年ios的开发经验，第一反应是问题出在哪？<br>答:  没有10年经验，先看初始化，如果是scheduledTimerWithTimeInterval看runloop type，如果不是scheduled看加没加进runloop。<br>10、多线程编程种，死锁产生的条件是什么？死锁是不是只在主线程发生？<br>答： 不是，先看死锁定义，死锁是指两个或两个以上的进程在执行过程中，由于竞争资源或者由于彼此通信而造成的一种阻塞的现象，若无外力作用，它们都将无法推进下去。此时称系统处于死锁状态或系统产生了死锁，这些永远在互相等待的进程称为死锁进程。<br>通常死锁的题，只要两个现成线程互为条件就可以触发死锁了。    蛋说我要一只鸡来生下我。 鸡说我要一个蛋才能创建。<br>在<br>11、举出一个例子，说明dispatch_sync 的应用场景<br>答：  答第10题的时候我们可以用到dispatch_sync，在主线程写下这个代码就产生死锁了。<br>dispatch_sync(dispatch_get_main_queue(), ^{<br>                NSLog(@“你看不到我打印。”);<br>            });<br>12、如何创建一个常驻线程？<br>答:  建议使用runloop，详情可以看下我的这个博文：<a href="http://www.jianshu.com/p/b9a4f55001fe" target="_blank" rel="external">http://www.jianshu.com/p/b9a4f55001fe</a><br>13、我们知道，多线程读写，只要有1个写，就有可能出现并发问题，解决方案可以用锁，但我们又知道锁的效率不高，并且破坏程序结构，加锁的代码通常并不易理清逻辑，那么，还有什么样的手段能实现这个目的？（考虑队列） 如何实现？<br>答： 你也说了读不会有问题，写才会有问题，所以区分读写咯。       读 并行 写 串行。    大家可以搜一下，基于现成安全的多读单写。<br>14、基于13题的前提，假如现在有一个模型，写操作较少，但是读操作非常多，如何优化13题的模型，使之达到：写操作串行，读操作并行的效果？（考虑队列和dispatch_barrier函数族）<br>答：这道题和上面的题其实就是在考api咯，答案括号都给出来了。<br>15、dispatch_group函数族的应用场景是什么？假如现在让你使用信号量（dispatch_semaphore）来模拟类似的功能，如何实现？<br>答：这道题还是考api，  场景批量上传图片， dispatch_group，NSOperationQueue，还是NSOperationQueue好用一些。gcd主要是方便。<br>16、原子操作atomic 修饰的变量本身是否可以认为是线程安全的？ 如果不是，那什么类型的变量可以认为是安全的，又有什么样的变量是不安全的？举例说明即可<br>答：  你要是问我  atomic，和nonatomic的区别，我就说atomic是线程安全的。 现在直接问atomic，我在改口说不安全，会不会显得我很流氓。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2017/07/06/章鱼哥问答/" data-title="章鱼哥问答 | 史成" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/07/05/swift强行解包问题/" title="swift强制解包问题">
+  <strong>上一篇：</strong><br/>
+  <span>
+  swift强制解包问题</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/07/07/Undefined architecture i386/"  title="CPU 架构">
+ <strong>下一篇：</strong><br/> 
+ <span>CPU 架构
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ 
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.jianshu.com" target="_blank" title="简书">简书</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://guthub.com" target="_blank" title="GitHub">GitHub</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://cocoachina.com" target="_blank" title="cocoachina">cocoachina</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://mybigorange.github.io" target="_blank" title="Ambrose&#39;s Blog">Ambrose&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="www.baidu.com" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Dean Ambrose Page in Github. <br/>
+			Welcome to my bog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5767005756" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="史成">史成</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

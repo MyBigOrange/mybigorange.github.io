@@ -1,0 +1,604 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>swift代码规范大全 | 史成</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="史成">
+    
+
+    
+    <meta name="description" content="##swift 代码规范大全 ###1. 代码格式  使用四个空格进行缩进。  每行最多160个字符，这样可以避免一行过长。 (Xcode-&amp;gt;Preferences-&amp;gt;Text Editing-&amp;gt;Page guide at column: 设置成160即可)  确保每个文件结尾都有空白行。  确保每行都不以空白字符作为结尾 （Xcode-&amp;gt;Preferences-&amp;gt;T">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="swift代码规范大全">
+<meta property="og:url" content="http://yoursite.com/2017/07/27/swift代码规范/index.html">
+<meta property="og:site_name" content="史成">
+<meta property="og:description" content="##swift 代码规范大全 ###1. 代码格式  使用四个空格进行缩进。  每行最多160个字符，这样可以避免一行过长。 (Xcode-&amp;gt;Preferences-&amp;gt;Text Editing-&amp;gt;Page guide at column: 设置成160即可)  确保每个文件结尾都有空白行。  确保每行都不以空白字符作为结尾 （Xcode-&amp;gt;Preferences-&amp;gt;T">
+<meta property="og:updated_time" content="2017-07-30T08:20:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="swift代码规范大全">
+<meta name="twitter:description" content="##swift 代码规范大全 ###1. 代码格式  使用四个空格进行缩进。  每行最多160个字符，这样可以避免一行过长。 (Xcode-&amp;gt;Preferences-&amp;gt;Text Editing-&amp;gt;Page guide at column: 设置成160即可)  确保每个文件结尾都有空白行。  确保每行都不以空白字符作为结尾 （Xcode-&amp;gt;Preferences-&amp;gt;T">
+
+    
+    <link rel="alternative" href="www.baidu.com" title="史成" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/shicheng.png">
+    
+    
+    <link rel="apple-touch-icon" href="/img/shicheng.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/shicheng.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/shicheng.png" alt="史成" title="史成"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="史成">史成</a></h1>
+				<h2 class="blog-motto">知其然，知其所以然。一天一篇博客，一个星期研究一个第三方Demo，三个月看一本书！ 2017.7.1</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/07/27/swift代码规范/" title="swift代码规范大全" itemprop="url">swift代码规范大全</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-26T16:00:00.000Z" itemprop="datePublished"> 发表于 2017-07-27</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#功能列表"><span class="toc-number">1.</span> <span class="toc-text">功能列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">2.</span> <span class="toc-text">例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#警告"><span class="toc-number">3.</span> <span class="toc-text">警告</span></a></li></ol>
+		
+		</div>
+		
+		<p>##swift 代码规范大全</p>
+<p>###1. 代码格式</p>
+<ul>
+<li><p>使用四个空格进行缩进。</p>
+</li>
+<li><p>每行最多160个字符，这样可以避免一行过长。 (Xcode-&gt;Preferences-&gt;Text Editing-&gt;Page guide at column: 设置成160即可)</p>
+</li>
+<li><p>确保每个文件结尾都有空白行。</p>
+</li>
+<li><p>确保每行都不以空白字符作为结尾 （Xcode-&gt;Preferences-&gt;Text Editing-&gt;Automatically trim trailing whitespace + Including whitespace-only lines).</p>
+</li>
+<li><p>左大括号不用另起一行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">    class SomeClass &#123;</div><div class="line">    func someMethod() &#123;</div><div class="line">        if x == y &#123;</div><div class="line">            /* ... */</div><div class="line">        &#125; else if x == z &#123;</div><div class="line">            /* ... */</div><div class="line">        &#125; else &#123;</div><div class="line">            /* ... */</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    /* ... */</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>当在写一个变量类型，一个字典里的主键，一个函数的参数，遵从一个协议，或一个父类，不用在分号前添加空格   </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">    // 指定类型</div><div class="line">let pirateViewController: PirateViewController</div><div class="line">// 字典语法(注意这里是向左对齐而不是分号对齐)</div><div class="line">let ninjaDictionary: [String: AnyObject] = [</div><div class="line">    &quot;fightLikeDairyFarmer&quot;: false,</div><div class="line">    &quot;disgusting&quot;: true</div><div class="line">]</div><div class="line">// 声明函数</div><div class="line">func myFunction&lt;t, u: someprotocol where t.relatedtype == u&gt;(firstArgument: U, secondArgument: T) &#123;</div><div class="line">    /* ... */</div><div class="line">&#125;</div><div class="line">// 调用函数</div><div class="line">someFunction(someArgument: &quot;Kitten&quot;)</div><div class="line">// 父类</div><div class="line">class PirateViewController: UIViewController &#123;</div><div class="line">    /* ... */</div><div class="line">&#125;</div><div class="line">// 协议</div><div class="line">extension PirateViewController: UITableViewDataSource &#123;</div><div class="line">    /* ... */</div><div class="line">&#125;&lt;/t, u: someprotocol where t.relatedtype == u&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>基本来说，要在逗号后面加空格</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">let myArray = [1, 2, 3, 4, 5]</div></pre></td></tr></table></figure>
+</li>
+<li><p>二元运算符(+, ==, 或-&gt;)的前后都需要添加空格，左小括号后面和右小括号前面不需要空格。</p>
+</li>
+<li></li>
+<li><p>遵守Xcode内置的缩进格式( 如果已经遵守，按下CTRL-i 组合键文件格式没有变化)。当声明的一个函数需要跨多行时，推荐使用Xcode默认的格式，目前Xcode 版本是 7.3。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">// Xcode针对跨多行函数声明缩进</div><div class="line">func myFunctionWithManyParameters(parameterOne: String,</div><div class="line">                              parameterTwo: String,</div><div class="line">                              parameterThree: String) &#123;</div><div class="line">// Xcode会自动缩进</div><div class="line">print(&quot;\(parameterOne) \(parameterTwo) \(parameterThree)&quot;)</div><div class="line">&#125;</div><div class="line">// Xcode针对多行 if 语句的缩进</div><div class="line">    if myFirstVariable &gt; (mySecondVariable + myThirdVariable)</div><div class="line">&amp;&amp; myFourthVariable == .SomeEnumValue &#123;</div><div class="line">// Xcode会自动缩进</div><div class="line">print(&quot;Hello, World!&quot;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<pre><code>* 当调用的函数有多个参数时，每一个参数另起一行，并比函数名多一个缩进。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">someFunctionWithManyArguments(</div><div class="line">    firstArgument: &quot;Hello, I am a string&quot;,</div><div class="line">    secondArgument: resultFromSomeFunction()</div><div class="line">    thirdArgument: someOtherLocalVariable)</div></pre></td></tr></table></figure>
+
+* 当遇到需要处理的数组或字典内容较多需要多行显示时，需把 [ 和 ] 类似于方法体里的括号， 方法体里的闭包也要做类似处理。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">someFunctionWithABunchOfArguments(</div><div class="line">someStringArgument: &quot;hello I am a string&quot;,</div><div class="line">someArrayArgument: [</div><div class="line">    &quot;dadada daaaa daaaa dadada daaaa daaaa dadada daaaa daaaa&quot;,</div><div class="line">    &quot;string one is crazy - what is it thinking?&quot;</div><div class="line">],</div><div class="line">someDictionaryArgument: [</div><div class="line">    &quot;dictionary key 1&quot;: &quot;some value 1, but also some more text here&quot;,</div><div class="line">    &quot;dictionary key 2&quot;: &quot;some value 2&quot;</div><div class="line">],</div><div class="line">someClosure: &#123; parameter1 in</div><div class="line">    print(parameter1)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+
+
+*  应尽量避免出现多行断言，可使用本地变量或其他策略。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">// 推荐</div><div class="line">let firstCondition = x == firstReallyReallyLongPredicateFunction()</div><div class="line">let secondCondition = y == secondReallyReallyLongPredicateFunction()</div><div class="line">let thirdCondition = z == thirdReallyReallyLongPredicateFunction()</div><div class="line">if firstCondition &amp;&amp; secondCondition &amp;&amp; thirdCondition &#123;</div><div class="line">    // 你要干什么</div><div class="line">&#125;</div><div class="line">// 不推荐</div><div class="line">if x == firstReallyReallyLongPredicateFunction()</div><div class="line">    &amp;&amp; y == secondReallyReallyLongPredicateFunction()</div><div class="line">    &amp;&amp; z == thirdReallyReallyLongPredicateFunction() &#123;</div><div class="line">    // 你要干什么</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</code></pre><p>###2. 命名</p>
+<pre><code>2.1 在Swift中不用如Objective-C式 一样添加前缀 (如使用  GuybrushThreepwoode 而不是 LIGuybrushThreepwood)。
+
+2.2 使用帕斯卡拼写法（又名大骆驼拼写法，首字母大写）为类型命名 (如 struct, enum, class, typedef, associatedtype 等)。
+
+2.3 使用小骆驼拼写法 (首字母小写) 为函数，方法，变量，常量，参数等命名。
+
+2.4 首字母缩略词在命名中一般来说都是全部大写，例外的情形是如果首字母缩略词是一个命名的开始部分，而这个命名需要小写字母作为开头，这种情形下首字母缩略词全部小写。
+
+2.5 使用前缀 k + 大骆驼命名法 为所有非单例的静态常量命名
+2.6 对于泛型和关联类型，可以使用单个大写字母，也可是遵从大骆驼命名方式并能描述泛型的单词。如果这个单词和要实现的协议或继承的父类有冲突，可以为相关类型或泛型名字添加 Type 作为后缀。
+2.7 命名应该具有描述性 和 清晰的。
+2.8 不要缩写，简写命名，或用单个字母命名。
+2.9 如果原有命名不能明显表明类型，则属性命名内要包括类型信息。
+2.10 当给函数参数命名时，要确保函数能理解每个参数的目的。
+2.11 根据苹果接口设计指导文档, 如果协议描述的是协议做的事应该命名为名词(如Collection) ，如果描述的是行为，需添加后缀 able 或 ing (如Equatable 和 ProgressReporting)。 如果上述两者都不能满足需求，可以添加Protocol作为后缀
+</code></pre><p>###3. 代码风格<br>3.1 综合<br>    3.1.1 尽可能的多使用let，少使用var。<br>    3.1.2 当需要遍历一个集合并变形成另一个集合时，推荐使用函数 map, filter 和 reduce。</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">    // 推荐</div><div class="line">    let stringOfInts = [1, 2, 3].flatMap &#123; String($0) &#125;</div><div class="line">        // [&quot;1&quot;, &quot;2&quot;, &quot;3&quot;]// 不推荐</div><div class="line">    var stringOfInts: [String] = []</div><div class="line">    for integer in [1, 2, 3] &#123;</div><div class="line">    stringOfInts.append(String(integer))</div><div class="line">        &#125;</div><div class="line">// 推荐</div><div class="line">let evenNumbers = [4, 8, 15, 16, 23, 42].filter &#123; $0 % 2 == 0 &#125;</div><div class="line">// [4, 8, 16, 42]</div><div class="line">// 不推荐</div><div class="line">var evenNumbers: [Int] = []</div><div class="line">for integer in [4, 8, 15, 16, 23, 42] &#123;</div><div class="line">    if integer % 2 == 0 &#123;</div><div class="line">        evenNumbers(integer)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</code></pre><p>3.1.3 如果变量类型可以依靠推断得出，不建议声明变量时指明类型。</p>
+<p>3.1.4 如果一个函数有多个返回值，推荐使用 元组 而不是 inout 参数， 如果你见到一个元组多次，建议使用typealias ，而如果返回的元组有三个或多于三个以上的元素，建议使用结构体或类。<br>3.1.5 当使用委托和协议时，请注意避免出现循环引用，基本上是在定义属性的时候使用 weak 修饰。<br>3.1.6 在闭包里使用 self 的时候要注意出现循环引用，使用捕获列表可以避免这一点。<br>3.1.7 Switch 模块中不用显式使用break。<br>3.1.8 断言流程控制的时候不要使用小括号。<br>3.1.9 在写枚举类型的时候，尽量简写。<br>3.1.10 在使用类方法的时候不用简写，因为类方法不如 枚举 类型一样，可以根据轻易地推导出上下文。<br>3.1.11 不建议使用用self.修饰除非需要<br>3.1.12 在新写一个方法的时候，需要衡量这个方法是否将来会被重写，如果不是，请用 final 关键词修饰，这样阻止方法被重写。一般来说，final 方法可以优化编译速度，在合适的时候可以大胆使用它。但需要注意的是，在一个公开发布的代码库中使用 final 和本地项目中使用 final 的影响差别很大的。<br>3.1.13 在使用一些语句如 else，catch等紧随代码块的关键词的时候，确保代码块和关键词在同一行。下面 if/else 和 do/catch 的例子.</p>
+<p>3.2 访问控制修饰符<br>3.2.1 如果需要把访问修饰符放到第一个位置。<br>// 推荐<br>private static let kMyPrivateNumber: Int<br>// 不推荐<br>static private let kMyPrivateNumber: Int<br>3.2.2 访问修饰符不应单独另起一行，应和访问修饰符描述的对象保持在同一行。<br>// 推荐<br>public class Pirate {<br>    /<em> … </em>/<br>}<br>// 不推荐<br>public<br>class Pirate {<br>    /<em> … </em>/<br>}<br>3.2.3  默认的访问控制修饰符是 internal, 如果需要使用internal 可以省略不写。</p>
+<p>3.2.4 当一个变量需要被单元测试 访问时，需要声明为 internal 类型来使用@testable import {ModuleName}。 如果一个变量实际上是private 类型，而因为单元测试需要被声明为 internal 类型，确定添加合适的注释文档来解释为什么这么做。这里添加注释推荐使用 - warning: 标记语法。</p>
+<p>/**<br> 这个变量是private 名字</p>
+<ul>
+<li>warning: 定义为 internal 而不是 private 为了 <code>@testable</code>.<br>*/<br>let pirateName = “LeChuck”</li>
+</ul>
+<p>3.3 自定义操作符</p>
+<p>不推荐使用自定义操作符，如果需要创建函数来替代。</p>
+<p>在重写操作符之前，请慎重考虑是否有充分的理由一定要在全局范围内创建新的操作符，而不是使用其他策略。</p>
+<p>你可以重载现有的操作符来支持新的类型(特别是 ==)，但是新定义的必须保留操作符的原来含义，比如 == 必须用来测试是否相等并返回布尔值</p>
+<p>3.4 Switch 语句 和 枚举</p>
+<p>3.4.1 在使用 Switch 语句时，如果选项是有限集合时，不要使用default，相反地，把一些不用的选项放到底部，并用 break 关键词 阻止其执行。</p>
+<p>3.4.2 因为Swift 中的 switch 选项默认是包含break的， 如果不需要不用使用 break 关键词。</p>
+<p>3.4.3 case 语句 应和 switch 语句左对齐，并在 标准的 default 上面。</p>
+<p>3.4.4 当定义的选项有关联值时，确保关联值有恰当的名称，而不只是类型。(如. 使用 case Hunger(hungerLevel: Int) 而不是 case Hunger(Int)).</p>
+<p>3.4.5 推荐尽可能使用fall through。</p>
+<p>3.4.6 如果default 的选项不应该触发，可以抛出错误 或 断言类似的做法。</p>
+<p>3.5 可选类型</p>
+<p>3.5.1 唯一使用隐式拆包可选型（implicitly unwrapped optionals）的场景是结合@IBOutlets，在其他场景使用 非可选类型 和 常规可选类型，即使有的场景你确定有的变量使用的时候永远不会为 nil， 但这样做可以保持一致性和程序更加健壮。</p>
+<p>3.5.2 不要使用 as! 或 try!。</p>
+<p>3.5.3 如果对于一个变量你不打算声明为可选类型，但当需要检查变量值是否为 nil，推荐用当前值和 nil 直接比较，而不推荐使用 if let 语法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">// 推荐</div><div class="line">if someOptional != nil &#123;</div><div class="line">    // 你要做什么</div><div class="line">&#125;</div><div class="line">// 不推荐</div><div class="line">if let _ = someOptional &#123;</div><div class="line">    // 你要做什么</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>3.5.4 不要使用 unowned，unowned 和 weak 变量基本上等价，并且都是隐式拆包( unowned 在引用计数上有少许性能优化)，由于不推荐使用隐式拆包，也不推荐使用unowned 变量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// 推荐</div><div class="line">weak var parentViewController: UIViewController?</div><div class="line">// 不推荐</div><div class="line">weak var parentViewController: UIViewController!</div><div class="line">unowned var parentViewController: UIViewController</div><div class="line">3.5.5 当拆包取值时，使用和被拆包取值变量相同的名称。</div><div class="line">guard let myVariable = myVariable else &#123;</div><div class="line">    return</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>3.6 协议</p>
+<p>在实现协议的时候，有两种方式来组织你的代码:</p>
+<p>使用 // MARK: 注释来分割协议实现和其他代码。</p>
+<p>使用 extension 在 类/结构体已有代码外，但在同一个文件内。</p>
+<p>请注意 extension 内的代码不能被子类重写，这也意味着测试很难进行。 如果这是经常发生的情况，为了代码一致性最好统一使用第一种办法。否则使用第二种办法，其可以代码分割更清晰。</p>
+<p>使用而第二种方法的时候，使用  // MARK:  依然可以让代码在 Xcode 可读性更强。</p>
+<p>3.7 属性</p>
+<p>3.7.1 对于只读属性，计算后(Computed)属性, 提供 getter 而不是 get {}。</p>
+<p>var computedProperty: String {<br>    if someBool {<br>        return “I’m a mighty pirate!”<br>    }<br>    return “I’m selling these fine leather jackets.”<br>}<br>3.7.2 对于属性相关方法 get {}, set {}, willSet, 和 didSet, 确保缩进相关代码块。</p>
+<p>3.7.3 对于willSet/didSet 和 set 中的旧值和新值虽然可以自定义名称，但推荐使用默认标准名称 newValue/oldValue。</p>
+<p>var computedProperty: String {<br>    get {<br>        if someBool {<br>            return “I’m a mighty pirate!”<br>        }<br>        return “I’m selling these fine leather jackets.”<br>    }<br>    set {<br>        computedProperty = newValue<br>    }<br>    willSet {<br>        print(“will set to (newValue)”)<br>    }<br>    didSet {<br>        print(“did set from (oldValue) to (newValue)”)<br>    }<br>}<br>3.7.4 在创建类常量的时候，使用 static 关键词修饰。</p>
+<p>class MyTableViewCell: UITableViewCell {<br>    static let kReuseIdentifier = String(MyTableViewCell)<br>    static let kCellHeight: CGFloat = 80.0<br>}<br>3.7.5 声明单例属性可以通过下面方式进行：</p>
+<p>class PirateManager {<br>    static let sharedInstance = PirateManager()<br>    /<em> … </em>/<br>}<br>3.8 闭包</p>
+<p>3.8.1 如果参数的类型很明显，可以在函数名里可以省略参数类型, 但明确声明类型也是允许的。 代码的可读性有时候是添加详细的信息，而有时候部分重复，根据你的判断力做出选择吧，但前后要保持一致性。</p>
+<p>// 省略类型<br>doSomethingWithClosure() { response in<br>    print(response)<br>}<br>// 明确指出类型<br>doSomethingWithClosure() { response: NSURLResponse in<br>    print(response)<br>}<br>// map 语句使用简写<br>[1, 2, 3].flatMap { String($0) }<br>3.8.2 如果使用捕捉列表 或 有具体的非 Void返回类型，参数列表应该在小括号内， 否则小括号可以省略。</p>
+<p>// 因为使用捕捉列表，小括号不能省略。<br>doSomethingWithClosure() { [weak self] (response: NSURLResponse) in<br>    self?.handleResponse(response)<br>}<br>// 因为返回类型，小括号不能省略。<br>doSomethingWithClosure() { (response: NSURLResponse) -&gt; String in<br>    return String(response)<br>}<br>3.8.3 如果闭包是变量类型，不需把变量值放在括号中，除非需要，如变量类型是可选类型(Optional?)， 或当前闭包在另一个闭包内。确保闭包里的所以参数放在小括号中，这样()表示没有参数，Void 表示不需要返回值。</p>
+<p>let completionBlock: (success: Bool) -&gt; Void = {<br>    print(“Success? (success)”)<br>}<br>let completionBlock: () -&gt; Void = {<br>    print(“Completed!”)<br>}<br>let completionBlock: (() -&gt; Void)? = nil</p>
+<p>3.9 数组</p>
+<p>3.9.1 基本上不要通过下标直接访问数组内容，如果可能使用如 .first 或 .last, 因为这些方法是非强制类型并不会崩溃。 推荐尽可能使用 for item in items 而不是 for i in 0..</p>
+<p>3.9.2 不要使用 += 或 + 操作符给数组添加新元素，使用性能较好的.append() 或.appendContentsOf()  ，如果需要声明数组基于其他的数组并保持不可变类型， 使用 let myNewArray = [arr1, arr2].flatten()，而不是let myNewArray = arr1 + arr2 。</p>
+<p>3.10 错误处理</p>
+<p>假设一个函数 myFunction 返回类型声明为 String，但是总有可能函数会遇到error，有一种解决方案是返回类型声明为 String?, 当遇到错误的时候返回 nil。</p>
+<p>例子:</p>
+<p>func readFile(withFilename filename: String) -&gt; String? {<br>    guard let file = openFile(filename) else {<br>        return nil<br>    }<br>    let fileContents = file.read()<br>    file.close()<br>    return fileContents<br>}<br>func printSomeFile() {<br>    let filename = “somefile.txt”<br>    guard let fileContents = readFile(filename) else {<br>        print(“不能打开 (filename).”)<br>        return<br>    }<br>    print(fileContents)<br>}<br>实际上如果预知失败的原因，我们应该使用Swift 中的 try/catch 。</p>
+<p>定义 错误对象 结构体如下:</p>
+<p>struct Error: ErrorType {<br>    public let file: StaticString<br>    public let function: StaticString<br>    public let line: UInt<br>    public let message: String<br>    public init(message: String, file: StaticString = #file, function: StaticString = #function, line: UInt = #line) {<br>        self.file = file<br>        self.function = function<br>        self.line = line<br>        self.message = message<br>    }<br>}<br>使用案例:</p>
+<p>func readFile(withFilename filename: String) throws -&gt; String {<br>    guard let file = openFile(filename) else {<br>        throw Error(message: “打不开的文件名称 (filename).”)<br>    }<br>    let fileContents = file.read()<br>    file.close()<br>    return fileContents<br>}<br>func printSomeFile() {<br>    do {<br>        let fileContents = try readFile(filename)<br>        print(fileContents)<br>    } catch {<br>        print(error)<br>    }<br>}<br>其实项目中还是有一些场景更适合声明为可选类型，而不是错误捕捉和处理，比如在获取远端数据过程中遇到错误，nil作为返回结果是合理的，也就是声明返回可选类型比错误处理更合理。</p>
+<p>整体上说，如果一个方法有可能失败，并且使用可选类型作为返回类型会导致错误原因湮没，不妨考虑抛出错误而不是吃掉它。</p>
+<p>3.11 使用 guard 语句</p>
+<p>3.11.1 总体上，我们推荐使用提前返回的策略，而不是 if 语句的嵌套。使用 guard 语句可以改善代码的可读性。</p>
+<p>// 推荐<br>func eatDoughnut(atIndex index: Int) {<br>    guard index &gt;= 0 &amp;&amp; index &lt; doughnuts else {<br>        // 如果 index 超出允许范围，提前返回。<br>        return<br>    }<br>    let doughnut = doughnuts[index]<br>    eat(doughnut)<br>}<br>// 不推荐<br>func eatDoughnuts(atIndex index: Int) {<br>    if index &gt;= 0 &amp;&amp; index &lt; donuts.count {<br>        let doughnut = doughnuts[index]<br>        eat(doughnut)<br>    }<br>}<br>3.11.2 在解析可选类型时，推荐使用 guard 语句，而不是 if 语句，因为 guard 语句可以减少不必要的嵌套缩进。</p>
+<p>// 推荐<br>guard let monkeyIsland = monkeyIsland else {<br>    return<br>}<br>bookVacation(onIsland: monkeyIsland)<br>bragAboutVacation(onIsland: monkeyIsland)<br>// 不推荐<br>if let monkeyIsland = monkeyIsland {<br>    bookVacation(onIsland: monkeyIsland)<br>    bragAboutVacation(onIsland: monkeyIsland)<br>}<br>// 禁止<br>if monkeyIsland == nil {<br>    return<br>}<br>bookVacation(onIsland: monkeyIsland!)<br>bragAboutVacation(onIsland: monkeyIsland!)<br>3.11.3 当解析可选类型需要决定在 if 语句 和 guard 语句之间做选择时，最重要的判断标准是是否让代码可读性更强，实际项目中会面临更多的情景，如依赖 2 个不同的布尔值，复杂的逻辑语句会涉及多次比较等，大体上说，根据你的判断力让代码保持一致性和更强可读性， 如果你不确定 if 语句 和 guard 语句哪一个可读性更强，建议使用 guard 。</p>
+<p>// if 语句更有可读性<br>if operationFailed {<br>    return<br>}<br>// guard 语句这里有更好的可读性<br>guard isSuccessful else {<br>    return<br>}<br>// 双重否定不易被理解 - 不要这么做<br>guard !operationFailed else {<br>    return<br>}<br>3.11.4  如果需要在2个状态间做出选择，建议使用if 语句，而不是使用 guard 语句。</p>
+<p>// 推荐<br>if isFriendly {<br>    print(“你好, 远路来的朋友！”)<br>} else {<br>    print(“穷小子，哪儿来的？”)<br>}<br>// 不推荐<br>guard isFriendly else {<br>    print(“穷小子，哪儿来的？”)<br>    return<br>}<br>print(“你好, 远路来的朋友！”)<br>3.11.5  你只应该在在失败情形下退出当前上下文的场景下使用 guard 语句，下面的例子可以解释 if 语句有时候比 guard 语句更合适 – 我们有两个不相关的条件，不应该相互阻塞。</p>
+<p>if let monkeyIsland = monkeyIsland {<br>    bookVacation(onIsland: monkeyIsland)<br>}<br>if let woodchuck = woodchuck where canChuckWood(woodchuck) {<br>    woodchuck.chuckWood()<br>}<br>3.11.6 我们会经常遇到使用 guard 语句拆包多个可选值，如果所有拆包失败的错误处理都一致可以把拆包组合到一起 (如 return, break, continue,throw 等).</p>
+<p>// 组合在一起因为可能立即返回<br>guard let thingOne = thingOne,<br>    let thingTwo = thingTwo,<br>    let thingThree = thingThree else {<br>    return<br>}<br>// 使用独立的语句 因为每个场景返回不同的错误<br>guard let thingOne = thingOne else {<br>    throw Error(message: “Unwrapping thingOne failed.”)<br>}<br>guard let thingTwo = thingTwo else {<br>    throw Error(message: “Unwrapping thingTwo failed.”)<br>}<br>guard let thingThree = thingThree else {<br>    throw Error(message: “Unwrapping thingThree failed.”)<br>}</p>
+<p>###4. 文档/注释</p>
+<p>4.1 文档</p>
+<p>如果一个函数比 O(1) 复杂度高，你需要考虑为函数添加注释，因为函数签名(方法名和参数列表) 并不是那么的一目了然，这里推荐比较流行的插件 VVDocumenter. 不论出于何种原因，如果有任何奇淫巧计不易理解的代码，都需要添加注释，对于复杂的 类/结构体/枚举/协议/属性 都需要添加注释。所有公开的 函数/类/变量/枚举/协议/属性/常数 也都需要添加文档，特别是 函数声明(包括名称和参数列表) 不是那么清晰的时候。</p>
+<p>写文档时，确保参照苹果文档中提及的标记语法合集。</p>
+<p>在注释文档完成后，你应检查格式是否正确。</p>
+<p>规则:</p>
+<p>4.1.1 一行不要超过160个字符 (和代码长度限制雷同).</p>
+<p>4.1.2 即使文档注释只有一行，也要使用模块化格式 (/<em>* </em>/).</p>
+<p>4.1.3 注释模块中的空行不要使用 * 来占位。</p>
+<p>4.1.4 确定使用新的 – parameter 格式，而不是就得 Use the new -:param: 格式，另外注意 parameter 是小写的。</p>
+<p>4.1.5 如果需要给一个方法的 参数/返回值/抛出异常 添加注释，务必给所有的添加注释，即使会看起来有部分重复，否则注释会看起来不完整，有时候如果只有一个参数值得添加注释，可以在方法注释里重点描述。</p>
+<p>4.1.6 对于负责的类，在描述类的使用方法时可以添加一些合适的例子，请注意Swift注释是支持 MarkDown 语法的。</p>
+<p>/**</p>
+<h2 id="功能列表"><a href="#功能列表" class="headerlink" title="功能列表"></a>功能列表</h2><p> 这个类提供下一下很赞的功能，如下:</p>
+<ul>
+<li>功能 1</li>
+<li>功能 2</li>
+<li>功能 3<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2>这是一个代码块使用四个空格作为缩进的例子。<br>  let myAwesomeThing = MyAwesomeClass()<br>  myAwesomeThing.makeMoney()<h2 id="警告"><a href="#警告" class="headerlink" title="警告"></a>警告</h2>使用的时候总注意以下几点</li>
+</ul>
+<ol>
+<li>第一点</li>
+<li>第二点</li>
+<li>第三点<br><em>/<br>class MyAwesomeClass {<br>/</em> … */<br>}<br>4.1.8 在写文档注释时，尽量保持简洁。</li>
+</ol>
+<p>4.2 其他注释原则</p>
+<p>4.2.1  // 后面要保留空格。</p>
+<p>4.2.2 注释必须要另起一行。</p>
+<p>4.2.3 使用注释 // MARK: - xoxo 时, 下面一行保留为空行。</p>
+<p>class Pirate {<br>    // MARK: - 实例属性<br>    private let pirateName: String<br>    // MARK: - 初始化<br>    init() {<br>        /<em> … </em>/<br>    }<br>}</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2017/07/27/swift代码规范/" data-title="swift代码规范大全 | 史成" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/07/26/swift开发中的pch文件/" title="swift项目中相当于pch放入公共宏定义的文件">
+  <strong>上一篇：</strong><br/>
+  <span>
+  swift项目中相当于pch放入公共宏定义的文件</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2017/07/28/swift数据存储/"  title="swift数据存储">
+ <strong>下一篇：</strong><br/> 
+ <span>swift数据存储
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#功能列表"><span class="toc-number">1.</span> <span class="toc-text">功能列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">2.</span> <span class="toc-text">例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#警告"><span class="toc-number">3.</span> <span class="toc-text">警告</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.jianshu.com" target="_blank" title="简书">简书</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://guthub.com" target="_blank" title="GitHub">GitHub</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="www://cocoachina.com" target="_blank" title="cocoachina">cocoachina</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://mybigorange.github.io" target="_blank" title="Ambrose&#39;s Blog">Ambrose&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="www.baidu.com" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Dean Ambrose Page in Github. <br/>
+			Welcome to my bog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5767005756" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="史成">史成</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
