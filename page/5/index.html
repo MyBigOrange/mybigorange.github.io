@@ -81,6 +81,64 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2017/05/15/iOS 整体大观/" title="iOS 核心知识点" itemprop="url">iOS 核心知识点</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-15T13:55:03.000Z" itemprop="datePublished"> 发表于 2017-05-15</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>iOS必须知道并深究的一些知识点，一点一点积累扩展。</p>
+<p>##iOS 核心框架<br>CoreAnimation<br>CoreGraphics<br>CoreLocation<br>AVFoundation<br>Foundation</p>
+<p>##iOS核心机制</p>
+<p>UITableView 重用<br>ObjC内存管理；自动释放池，ARC如何实现<br>runloop<br>runtime<br>Block的定义、特性、内存区域、如何实现<br>Responder Chain<br>NSOperation<br>GCD</p>
+<p>##数据结构</p>
+<p>8大排序算法<br>二叉树实现<br>二分查找实现<br>面向对象编程<br>封装、继承、多态<br>设计模式6个原则<br>设计一个类的功能，如何划分粒度（单一职责）<br>接口隔离。<br>如果有一个鸟类，有飞的动作，一个鸵鸟继承它是合适的吗（里氏替换）<br>类之间的依赖如何依赖偶合度最小（依赖倒转）<br>高层依赖低层，低层不能依赖高层。依赖接口，不能依赖具体的类。<br>如果A要调用C函数，但C是B的成员类，应该如何设计？（迪米特）<br>如何设计类，能做到只增加代码，而不修改代码，有哪些经验（开放封闭）<br>通过设计模式解决。</p>
+<p>##计算机技术</p>
+<p>计算机网络： TCP/IP、HTTPCDN、SPDY<br>计算机安全： RSA、AES、DES<br>操作系统：线程、进程、堆栈、死锁、调度算法</p>
+<p>##iOS新特性、新技术<br>iOS7 UIDynamic、SpritKit、新布局、扁平化<br>iOS8 应用程序扩展、HealthKit、SceneKit、CoreLocation、TouchID、PhotoKit<br>iOS9<br>iOS10<br>iOS11<br>Apple Watch<br>第三方库：SDWebImage、AFNetwork、JSONKit、wax<br>swift</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2017/05/14/基本算法/" title="必须会基本算法" itemprop="url">必须会基本算法</a>
   </h1>
   <p class="article-author">By
@@ -716,67 +774,6 @@ GSEventReceiveRunLoopMode：接受系统事件的内部mode，通常用不到。
 </ol>
 <p>4.给对象添加关联对象<br>比如alertView,一般传值，使用的是alertView的tag属性。我们想把更多的参数传给alertView代理：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">- (void)shopCartCell:(BSShopCartCell *)shopCartCell didDeleteClickedAtRecId:(NSString *)recId</div><div class="line">&#123;</div><div class="line">    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@&quot;&quot; message:@&quot;确认要删除这个宝贝&quot; delegate:self cancelButtonTitle:@&quot;取消&quot; otherButtonTitles:@&quot;确定&quot;, nil];</div><div class="line">    </div><div class="line">    // 传递多参数</div><div class="line">    objc_setAssociatedObject(alert, &quot;suppliers_id&quot;, @&quot;1&quot;, OBJC_ASSOCIATION_RETAIN_NONATOMIC);</div><div class="line">    objc_setAssociatedObject(alert, &quot;warehouse_id&quot;, @&quot;2&quot;, OBJC_ASSOCIATION_RETAIN_NONATOMIC);</div><div class="line">    </div><div class="line">    alert.tag = [recId intValue];</div><div class="line">    [alert show];</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line"> *  确定删除操作</div><div class="line"> */</div><div class="line">- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex &#123;</div><div class="line">    if (buttonIndex == 1) &#123;</div><div class="line">        </div><div class="line">        NSString *warehouse_id = objc_getAssociatedObject(alertView, &quot;warehouse_id&quot;);</div><div class="line">        NSString *suppliers_id = objc_getAssociatedObject(alertView, &quot;suppliers_id&quot;);</div><div class="line">        NSString *recId = [NSString stringWithFormat:@&quot;%ld&quot;,(long)alertView.tag];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">objc_setAssociatedObject方法的参数解释:</div><div class="line"></div><div class="line">第一个参数id object, 当前对象</div><div class="line">第二个参数const void *key, 关联的key，是c字符串 </div><div class="line">第三个参数id value, 被关联的对象的值 </div><div class="line">第四个参数objc_AssociationPolicy policy关联引用的规则</div></pre></td></tr></table></figure></p>
 <p>动态添加方法<br>开发使用场景：如果一个类方法非常多，加载类到内存的时候也比较耗费资源，需要给每个方法生成映射表，可以使用动态给某个类，添加方法解决。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"> Person *p = [[Person alloc] init];</div><div class="line"></div><div class="line">    // 默认person，没有实现eat方法，可以通过performSelector调用，但是会报错。</div><div class="line">    // 动态添加方法就不会报错</div><div class="line">    [p performSelector:@selector(eat)];</div><div class="line">    </div><div class="line">    // 默认方法都有两个隐式参数，</div><div class="line">void eat(id self,SEL sel)</div><div class="line">&#123;</div><div class="line">       NSLog(@&quot;%@ %@&quot;,self,NSStringFromSelector(sel));</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 当一个对象调用未实现的方法，会调用这个方法处理,并且会把对应的方法列表传过来.</div><div class="line">// 刚好可以用来判断，未实现的方法是不是我们想要动态添加的方法</div><div class="line">+ (BOOL)resolveInstanceMethod:(SEL)sel</div><div class="line">&#123;</div><div class="line">    if (sel == @selector(eat)) &#123;</div><div class="line">        // 动态添加eat方法</div><div class="line"></div><div class="line">        // 第一个参数：给哪个类添加方法</div><div class="line">        // 第二个参数：添加方法的方法编号</div><div class="line">        // 第三个参数：添加方法的函数实现（函数地址）</div><div class="line">        // 第四个参数：函数的类型，(返回值+参数类型) v:void @:对象-&gt;self :表示SEL-&gt;_cmd</div><div class="line">        class_addMethod(self, @selector(eat), eat, &quot;v@:&quot;);</div><div class="line">    &#125;</div><div class="line">    return [super resolveInstanceMethod:sel];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/03/21/绑定域名/" title="github pages 绑定一级二级域名" itemprop="url">github pages 绑定一级二级域名</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="史成" target="_blank" itemprop="author">史成</a>
-		
-  <p class="article-time">
-    <time datetime="2017-03-21T11:11:07.000Z" itemprop="datePublished"> 发表于 2017-03-21</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>拿我自己的来说 devshicheng.com 算是一级域名<br>            www.devshicheng.com 算是🎧域名</p>
-<h4 id="一级域名"><a href="#一级域名" class="headerlink" title="一级域名"></a>一级域名</h4><ol>
-<li>如果你用hexo搭建的博客，需要在本地source文件夹下创建一个CNAME（去掉后缀），里边输入你的一级域名，然后同步到你的githubpages上，</li>
-<li>去你的域名 解析设置 添加解析 类型CNAME  记录值填写你的 mybigorange.github.io. (最后点不要省略)</li>
-</ol>
-<h4 id="二级域名"><a href="#二级域名" class="headerlink" title="二级域名"></a>二级域名</h4><ol>
-<li>同一级域名</li>
-<li>新建新的解析。类型为A  主机记录@ 记录值ip（ping你的仓库去找你的仓库服务器）</li>
-</ol>
-<blockquote>
-<p>以上方法亲测可用（设置好后需要等一会才可以访问）。</p>
-</blockquote>
 
         
         
